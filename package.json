@@ -12,7 +12,9 @@
   },
   "dependencies": {
     "axios": "^0.19.2",
+    "bip39": "^3.0.3",
     "core-js": "^3.6.4",
+    "less": "^3.13.0",
     "lib-flexible": "^0.3.2",
     "lodash": "^4.17.15",
     "regenerator-runtime": "^0.13.5",
