@@ -1,7 +1,7 @@
 <!-- home -->
 <template>
   <div class="container">
-    1111111111111111111111111111111111
+    1111111111
   </div>
 </template>
 
