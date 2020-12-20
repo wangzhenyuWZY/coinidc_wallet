@@ -6,7 +6,7 @@
 </template>
 
 <script>
-const bip39 = require('bip39')
+var lightwallet = require('eth-lightwallet')
 export default {
   data() {
     return {
@@ -17,13 +17,23 @@ export default {
   computed: {},
 
   mounted() { 
-    debugger
-    const mnemonic = bip39.generateMnemonic()
-    console.log(mnemonic)
-    bip39.mnemonicToSeed(mnemonic).then((res)=>{
-      console.log(res.toString('hex'))
-    })
-    
+    var secretSeed = lightwallet.keystore.generateRandomSeed();//注记词
+    var password = prompt('Enter password for encryption', 'password');//密码
+var global_keystore = null
+    lightwallet.keystore.createVault({
+        password: password,
+        seedPhrase: secretSeed,
+        //random salt
+        hdPathString: "m/0'/0'/0'"
+      }, function (err, ks) {
+        global_keystore = ks
+        global_keystore.keyFromPassword(password, function(err, pwDerivedKey) {
+          global_keystore.generateNewAddress(pwDerivedKey, 3);
+          var addresses = global_keystore.getAddresses();
+          console.log(addresses)
+        })
+      })
+      
   },
 
   methods: {}
