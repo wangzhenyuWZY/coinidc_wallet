@@ -1,0 +1,297 @@
+<template>
+  <div class="container">
+    <div class="title_bg">
+      <Title title="钱包" hide></Title>
+      <div class="assetsDtal">
+        <p>98988.099 IDC</p>
+        <p>≈98988.099</p>
+      </div>
+      <div class="wallet_btn">
+        <router-link tag="div" to="/walletAssets/transfer" class="btn">转账</router-link>
+        <router-link tag="div" to="/walletAssets/collection" class="btn">收款</router-link>
+      </div>
+    </div>
+    <div class="wallet_scoll">
+      <div class="wallet_energy">
+        <div class="energy_lt">
+          <div class="dv1">能量</div>
+          <div class="dv2">
+            <p style="width:70%"></p>
+          </div>
+          <div class="dv3"><span>123012313</span>/1231654</div>
+        </div>
+        <div class="energy_lt">
+          <div class="dv1">宽带</div>
+          <div class="dv2">
+            <p style="width:70%"></p>
+          </div>
+          <div class="dv3"><span>123012313</span>/1231654</div>
+        </div>
+      </div>
+      <div class="currency__list">
+        <div class="item">
+          <div class="item_top">
+            <img src="../../assets/currency/IDC.svg" alt="">
+            <div class="item_assets">
+              <p>
+                <span>IDC</span>
+                <span>2393846</span>
+              </p>
+              <p>
+                <span>IDCOIN</span>
+                <span>≈10283.32 USDT</span>
+              </p>
+            </div>
+          </div>
+          <div class="item_btn">
+            <div class=currency_btn>提币</div>
+            <div class=currency_btn>冲币</div>
+          </div>
+        </div>
+        <div class="item">
+          <div class="item_top">
+            <img src="../../assets/currency/IDC.svg" alt="">
+            <div class="item_assets">
+              <p>
+                <span>IDC</span>
+                <span>2393846</span>
+              </p>
+              <p>
+                <span>IDCOIN</span>
+                <span>≈10283.32 USDT</span>
+              </p>
+            </div>
+          </div>
+          <div class="item_btn">
+            <div class=currency_btn>提币</div>
+            <div class=currency_btn>冲币</div>
+          </div>
+        </div>
+        <div class="item">
+          <div class="item_top">
+            <img src="../../assets/currency/IDC.svg" alt="">
+            <div class="item_assets">
+              <p>
+                <span>IDC</span>
+                <span>2393846</span>
+              </p>
+              <p>
+                <span>IDCOIN</span>
+                <span>≈10283.32 USDT</span>
+              </p>
+            </div>
+          </div>
+          <div class="item_btn">
+            <div class=currency_btn>提币</div>
+            <div class=currency_btn>冲币</div>
+          </div>
+        </div>
+        <div class="item">
+          <div class="item_top">
+            <img src="../../assets/currency/IDC.svg" alt="">
+            <div class="item_assets">
+              <p>
+                <span>IDC</span>
+                <span>2393846</span>
+              </p>
+              <p>
+                <span>IDCOIN</span>
+                <span>≈10283.32 USDT</span>
+              </p>
+            </div>
+          </div>
+          <div class="item_btn">
+            <div class=currency_btn>提币</div>
+            <div class=currency_btn>冲币</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <van-tabbar v-model="active" active-color="#6362F1" @change="onChange">
+      <van-tabbar-item>
+        <!-- <template #icon="props"> -->
+        <template>
+          <div class="tabbar_img">
+            <img src="../../assets/zican.svg" />
+          </div>
+        </template>
+        <div class="tabbar_zise">资产</div>
+      </van-tabbar-item>
+      <van-tabbar-item>
+
+        <template>
+          <div class="tabbar_img">
+            <img src="../../assets/liulanq.svg" />
+          </div>
+        </template>
+        <div class="tabbar_zise">浏览器</div>
+      </van-tabbar-item>
+    </van-tabbar>
+  </div>
+</template>
+
+<script>
+import Title from '@/components/Title'
+export default {
+  data() {
+    return {
+      active: 0
+    }
+  },
+  components: {
+    Title
+  },
+  methods: {
+    onChange(index) {
+      this.active = index
+      console.log(index)
+    }
+  }
+}
+</script>
+
+<style lang="less" scoped>
+.title_bg {
+  height: 236px;
+  background: url(../../assets/bg2.png) no-repeat;
+  background-size: 100% 100%;
+  .assetsDtal {
+    padding-top: 33px;
+    p {
+      text-align: center;
+    }
+    p:nth-child(1) {
+      font-size: 28px;
+      font-weight: 500;
+      color: #ffffff;
+    }
+    p:nth-child(2) {
+      font-size: 14px;
+      font-weight: 500;
+      color: #cad5de;
+    }
+  }
+  .wallet_btn {
+    display: flex;
+    padding: 0 20px;
+    justify-content: space-between;
+    margin-top: 45px;
+    .btn {
+      width: 48%;
+      height: 36px;
+      background: #ffffff;
+      border-radius: 4px;
+      font-size: 14px;
+      font-weight: 500;
+      color: #4f5f7f;
+      text-align: center;
+      line-height: 36px;
+    }
+  }
+}
+.wallet_scoll {
+  height: calc(100vh - 236px);
+  overflow: scroll;
+  padding: 0 10px;
+  padding-top: 14px;
+  .wallet_energy {
+    display: flex;
+    justify-content: space-between;
+    .energy_lt {
+      width: 45%;
+      .dv1 {
+        font-size: 12px;
+        font-weight: 400;
+        color: #000000;
+        margin-bottom: 5px;
+      }
+      .dv2 {
+        height: 6px;
+        background: #e7ebf1;
+        border-radius: 2px;
+        margin-bottom: 5px;
+        p {
+          height: 6px;
+          background: linear-gradient(270deg, #afafff 0%, #6362f1 100%);
+          border-radius: 2px;
+        }
+      }
+      .dv3 {
+        font-size: 12px;
+        font-weight: 400;
+        color: #8997b3;
+        span {
+          font-size: 14px;
+          font-weight: 500;
+          color: #000000;
+        }
+      }
+    }
+  }
+  .currency__list {
+    margin-top: 15px;
+    padding-bottom: 65px;
+    .item {
+      margin-bottom: 10px;
+      padding: 13px 10px 10px;
+      background: #ffffff;
+      box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.08);
+      border-radius: 6px;
+      border: 1px solid #e7ebf1;
+      .item_top {
+        display: flex;
+        img {
+          width: 40px;
+          margin-right: 9px;
+        }
+        .item_assets {
+          flex: 1;
+          p {
+            display: flex;
+            justify-content: space-between;
+            &:nth-child(2) {
+              margin-top: 2px;
+            }
+            span {
+              &:nth-child(1) {
+                font-size: 12px;
+                font-family: PingFangSC-Medium, PingFang SC;
+                font-weight: 500;
+                color: #000000;
+              }
+              &:nth-child(2) {
+                font-size: 10px;
+                font-family: PingFangSC-Medium, PingFang SC;
+                font-weight: 500;
+                color: #8997b3;
+              }
+            }
+          }
+        }
+      }
+      .item_btn {
+        display: flex;
+        justify-content: space-between;
+        .currency_btn {
+          width: 45%;
+          height: 26px;
+          line-height: 26px;
+          background: #f4f6fa;
+          border-radius: 4px;
+          font-size: 11px;
+          font-weight: 400;
+          color: #4f5f7f;
+          text-align: center;
+          margin-top: 13px;
+        }
+      }
+    }
+  }
+}
+.tabbar_img {
+  text-align: center;
+}
+.tabbar_zise {
+  margin-top: 3px;
+}
+</style>

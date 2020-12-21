@@ -1,0 +1,191 @@
+<template>
+  <div class="container">
+    <div class="title_bg">
+      <Title title="IDC" hide></Title>
+      <div class="assetsDtal">
+        <p><img src="../../assets/currency/IDC.svg" alt=""></p>
+        <p>98988.099 IDC</p>
+      </div>
+    </div>
+    <div class="detals_nav">
+      <div :class="navIndex==1?'nav_item':''" @click="nav(1)">全部</div>
+      <div :class="navIndex==2?'nav_item':''" @click="nav(2)">转账</div>
+      <div :class="navIndex==3?'nav_item':''" @click="nav(3)">收款</div>
+    </div>
+    <div class="wallet_scoll">
+      <div class="currency__list">
+        <div class="item">
+          <div class="item_lt">
+            <p>sdfsdf23…23efdfs</p>
+            <p>2020/12/18 11:08:21</p>
+          </div>
+          <div class="item_lt item_rg red">
+            -3846
+          </div>
+        </div>
+        <div class="item">
+          <div class="item_lt">
+            <p>sdfsdf23…23efdfs</p>
+            <p>2020/12/18 11:08:21</p>
+          </div>
+          <div class="item_lt item_rg green">
+            +3846
+          </div>
+        </div>
+      </div>
+    </div>
+    <van-tabbar v-model="active" active-color="#4F5F7F" @change="onChange">
+      <van-tabbar-item>
+        <!-- <template #icon="props"> -->
+        <router-link class="tabbar_ls tabbar_ls1" tag="div" to="/walletAssets/transfer">
+          <template>
+            <span class="tabbar_img">
+              <img src="../../assets/assets.svg" />
+            </span>
+          </template>
+          <span class="tabbar_zise">转账</span>
+        </router-link>
+
+      </van-tabbar-item>
+      <van-tabbar-item>
+        <router-link class="tabbar_ls" tag="div" to="/walletAssets/collection">
+          <template>
+            <span class="tabbar_img">
+              <img src="../../assets/asstes1.svg" />
+            </span>
+          </template>
+          <span class="tabbar_zise">收款</span>
+        </router-link>
+      </van-tabbar-item>
+    </van-tabbar>
+  </div>
+</template>
+
+<script>
+import Title from '@/components/Title'
+export default {
+  data() {
+    return {
+      active: 0,
+      navIndex: 1
+    }
+  },
+  components: {
+    Title
+  },
+  methods: {
+    onChange(index) {
+      this.active = index
+      console.log(index)
+    },
+    nav(index) {
+      this.navIndex = index
+    }
+  }
+}
+</script>
+
+<style lang="less" scoped>
+.title_bg {
+  height: 180px;
+  background: url(../../assets/bg2.png) no-repeat;
+  background-size: 100% 100%;
+  .assetsDtal {
+    padding-top: 17px;
+    p {
+      text-align: center;
+    }
+    p:nth-child(1) {
+      img {
+        width: 60px;
+      }
+    }
+    p:nth-child(2) {
+      font-size: 20px;
+      font-weight: 500;
+      color: #ffffff;
+    }
+  }
+}
+.detals_nav {
+  padding: 20px 10px;
+  display: flex;
+  justify-content: space-around;
+  div {
+    height: 26px;
+    background: #f4f6fa;
+    border-radius: 13px;
+    line-height: 26px;
+    font-size: 14px;
+    font-weight: 400;
+    color: #aeb8c2;
+    text-align: center;
+    padding: 0 36px;
+    &.nav_item {
+      color: #ffffff;
+      background: #6362f1;
+    }
+  }
+}
+.wallet_scoll {
+  height: calc(100vh - 180px);
+  overflow: scroll;
+  padding: 0 10px;
+  padding-top: 14px;
+  .currency__list {
+    .item {
+      display: flex;
+      justify-content: space-between;
+      background: #ffffff;
+      box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.08);
+      border-radius: 6px;
+      padding: 18px 10px;
+      margin-bottom: 10px;
+      .item_lt {
+        p {
+          color: #000000;
+          font-size: 12px;
+          font-weight: 500;
+        }
+        p:nth-child(2) {
+          color: #8997b3;
+        }
+      }
+      .item_rg {
+        font-size: 14px;
+        font-weight: 600;
+        &.red {
+          color: #ff545d;
+        }
+        &.green {
+          color: #00ab72;
+        }
+      }
+    }
+  }
+}
+.tabbar_ls {
+  display: flex;
+  align-items: center;
+}
+.tabbar_ls1::before {
+  position: absolute;
+  content: '';
+  right: 0;
+  top: 18px;
+  height: 13px;
+  border-right: 1px solid #cad5de;
+  border-style: dotted;
+}
+.tabbar_img {
+  text-align: center;
+  display: inline-block;
+  margin-right: 10px;
+}
+.tabbar_zise {
+  display: inline-block;
+}
+.van-tabbar-item {
+  position: relative;
+}
+</style>

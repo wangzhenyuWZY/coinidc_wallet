@@ -16,7 +16,7 @@ import '@/plugins/vant'
 import '@/assets/css/index.scss'
 // 移动端适配
 import 'lib-flexible/flexible.js'
-
+import './styles/index.less'
 // filters
 import './filters'
 Vue.config.productionTip = false
