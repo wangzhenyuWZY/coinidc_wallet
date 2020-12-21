@@ -12,4 +12,5 @@ export const constantRouterMap = [
     }
   },
   { path: '/home', name: 'home', component: () => import('@/views/home/index')},
+  { path: '/wallet/step1', name: 'step1', component: () => import('@/views/wallet/step1')},
 ]
