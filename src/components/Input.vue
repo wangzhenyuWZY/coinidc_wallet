@@ -3,9 +3,9 @@
     <div class="input_lable" v-show="label">{{label}}</div>
     <div class="globle_input">
       <div class="input_lt">
-        <input :type="showEye ?'text':'password'" placeholder="请输入密码" @keyup="hdelClick">
+        <input :type="showEye ?'text':'password'" :placeholder="placeholder" @keyup="hdelClick">
       </div>
-      <div class="rg_icon">
+      <div class="rg_icon" v-show="icon">
         <span>
           <img v-show="!showEye" src='../assets/eye_show.svg' alt="" @click="showEye =!showEye ">
           <img v-show="showEye" src='../assets/eye_hide.svg' alt="" @click="showEye =!showEye">
@@ -17,7 +17,17 @@
 
 <script>
 export default {
-  props: ['label', 'placeholder'],
+  props: {
+    label: {
+
+    },
+    placeholder: {
+
+    },
+    icon: {
+      default: true
+    }
+  },
   data() {
     return {
       showEye: false
