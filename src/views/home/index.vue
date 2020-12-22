@@ -20,6 +20,7 @@ export default {
     var secretSeed = lightwallet.keystore.generateRandomSeed();//注记词
     var password = prompt('Enter password for encryption', 'password');//密码
 var global_keystore = null
+
     lightwallet.keystore.createVault({
         password: password,
         seedPhrase: secretSeed,
@@ -28,14 +29,13 @@ var global_keystore = null
       }, function (err, ks) {
         global_keystore = ks
         global_keystore.keyFromPassword(password, function(err, pwDerivedKey) {
-          global_keystore.generateNewAddress(pwDerivedKey, 3);
-          var addresses = global_keystore.getAddresses();
+          global_keystore.generateNewAddress(pwDerivedKey);
+          var addresses = global_keystore.getAddresses()[0];
           console.log(addresses)
-          var keys = global_keystore._generatePrivKeys(pwDerivedKey,1) 
+          var keys = global_keystore.exportPrivateKey(addresses,pwDerivedKey) 
           console.log(keys)
         })
-      })
-      
+      }) 
   },
 
   methods: {}
