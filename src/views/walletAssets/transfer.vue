@@ -24,12 +24,12 @@
               <div class="bordrs_lt">
                 <div class="inputs">
                   <input type="text" placeholder="请输入账户">
-                  <img src="../../assets/closeit.svg" alt="">
+                  <img class="saoyisao" src="../../assets/saoyisao.png" alt="">
                 </div>
               </div>
             </div>
           </div>
-          <div class="account_title">
+          <div class="account_title" @click="showPicker = true">
             <div class="title ">选择通行证</div>
             <div class="borders">
               <div class="bordrs_lt">
@@ -65,7 +65,10 @@
         <van-button class="globel_button" :loading="false" :disabled='true' type="info" loading-text="确定">发送</van-button>
       </div>
     </div>
-
+    <van-popup v-model="showPicker" round position="bottom">
+      <van-picker show-toolbar title="" :columns="columns" @cancel="showPicker = false" item-height="40" @confirm="onConfirm"
+                  confirm-button-text="确定" />
+    </van-popup>
   </div>
 </template>
 
@@ -75,7 +78,11 @@ export default {
   data() {
     return {
       active: 0,
-      navIndex: 1
+      navIndex: 1,
+      value: '',
+      showPicker: false,
+      columns: ['杭州', '宁波', '温州', '绍兴', '湖州', '嘉兴', '金华', '衢州', '宁波', '温州', '绍兴', '湖州', '嘉兴', '金华', '衢州']
+
     }
   },
   components: {
@@ -88,6 +95,10 @@ export default {
     },
     nav(index) {
       this.navIndex = index
+    },
+    onConfirm(value) {
+      this.value = value
+      this.showPicker = false
     }
   }
 }
@@ -186,6 +197,9 @@ export default {
         padding-left: 11px;
         padding-right: 14px;
         border: 1px solid #cad5de;
+        .saoyisao {
+          width: 18px;
+        }
         .input_lt {
           flex: 1;
           color: #000000;
@@ -210,5 +224,12 @@ export default {
       }
     }
   }
+}
+/deep/ .van-picker-column__item--selected {
+  background: #f4f6fa;
+  height: 60px;
+  font-size: 16px;
+  font-weight: 600;
+  font-size: 16px;
 }
 </style>

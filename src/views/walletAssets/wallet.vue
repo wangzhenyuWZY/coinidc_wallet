@@ -112,16 +112,15 @@
         <!-- <template #icon="props"> -->
         <template>
           <div class="tabbar_img">
-            <img src="../../assets/zican.svg" />
+            <img :src="active == 0?require('../../assets/zican.svg'):require('../../assets/assetsh.png')" />
           </div>
         </template>
         <div class="tabbar_zise">资产</div>
       </van-tabbar-item>
       <van-tabbar-item>
-
         <template>
           <div class="tabbar_img">
-            <img src="../../assets/liulanq.svg" />
+            <img :src="active == 1?require('../../assets/liulanqs.png'):require('../../assets/liulanq.svg')" />
           </div>
         </template>
         <div class="tabbar_zise">浏览器</div>
@@ -290,6 +289,9 @@ export default {
 }
 .tabbar_img {
   text-align: center;
+  img {
+    width: 20px;
+  }
 }
 .tabbar_zise {
   margin-top: 3px;
