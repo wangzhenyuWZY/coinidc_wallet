@@ -13,9 +13,9 @@
         <span>备份私钥</span>
         <img src="../../assets/back.svg" alt="">
       </div>
-      <div class="key m_top20" @click="show1 = true">
-        <span>备份助记词</span>
-        <img src="../../assets/back.svg" alt="">
+      <div class="key m_top20" @click="toMnemonic">
+          <span>备份助记词</span>
+          <img src="../../assets/back.svg" alt="">
       </div>
       <div class="reading m_top20">
         <span>
@@ -25,7 +25,7 @@
         <span>我已备份助记词并保存好私钥信息，并知晓私钥一旦丢失任 何人都将无法找回。</span>
       </div>
       <div class="m_top20">
-        <van-button class="globel_button" :loading="false" :disabled='!reading' type="info" loading-text="下载Keystore文件">下载Keystore文件</van-button>
+        <van-button class="globel_button" :loading="false" :disabled='!reading' type="info" loading-text="下载Keystore文件" @click="show1 = true">确定</van-button>
       </div>
     </div>
     <modelKey :show="show" :codeUrl="codeUrl" @close="show=false" />
@@ -65,7 +65,15 @@ export default {
   },
   methods: {
     chage() {
-      alert('点击确定')
+      this.$router.push({
+        path: "/validation/step2",
+        query: {
+          ...this.$route.query
+        }
+      })
+    },
+    toMnemonic(){
+      this.$router.push('/validation/step1')
     }
   }
 }

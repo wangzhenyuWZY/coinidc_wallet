@@ -16,7 +16,7 @@
             <span class="type">{{d}}</span>
           </div>
         </div>
-        <div class="list_btn">
+        <div class="list_btn" v-show="false">
           <div class="cp">
             <img src="../../assets/icon_cp.svg" alt="">
             <span>复制</span>
@@ -28,8 +28,8 @@
         </div>
       </div>
       <div class="btn_list m_top20">
-        <div class="btn1">下一步</div>
-        <div class="btn2 m_top20">上一步</div>
+        <router-link to="/wallet/step2"><div class="btn1">下一步</div></router-link>
+        <!-- <div class="btn2 m_top20">上一步</div> -->
       </div>
     </div>
   </div>
@@ -62,7 +62,6 @@ export default {
   },
   mounted() {
     let mnemonic = getStore("mnemonic");
-    console.log('mnemonic======='+mnemonic)
     if (!objIsNull(mnemonic)) {
       this.wordsList = mnemonic.split(" ");
     }
