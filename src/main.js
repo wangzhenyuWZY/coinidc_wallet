@@ -6,6 +6,10 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 
+import bip39 from 'bip39';
+import ethers from 'ethers';
+Vue.prototype.bip39 = bip39;
+Vue.prototype.ethers = ethers;
 // 设置 js中可以访问 $cdn
 import { $cdn } from '@/config'
 Vue.prototype.$cdn = $cdn
@@ -16,7 +20,7 @@ import '@/plugins/vant'
 import '@/assets/css/index.scss'
 // 移动端适配
 import 'lib-flexible/flexible.js'
-
+import './styles/index.less'
 // filters
 import './filters'
 Vue.config.productionTip = false

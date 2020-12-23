@@ -1,0 +1,94 @@
+<template>
+  <van-popup :value="show" :style="{ width: '94.67%' ,borderRadius: '6px'}">
+    <div class="popup_model">
+      <div class="popup_title">
+        <span class="title_lt"></span>
+        <span class="title_center">备份私钥</span>
+        <span class="title_rg" @click="close"> <img src="../../assets/colse.svg" alt=""> </span>
+      </div>
+      <div class="popup_size m_top20">以下是钱包的私钥，请保存在安全的地方，一旦丢失将无法 找回。</div>
+      <div class="popup_key">
+        <div>rwergsdsfds0i34okreporgk4optmgdosidjf30irfoi sdfspdfijq34sijfdiosdjfsdjfwioe</div>
+        <div class="cp"><img src="../../assets/icon_cp.svg" alt=""></div>
+      </div>
+      <div class="qrcode">
+        <vue-qr :correctLevel="3" :autoColor="false" :text="codeUrl" :size="121" :margin="0" :logoMargin="3"></vue-qr>
+      </div>
+      <div class="popup_buttons">
+        <div>备份完成</div>
+        <div>保存二维码</div>
+      </div>
+    </div>
+  </van-popup>
+</template>
+
+<script>
+import VueQr from 'vue-qr'
+export default {
+  props: ['show', 'codeUrl'],
+  components: {
+    VueQr
+  },
+  methods: {
+    close() {
+      this.$emit('close')
+    }
+  }
+}
+</script>
+
+<style lang="less" scoped>
+.popup_model {
+  padding: 20px;
+  .popup_title {
+    display: flex;
+    justify-content: space-between;
+    justify-items: center;
+    font-size: 16px;
+    font-weight: 500;
+    color: #000000;
+  }
+  .popup_size {
+    font-size: 12px;
+    color: #000000;
+  }
+  .popup_key {
+    display: flex;
+    background: #ebeff2;
+    border-radius: 6px;
+    padding: 8px 10px;
+    font-size: 12px;
+    font-weight: 400;
+    color: #8997b3;
+    margin-top: 8px;
+    .cp {
+      margin-left: 8px;
+    }
+  }
+  .qrcode {
+    text-align: center;
+    padding: 30px 0;
+  }
+  .popup_buttons {
+    display: flex;
+    justify-content: space-between;
+    > div {
+      width: 48%;
+      height: 50px;
+      border-radius: 4px;
+      line-height: 50px;
+      font-size: 16px;
+      font-weight: 500;
+      text-align: center;
+      &:nth-child(1) {
+        border: 1px solid #8997b3;
+        color: #8997b3;
+      }
+      &:nth-child(2) {
+        background: #3c3bee;
+        color: #fff;
+      }
+    }
+  }
+}
+</style>
