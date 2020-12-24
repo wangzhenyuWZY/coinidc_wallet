@@ -5,6 +5,9 @@
     <div class="createContainer">
       <p class="createTitle">创建钱包<span>(Step1/<span class="title_colr">2</span>)</span></p>
       <div class="set_input">
+        <Input label="昵称" placeholder="请输入昵称" v-model="password" />
+      </div>
+      <div class="set_input">
         <Input label="设置密码" placeholder="请输入密码" v-model="password" />
       </div>
       <div class="set_input">
