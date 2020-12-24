@@ -12,6 +12,7 @@ export const constantRouterMap = [
     }
   },
   { path: '/home', name: 'home', component: () => import('@/views/home/index') },
+  { path: '/scene', name: 'scene', component: () => import('@/components/scene') },
   { path: '/wallet/step1', name: 'step1', component: () => import('@/views/wallet/step1') }, // 创建钱包第1步设置钱包密码
   { path: '/wallet/step2', name: 'step2', component: () => import('@/views/wallet/step2') }, // 创建钱包第2步 生成秘钥和助记词
   { path: '/wallet/mnemonic', name: 'mnemonic', component: () => import('@/views/wallet/mnemonic') }, // 导入助记词
