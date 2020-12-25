@@ -5,13 +5,16 @@
     <div class="createContainer">
       <p class="createTitle">创建钱包<span>(Step1/<span class="title_colr">2</span>)</span></p>
       <div class="set_input">
-        <Input label="昵称" placeholder="请输入昵称" v-model="password" />
+        <Input label="昵称" placeholder="请输入昵称" v-model="name" />
       </div>
       <div class="set_input">
         <Input label="设置密码" placeholder="请输入密码" v-model="password" />
       </div>
       <div class="set_input">
         <Input label="确认密码" placeholder="请再次输入密码" v-model="passwordAgain" />
+      </div>
+      <div class="set_input">
+        <Input label="邀请码" placeholder="请输入邀请码" v-model="inviteCode" />
       </div>
       <div class="btn">
         <!-- <van-button class="globel_button" :loading="false" :disabled='disableds' type="info" loading-text="下载Keystore文件">下载Keystore文件</van-button> -->
@@ -32,7 +35,9 @@ export default {
       title: '创建钱包',
       showEye: false,
       password:'',
-      passwordAgain:''
+      passwordAgain:'',
+      name:'',
+      inviteCode:''
     }
   },
   components: {
@@ -54,6 +59,11 @@ export default {
   },
   methods: {
     handelClick() {
+      if (objIsNull(this.name) || objIsNull(this.name)) {
+        this.text = "钱包名称不能为空";
+        this.toast = true;
+        return;
+      }
       if (objIsNull(this.password) || objIsNull(this.passwordAgain)) {
         this.text = "钱包密码不能为空";
         this.toast = true;
@@ -75,6 +85,7 @@ export default {
             this.$router.push({
                 path: "/wallet/step2",
                 query: {
+                    walletName:this.name,
                     walletPassword: this.password
                 }
             });
