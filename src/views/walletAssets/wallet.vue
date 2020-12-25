@@ -130,6 +130,8 @@
 </template>
 
 <script>
+const TronWeb = require('tronweb');
+import { getStore, objIsNull } from "@/config/utils";
 import Title from '@/components/Title'
 export default {
   data() {
@@ -140,10 +142,26 @@ export default {
   components: {
     Title
   },
+  created(){
+    this.createTronWeb()
+  },
   methods: {
     onChange(index) {
       this.active = index
       console.log(index)
+    },
+    createTronWeb(){
+      let walletItem = getStore("walletItem");
+      let privateKey = ''
+      if (!objIsNull(walletItem)) {
+        walletItem = JSON.parse(walletItem)
+        privateKey = walletItem.wallet.privateKey
+      }
+      const fullNode = 'https://api.shasta.trongrid.io';
+      const solidityNode = 'https://api.shasta.trongrid.io';
+      const eventServer = 'https://api.shasta.trongrid.io';
+      const tronWeb = new TronWeb(fullNode,solidityNode,eventServer,privateKey);
+      console.log(tronWeb)
     }
   }
 }

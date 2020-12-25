@@ -8,14 +8,14 @@
       </div>
       <div class="popup_size m_top20">以下是钱包的私钥，请保存在安全的地方，一旦丢失将无法 找回。</div>
       <div class="popup_key">
-        <div>rwergsdsfds0i34okreporgk4optmgdosidjf30irfoi sdfspdfijq34sijfdiosdjfsdjfwioe</div>
+        <div style="overflow: hidden;text-overflow: ellipsis;">{{privateKey}}</div>
         <div class="cp"><img src="../../assets/icon_cp.svg" alt=""></div>
       </div>
       <div class="qrcode">
-        <vue-qr :correctLevel="3" :autoColor="false" :text="codeUrl" :size="121" :margin="0" :logoMargin="3"></vue-qr>
+        <vue-qr :correctLevel="3" :autoColor="false" :text="privateKey" :size="121" :margin="0" :logoMargin="3"></vue-qr>
       </div>
       <div class="popup_buttons">
-        <div>备份完成</div>
+        <div @click="close">备份完成</div>
         <div>保存二维码</div>
       </div>
     </div>
@@ -23,15 +23,29 @@
 </template>
 
 <script>
+import { getStore, objIsNull } from "@/config/utils";
 import VueQr from 'vue-qr'
 export default {
   props: ['show', 'codeUrl'],
   components: {
     VueQr
   },
+  data() {
+    return {
+      title: '创建钱包',
+      privateKey:''
+    }
+  },
   methods: {
     close() {
       this.$emit('close')
+    }
+  },
+  created(){
+    let walletItem = getStore("walletItem");
+    if (!objIsNull(walletItem)) {
+      walletItem = JSON.parse(walletItem)
+      this.privateKey = walletItem.wallet.privateKey
     }
   }
 }

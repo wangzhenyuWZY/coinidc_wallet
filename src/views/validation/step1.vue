@@ -11,12 +11,12 @@
       </div>
       <div class="validation_list">
         <div class="list">
-          <div class="list_item" v-for="(d,index) in list" :key="index">
-            <span class="size_number">{{d}}</span>
-            <span class="type">type</span>
+          <div class="list_item" v-for="(d,index) in wordsList" :key="index">
+            <span class="size_number">{{index}}</span>
+            <span class="type">{{d}}</span>
           </div>
         </div>
-        <div class="list_btn">
+        <div class="list_btn" v-show="false">
           <div class="cp">
             <img src="../../assets/icon_cp.svg" alt="">
             <span>复制</span>
@@ -28,14 +28,15 @@
         </div>
       </div>
       <div class="btn_list m_top20">
-        <div class="btn1">下一步</div>
-        <div class="btn2 m_top20">上一步</div>
+        <router-link to="/wallet/step2"><div class="btn1">下一步</div></router-link>
+        <!-- <div class="btn2 m_top20">上一步</div> -->
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { getStore, objIsNull } from "@/config/utils";
 import Title from '@/components/Title'
 export default {
   data() {
@@ -50,18 +51,20 @@ export default {
       show: false,
       show1: false,
       reading: false,
-      list: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+      wordsList:[]
     }
   },
   components: {
     Title
-
   },
   computed: {
-
+    
   },
   mounted() {
-
+    let mnemonic = getStore("mnemonic");
+    if (!objIsNull(mnemonic)) {
+      this.wordsList = mnemonic.split(" ");
+    }
   },
   methods: {
     chage() {

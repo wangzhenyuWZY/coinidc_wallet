@@ -12,8 +12,8 @@
       <div class="validation_list">
         <div class="list2v ">
           <div class="list ">
-            <div class="list_item" v-for="(d,index) in list1" :key="index">
-              <span class="type">type</span>
+            <div class="list_item" v-for="(item,index) in wordsListCopy" :key="index">
+              <span class="type">{{item.mnemonic}}</span>
             </div>
           </div>
         </div>
@@ -21,20 +21,21 @@
       <div class="validation_listvt2 validation_list">
 
         <div class="list list2">
-          <div class="list_item" v-for="(d,index) in list" :key="index" @click="hdelClick(d,index)" :class="d.show?'blues':''">
-            <span class="type">type</span>
+          <div class="list_item" v-for="(item,index) in wordsList" :key="index" @click="hdelClick(item,index)" :class="item.show?'blues':''">
+            <span class="type">{{item.mnemonic}}</span>
           </div>
         </div>
       </div>
       <div class="btn_list m_top20">
-        <van-button class="globel_button" :loading="false" :disabled='true' type="info" loading-text="确定">确定</van-button>
-        <div class="btn2 m_top20">上一步</div>
+        <van-button class="globel_button" :loading="false" :disabled='disabled' type="info" loading-text="确定" @click="toHome">确定</van-button>
+        <div class="btn2 m_top20" @click="goBack">上一步</div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { getStore, setStore, removeStore, objIsNull } from "@/config/utils";
 import Title from '@/components/Title'
 export default {
   data() {
@@ -49,77 +50,73 @@ export default {
       show: false,
       show1: false,
       reading: false,
-      list: [
-        {
-          id: 1,
-          show: false
-        },
-        {
-          id: 2,
-          show: false
-        },
-        {
-          id: 3,
-          show: false
-        },
-        {
-          id: 4,
-          show: false
-        },
-        {
-          id: 5,
-          show: false
-        },
-        {
-          id: 6,
-          show: false
-        },
-        {
-          id: 7,
-          show: false
-        },
-        {
-          id: 8,
-          show: false
-        },
-        {
-          id: 9,
-          show: false
-        },
-        {
-          id: 10,
-          show: false
-        },
-        {
-          id: 11,
-          show: false
-        },
-        {
-          id: 12,
-          show: false
-        }
-      ],
-      list1: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+      disabled:true,
+      mnemonic:[],
+      wordsList:[],
+      wordsListCopy:[]
     }
   },
   components: {
     Title
-
+  },
+  watch: {
+    wordsListCopy(list) {
+      if(list.length==12){
+        this.disabled = false
+      }
+    }
   },
   computed: {
 
   },
   mounted() {
-
+    let mnemonic = getStore("mnemonic");
+    if (!objIsNull(mnemonic)) {
+      this.mnemonic = mnemonic.split(" ");
+      this.mnemonic.forEach(element => {
+        this.wordsList.push({
+          mnemonic:element,
+          show:false
+        })
+      });
+    }
   },
   methods: {
-    chage() {
-      alert('点击确定')
+    checkWordList() {
+      if (this.mnemonic.toString() === this.wordsListCopy.toString()) {
+        alert('成功')
+      } else {
+        alert('shibai')
+      }
     },
-    hdelClick(d, index) {
-      d.show = !d.show
-      this.$set(this.list, index, d)
-      console.log(this.list)
+    hdelClick(d,index) {
+      d.show = true
+      this.$set(this.wordsList, index, d)
+      let hasItem = this.wordsListCopy.filter((res)=>{return res==d})
+      if(hasItem.length==0){
+        this.wordsListCopy.push(d)
+      }
+    },
+    toHome(){
+      let wallet = this.$route.query;
+      let walletList = JSON.parse(getStore("walletList"));
+      let walletItem = JSON.parse(getStore("walletItem"));
+      this.$set(walletItem, "details", wallet);
+      if (objIsNull(walletList) || walletList.length == 0) {
+        let list = [];
+        list.push(walletItem);
+        setStore("walletList", list);
+      } else {
+        walletList.push(walletItem);
+        setStore("walletList", walletList);
+      }
+      removeStore("mnemonic");
+      removeStore("walletItem");
+      // register();
+      this.$router.replace({ name: "wallet" });
+    },
+    goBack(){
+      this.$router.go(-1)
     }
   }
 }
