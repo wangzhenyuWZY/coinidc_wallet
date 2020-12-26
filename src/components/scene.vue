@@ -33,6 +33,9 @@
     <div class="guard-container">
       <guard></guard>
     </div>
+    <div class="coins-container">
+        <coins-rolling></coins-rolling>
+    </div>
     <slot>
     </slot>
   </div>
@@ -44,6 +47,7 @@ import general from './general.vue'
 import commander from './commander.vue'
 import captain from './captain.vue'
 import guard from './guard.vue'
+import coinsRolling from './coinsRolling.vue'
 export default {
   name: 'Scene',
   data() {
@@ -57,7 +61,8 @@ export default {
     general,
     commander,
     captain,
-    guard
+    guard,
+    coinsRolling
   },
   methods: {
 
@@ -117,4 +122,12 @@ export default {
   width: 100px;
   height: 100px;
 }
+
+.coins-container {
+    position: absolute;
+    top: 550px;
+    left: 250px;
+    width: 30px;
+    height: 30px;
+  }
 </style>
