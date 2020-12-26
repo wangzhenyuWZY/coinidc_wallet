@@ -1,6 +1,6 @@
 <template>
   <van-overlay :show="show" :lock-scroll="false" class="over_lay">
-    <div class="wrapper" @click.stop.prevent>
+    <div class="wrappers" @click.stop.prevent>
       <div class="wraper_bg" :class="hide?'padds':''">
         <div class="content">
           <div class="header">
@@ -13,7 +13,6 @@
               <img class="bg_img1 bg_img2" src="../../assets/Groupcell.svg" alt="">
             </div>
             <slot>
-
             </slot>
           </div>
         </div>
@@ -39,9 +38,6 @@ export default {
     },
     hide: {
       default: false
-    },
-    back: {
-      default: false
     }
   },
   data() {
@@ -61,10 +57,9 @@ export default {
   z-index: 9999999;
 }
 
-.wrapper {
+.wrappers {
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: flex-end;
   height: 100%;
 
   .wraper_bg {
@@ -74,9 +69,8 @@ export default {
       padding: 0;
     }
     .content {
-      background: linear-gradient(180deg, #a4acdc 0%, #7881ce 18%, #7881ce 100%);
-      box-shadow: 2px 2px 0px 0px rgba(112, 129, 240, 0.27);
-      border-radius: 6px;
+      background: #e7ebf1;
+      border-radius: 6px 6px 0px 0px;
       border: 1px solid #232c6e;
       min-height: 290px;
       position: relative;
@@ -105,7 +99,7 @@ export default {
         }
         .closeBtn {
           position: absolute;
-          right: -5px;
+          right: 15px;
           top: 0px;
           img {
             width: 37px;
@@ -114,7 +108,6 @@ export default {
       }
       .ct_by {
         margin-top: 40px;
-        padding: 0 10px 10px 10px;
         position: relative;
         .ct_cneter {
           background: #fff;

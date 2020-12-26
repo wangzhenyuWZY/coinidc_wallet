@@ -4,8 +4,13 @@
       <div class="wraper_bg" :class="hide?'padds':''">
         <div class="content">
           <div class="header">
+            <div class="back_btn" v-show="!hideback">
+              <img @click="closeback" src="../../assets/back1.svg" alt="">
+            </div>
             <div class="title">{{label}}</div>
-            <div class="closeBtn" @click="close"><img src="../../assets/Groupcolse.svg" alt=""></div>
+            <div class="closeBtn" @click="close" :class="hideback?'closeBtn1':''">
+              <img src="../../assets/close12.svg" alt="">
+            </div>
           </div>
           <div class="ct_by">
             <div class="img_bg" v-show="!mall">
@@ -42,6 +47,9 @@ export default {
     },
     back: {
       default: false
+    },
+    hideback: {
+      default: false
     }
   },
   data() {
@@ -51,6 +59,9 @@ export default {
   methods: {
     close() {
       this.$emit('close')
+    },
+    closeback() {
+      this.$emit('closeback')
     }
   }
 }
@@ -105,10 +116,26 @@ export default {
         }
         .closeBtn {
           position: absolute;
+          right: 10px;
+          top: 18px;
+          img {
+            width: 26px;
+          }
+        }
+        .closeBtn1 {
           right: -5px;
           top: 0px;
           img {
             width: 37px;
+          }
+        }
+        .back_btn {
+          position: absolute;
+          left: 10px;
+          top: 18px;
+          img {
+            width: 26px;
+            height: 26px;
           }
         }
       }
@@ -130,7 +157,7 @@ export default {
           width: 26px;
           height: 28px;
           position: absolute;
-          top: -14px;
+          top: 14px;
           left: 40px;
           &.bg_img2 {
             right: 40px;

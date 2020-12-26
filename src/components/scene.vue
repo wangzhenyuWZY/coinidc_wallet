@@ -33,87 +33,88 @@
     <div class="guard-container">
       <guard></guard>
     </div>
-
+    <slot>
+    </slot>
   </div>
 </template>
 <script>
-  import people from './people.vue'
-  import wizard from './wizard.vue'
-  import general from './general.vue'
-  import commander from './commander.vue'
-  import captain from './captain.vue'
-  import guard from './guard.vue'
-  export default {
-    name: 'scene',
-    data() {
-      return {
-
-      }
-    },
-    components: {
-      people,
-      wizard,
-      general,
-      commander,
-      captain,
-      guard
-    },
-    methods: {
-
-    },
-    mounted() {
+import people from './people.vue'
+import wizard from './wizard.vue'
+import general from './general.vue'
+import commander from './commander.vue'
+import captain from './captain.vue'
+import guard from './guard.vue'
+export default {
+  name: 'Scene',
+  data() {
+    return {
 
     }
+  },
+  components: {
+    people,
+    wizard,
+    general,
+    commander,
+    captain,
+    guard
+  },
+  methods: {
+
+  },
+  mounted() {
+
   }
+}
 </script>
 <style lang="less">
-  @import "../themes/style/scene.less";
+@import '../themes/style/scene.less';
 
-  .people-container {
-    position: absolute;
-    top: 220px;
-    left: 50px;
-    width: 100px;
-    height: 100px;
-  }
+.people-container {
+  position: absolute;
+  top: 220px;
+  left: 50px;
+  width: 100px;
+  height: 100px;
+}
 
-  .wizard-container {
-    position: absolute;
-    top: 420px;
-    right: 70px;
-    width: 100px;
-    height: 100px;
-  }
+.wizard-container {
+  position: absolute;
+  top: 420px;
+  right: 70px;
+  width: 100px;
+  height: 100px;
+}
 
-  .general-container {
-    position: absolute;
-    top: 370px;
-    left: 60px;
-    width: 100px;
-    height: 100px;
-  }
+.general-container {
+  position: absolute;
+  top: 370px;
+  left: 60px;
+  width: 100px;
+  height: 100px;
+}
 
-  .captain-container {
-    position: absolute;
-    top: 130px;
-    right: 70px;
-    width: 100px;
-    height: 100px;
-  }
+.captain-container {
+  position: absolute;
+  top: 130px;
+  right: 70px;
+  width: 100px;
+  height: 100px;
+}
 
-  .commander-container {
-    position: absolute;
-    top: 270px;
-    right: 70px;
-    width: 100px;
-    height: 100px;
-  }
+.commander-container {
+  position: absolute;
+  top: 270px;
+  right: 70px;
+  width: 100px;
+  height: 100px;
+}
 
-  .guard-container {
-    position: absolute;
-    top: 550px;
-    left: 70px;
-    width: 100px;
-    height: 100px;
-  }
+.guard-container {
+  position: absolute;
+  top: 550px;
+  left: 70px;
+  width: 100px;
+  height: 100px;
+}
 </style>
