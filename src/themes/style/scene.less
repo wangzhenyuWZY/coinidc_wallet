@@ -1,82 +1,41 @@
-// html {
-//     min-width: 320px;
-//     overflow-x: hidden
-// }
-
-// body,
-// html {
-//     height: 100%;
-//     line-height: 1;
-//     -webkit-user-select: none;
-//     -webkit-touch-callout: none;
-//     -webkit-overflow-scrolling: touch;
-//     -webkit-font-smoothing: antialiased;
-//     -webkit-tap-highlight-color: rgba(242, 137, 76, .05);
-// }
-
-// article,
-// aside,
-// blockquote,
-// body,
-// button,
-// code,
-// dd,
-// details,
-// div,
-// dl,
-// dt,
-// fieldset,
-// figcaption,
-// figure,
-// footer,
-// form,
-// h1,
-// h2,
-// h3,
-// h4,
-// h5,
-// h6,
-// header,
-// hgroup,
-// hr,
-// input,
-// legend,
-// li,
-// menu,
-// nav,
-// ol,
-// p,
-// pre,
-// section,
-// span,
-// td,
-// textarea,
-// th,
-// ul {
-//     margin: 0;
-//     padding: 0;
-//     list-style: none;
-//     -webkit-text-size-adjust: none;
-//     -moz-box-sizing: border-box;
-//     -ms-box-sizing: border-box;
-//     box-sizing: border-box;
-//     word-wrap: break-word
-// }
-
-.first-owl {
-    position: absolute;
-    top: 2rem;
-    left: 2rem;
-    width: 10rem;
-    height: 10rem;
+@keyframes meteor {
+    0% {
+      opacity: 0;
+      visibility: visible;
+      background: transparent url(../images/scene/meteor.png) no-repeat right top / 25% auto;
+    }
+    5% {
+      opacity: 1;
+      background: transparent url(../images/scene/meteor.png) no-repeat 50% 50% / 25% auto;
+    }
+    10% {
+      opacity: 0;
+      background: transparent url(../images/scene/meteor.png) no-repeat left bottom / 25% auto;
+    }
+    100% {
+      opacity: 0;
+      background: transparent url(../images/scene/meteor.png) no-repeat left bottom / 25% auto;
+    }
 }
-
 .scene {
     position: absolute;
     top: 0%;
     width: 100%;
     height: 800px;
     background: transparent url(../images/scene/background-empty.svg) no-repeat center top / 100% auto;
+    img {
+        height: 100%;
+    }
+    .meteor {
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 239px;
+        height: 93px;
+        background: transparent url(../images/scene/meteor.png) no-repeat right top / 25% auto;
+        animation: meteor 5s ease-out 2s infinite;
+        opacity: 0;
+    }
     .branch-1 {
         z-index: 100;
         position: absolute;
@@ -180,8 +139,4 @@
         height: 16%;
         background: transparent url(../images/scene/moon.svg) no-repeat center center / 100% auto;
     }
-}
-
-.scene img {
-    height: 100%;
 }

@@ -1,5 +1,7 @@
 <template>
   <div class="scene">
+    <div class="meteor" ref="meteor">
+    </div>
     <div class="moon">
       <img src="themes/images/scene/moon.svg" alt="">
     </div>
@@ -65,10 +67,17 @@ export default {
     coinsRolling
   },
   methods: {
-
+    randomCoordinates () {
+      let self = this;
+      let meteor = self.$refs.meteor;
+      setInterval(function(){
+        meteor.style.transform = 'translateY(' + 400 * Math.random() + '%)';
+      }, 5000)
+    }
   },
   mounted() {
-
+    let self = this;
+    self.randomCoordinates();
   }
 }
 </script>
