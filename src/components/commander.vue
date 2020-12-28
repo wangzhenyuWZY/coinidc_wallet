@@ -49,9 +49,10 @@
       <div class="hat">
         <img src="../themes/images/skin/commander-hat.png" alt="">
       </div>
-      <!-- <div class="branch">
+      <div class="branch" v-if="defaultBranch">
         <img src="../themes/images/common/branch.png" alt="">
-      </div> -->
+      </div>
+      <slot></slot>
       <div class="feet">
         <div class="left">
           <img src="../themes/images/common/foot.png" alt="">
@@ -115,6 +116,12 @@
         fly: '',
         fighting: '',
         lighting: ''
+      }
+    },
+    props: {
+      defaultBranch: {
+        type: Boolean,
+        default: true,
       }
     },
     methods: {
