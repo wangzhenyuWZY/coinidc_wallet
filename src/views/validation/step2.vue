@@ -110,8 +110,8 @@ export default {
         walletList.push(walletItem);
         setStore("walletList", walletList);
       }
-      removeStore("mnemonic");
-      removeStore("walletItem");
+      // removeStore("mnemonic");
+      // removeStore("walletItem");
       // register();
       this.$router.replace({ name: "wallet" });
     },

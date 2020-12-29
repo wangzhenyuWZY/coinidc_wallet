@@ -30,8 +30,8 @@
     <alert1 :show='show3' label="公告" @close="show3 = false">
       <div class="announcement announcement2">
         <div class="accets">
-          <p>2505 <span>USDT</span></p>
-          <p>≈ 2505 USDT</p>
+          <p>{{homeInfo.idctBalance}} <span>IDCT</span></p>
+          <p>≈ {{homeInfo.convertUsdtBalance}} USDT</p>
         </div>
         <div class="btns m_top20">提币</div>
         <ul class="an2 m_top20">
@@ -61,11 +61,11 @@
     <alert1 :show='show4' label="我的好友" @close="show4 = false">
       <div class="announcement friend">
         <ul class="friendul">
-          <li class="friendli" v-for="(item,index) in data4" :key="index">
-            <div> <img src="" alt=""></div>
+          <li class="friendli" v-for="(item,index) in friendList" :key="index">
+            <div> <img :src="item.portrait" alt=""></div>
             <div>
-              <p>张大臣</p>
-              <p>chen****@gmailcom</p>
+              <p>{{item.name}}</p>
+              <p>{{item.highestTitle}}</p>
             </div>
           </li>
         </ul>
@@ -75,19 +75,19 @@
       <div class="mall">
         <div class="scoll">
           <ul class="mallul">
-            <li class="mallli" v-for="(item,index) in data5 " :key="index" @click="setIndex(index)">
+            <li class="mallli" v-for="(item,index) in mallPlace " :key="index" @click="setIndex(item,index)">
               <div :class="toindex == index?'malllibg':''"> </div>
             </li>
           </ul>
         </div>
         <div class="mall_dtail">
           <div class="dt_lt">
-            <p>卫兵<span>3000<span>USDT</span></span></p>
-            <p>领养卫兵最高可获得600 USDT收益</p>
+            <p>{{mallDetail.name}}<span>{{mallDetail.usdtPrice}}<span>USDT</span></span></p>
+            <p>领养卫兵最高可获得{{mallDetail.describe}} USDT收益</p>
           </div>
           <div class="dt_rg">
             <div class="btns">
-              <div @click="show55= true; show5= false">领养</div>
+              <div @click="show55= true; show5= false">{{mallDetail.buyType=='buy'?'领养':'抽奖'}}</div>
             </div>
           </div>
         </div>
@@ -165,31 +165,33 @@
         <div class="btns btnst" @click="show7 = false">确定</div>
       </div>
     </alert2>
-    <scene>
+    <scene :mallList='mallList'>
       <div class="ps_list">
         <div class="play " @click="show = true"> <img src="../../assets/play.svg" alt=""> <span class="play_size">玩法</span> </div>
         <div class="play play1" @click="show2 = true"> <img src="../../assets/announcement.svg" alt=""> <span
-                class="play_size p_announcement">公告</span> </div>
-        <div class="play play1 " @click="show5 = true"> <img src="../../assets/mall.svg" alt=""> <span class="play_size p_mall">商城</span> </div>
+                class="play_size p_announcement">公告</span><a class="num" v-show="homeInfo.unReadNoticeCount">{{homeInfo.unReadNoticeCount}}</a> </div>
+        <div class="play play1 " @click="getPalaceOwls"> <img src="../../assets/mall.svg" alt=""> <span class="play_size p_mall">商城</span> </div>
         <div class="play play1 " @click="show3 = true"> <img src="../../assets/earnings.svg" alt=""> <span class="play_size p_earnings">收益</span>
         </div>
       </div>
       <div class="ps_nav">
-        <div class="play " @click="show4 = true"> <img src="../../assets/haoyou.svg" alt=""> <span class="play_size">好友</span> </div>
+        <div class="play " @click="getMyFriends"> <img src="../../assets/haoyou.svg" alt=""> <span class="play_size">好友</span> </div>
         <div class="play1 " @click="show7 = true">
-          <div class="ceter_img">2000</div> <span class="play_size">免费赚金币</span>
+          <div class="ceter_img">{{homeInfo.goldBalance}}</div> <span class="play_size">免费赚金币</span>
         </div>
-        <div class="play "> <img src="../../assets/weiyang.svg" alt=""> <span class="play_size play_sizec">一键喂养</span> </div>
+        <div class="play " @click="feedOwls"> <img src="../../assets/weiyang.svg" alt=""> <span class="play_size play_sizec">一键喂养</span> </div>
       </div>
     </scene>
   </div>
 </template>
 
 <script>
+import { getStore, objIsNull } from "@/config/utils";
 import alert1 from './globelModel'
 import alert2 from './globelModel2'
 import scene from '@/components/scene'
 import mallmodel from './mallModel'
+import {queryMyOwlList,feedMyOwls,getIndexInfo,queryMyFriends,queryPalaceOwls} from '@/api/user'
 export default {
   components: {
     alert1,
@@ -233,18 +235,73 @@ export default {
         }
       ],
       data4: [1, 2, 4, 5, 6, 7, 8, 9],
-      data5: [1, 2, 4, 5, 6, 7, 8, 9, 2, 4, 5, 6, 7]
+      data5: [1, 2, 4, 5, 6, 7, 8, 9, 2, 4, 5, 6, 7],
+      mallList:[],
+      friendList:[],
+      homeInfo:{},
+      mallPlace:[],
+      mallDetail:[]
     }
   },
+  created(){
+    this.getHomeInfo()
+    this.getMyOwlList()
+  },
   methods: {
-    setIndex(index) {
+    setIndex(item,index) {
       this.toindex = index
-    }
+      this.mallDetail = item
+    },
+    getMyOwlList(){
+      let that = this
+      queryMyOwlList().then(res=>{
+        if(res.data.resultCode==999999){
+          that.mallList = res.data.resultData
+        }
+        console.log(res)
+      })
+    },
+    feedOwls(){
+      let that = this
+      feedMyOwls().then(res=>{
+        if(res.data.resultCode==999999){
+          that.getMyOwlList()
+        }
+      })
+    },
+    getHomeInfo(){
+      let that = this
+      getIndexInfo().then(res=>{
+        if(res.data.resultCode==999999){
+          that.homeInfo = res.data.resultData
+        }
+      })
+    },
+    getMyFriends(){
+      let that = this
+      that.show4 = true
+      queryMyFriends().then(res=>{
+        if(res.data.resultCode==999999){
+          that.friendList = res.data.resultData
+        }
+      })
+    },
+    getPalaceOwls(){
+      let that = this
+      that.show5 = true
+      queryPalaceOwls().then(res=>{
+        if(res.data.resultCode==999999){
+          that.mallPlace = res.data.resultData
+          that.mallDetail = res.data.resultData[0]
+        }
+      })
+    },
   }
 }
 </script>
 
 <style lang="less" scoped>
+.scene{height:100%;}
 ul {
   li {
     width: auto;
@@ -658,6 +715,19 @@ ul {
   .play {
     position: relative;
     height: 40px;
+    .num{
+      position:absolute;
+      top:-5px;
+      right:-3px;
+      border-radius: 50%;
+      text-align:center;
+      font-size:12px;
+      color:#fff;
+      line-height:18px;
+      width:18px;
+      height:18px;
+      background:#ff0000
+    }
     &.play1 {
       margin-top: 17px;
     }

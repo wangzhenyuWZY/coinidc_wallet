@@ -1,7 +1,10 @@
 const api = {
   Login: '/user/login',
-  UserInfo: '/user/userinfo',
-  UserName: '/user/name'
+  queryMyOwlList: '/owl/queryMyOwlList',
+  feedMyOwls: '/owl/feedMyOwls',
+  queryMyFriends: '/user/queryMyFriends',
+  getIndexInfo: '/account/getIndexInfo',
+  queryPalaceOwls:'/owl/queryPalaceOwls'
 }
 
 export default api

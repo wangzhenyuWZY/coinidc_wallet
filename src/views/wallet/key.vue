@@ -33,7 +33,7 @@ export default {
   data() {
     return {
       title: '创建钱包',
-      privateKey:''
+      privateKey:'11'
     }
   },
   methods: {
@@ -43,6 +43,7 @@ export default {
   },
   created(){
     let walletItem = getStore("walletItem");
+    debugger
     if (!objIsNull(walletItem)) {
       walletItem = JSON.parse(walletItem)
       this.privateKey = walletItem.wallet.privateKey

@@ -131,12 +131,14 @@
 
 <script>
 const TronWeb = require('tronweb');
-import { getStore, objIsNull } from "@/config/utils";
+import { getStore, setStore, objIsNull } from "@/config/utils";
 import Title from '@/components/Title'
+import {login} from '@/api/user'
 export default {
   data() {
     return {
-      active: 0
+      active: 0,
+      tronWeb:null
     }
   },
   components: {
@@ -144,6 +146,7 @@ export default {
   },
   created(){
     this.createTronWeb()
+    this.userLogin()
   },
   methods: {
     onChange(index) {
@@ -157,12 +160,31 @@ export default {
         walletItem = JSON.parse(walletItem)
         privateKey = walletItem.wallet.privateKey
       }
-      const fullNode = 'https://api.shasta.trongrid.io';
-      const solidityNode = 'https://api.shasta.trongrid.io';
-      const eventServer = 'https://api.shasta.trongrid.io';
-      const tronWeb = new TronWeb(fullNode,solidityNode,eventServer,privateKey);
-      console.log(tronWeb)
-    }
+      debugger
+      const fullNode = 'https://api.trongrid.io';
+      const solidityNode = 'https://api.trongrid.io';
+      const eventServer = 'https://api.trongrid.io';
+      this.tronWeb = new TronWeb(fullNode,solidityNode,eventServer,privateKey);
+    },
+    userLogin(){
+      let that = this
+      let walletItem = getStore("walletItem");
+      if (!objIsNull(walletItem)) {
+        walletItem = JSON.parse(walletItem)
+        let data = {
+          name:'xxx',
+          idctUserId:'760732255497768192',
+          // inviteCode:'',
+          trxAddress:walletItem.wallet.address
+        }
+        login(data).then((res)=>{
+          if(res.data.resultCode==999999){
+            setStore('token', res.data.resultData)
+          }
+        })
+      }
+    },
+    
   }
 }
 </script>
