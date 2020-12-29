@@ -1,10 +1,5 @@
 <template>
-  <div
-    class="owl king regular"
-    ref="owl"
-    :class="[fly, fighting]"
-    @touchstart="touchstart"
-    >
+  <div class="owl king regular" ref="owl" :class="[fly, fighting]" @touchstart="touchstart">
     <div class="body">
       <div class="backrest">
         <img src="../themes/images/skin/king-backrest.png" alt="">
@@ -100,9 +95,9 @@
             <img src="../themes/images/skin/king-eyebrow.png" alt="">
           </div>
         </div>
-        <div class="mouth">
+        <!-- <div class="mouth">
           <img src="../themes/images/common/mouth.png" alt="">
-        </div>
+        </div> -->
       </div>
       <div class="bamboo">
         <img src="../themes/images/common/bamboo.png" alt="">
@@ -114,7 +109,7 @@
 <script>
   export default {
     name: 'king',
-    data () {
+    data() {
       return {
         fly: '',
         fighting: ''
@@ -129,7 +124,7 @@
     methods: {
       touchstart() {}
     },
-    mounted () {}
+    mounted() {}
   }
 </script>
 <style lang="less" scoped>
