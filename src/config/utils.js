@@ -1,5 +1,5 @@
 import bip39 from 'bip39';
-// var bip39 = require('bip39')
+var lightwallet = require('eth-lightwallet')
 var ethers = require('ethers')
 import abi from './abi';
 /**
@@ -54,24 +54,49 @@ export const objIsNull = data => {
  * 判断值是否是空 是空返回true，不是空返回false；
  * @param data
  */
-export const createWallet = () => {
-  console.log("start");
-  let words = bip39.generateMnemonic(
-    128,
-    null,
-    bip39.wordlists.english
-  );
-  let seed = bip39.mnemonicToSeed(words);
-  let root = ethers.HDNode.fromSeed(seed);
-  var key1 = root.derivePath("m/44'/195'/0'/0/0");
-  let privateKey = key1.privateKey;
-  let wallet = new ethers.Wallet(privateKey);
-  let walletItem = {};
-  walletItem.wallet = wallet;
-  walletItem.isFirstIn = true;
-  setStore('mnemonic', words);
-  setStore('walletItem', walletItem);
-  return wallet;
+export const createWallet = (userpassword) => {
+  return new Promise((resolve, reject) => {
+    var secretSeed = lightwallet.keystore.generateRandomSeed();//注记词
+    var password = userpassword;//密码
+    var global_keystore = null
+    let privateKey = null
+    let addresses = null
+    lightwallet.keystore.createVault({
+        password: password,
+        seedPhrase: secretSeed,
+        //random salt
+        hdPathString: "m/44'/195'/0'/0/0"
+      }, function (err, ks) {
+        global_keystore = ks
+        global_keystore.keyFromPassword(password, function(err, pwDerivedKey) {
+          global_keystore.generateNewAddress(pwDerivedKey);
+          addresses = global_keystore.getAddresses()[0];
+          privateKey = global_keystore.exportPrivateKey(addresses,pwDerivedKey)
+          let wallet = {
+            privateKey:privateKey,
+            address:addresses
+          };
+          let walletItem = {}
+          walletItem.wallet = wallet;
+          walletItem.isFirstIn = true;
+          setStore('mnemonic', secretSeed);
+          setStore('walletItem', walletItem);
+          resolve(wallet);
+        })
+      })
+  })
+  // let words = bip39.generateMnemonic(
+  //   128,
+  //   null,
+  //   bip39.wordlists.english
+  // );
+  // let seed = bip39.mnemonicToSeed(words);
+  // let root = ethers.HDNode.fromSeed(seed);
+  // var key1 = root.derivePath("m/44'/195'/0'/0/0");
+  // let privateKey = key1.privateKey;
+  // let wallet = new ethers.Wallet(privateKey);
+  
+  
 }
 
 /**

@@ -16,43 +16,45 @@
     <div class="cartoon-right"></div>
     <div class="grass"></div>
     <div class="broadleaf"></div> -->
-    <div class="people-container">
+  <div v-for="(item,index) in mallList" :key="index">
+    <div class="people-container" v-show="item.level==0">
       <people :defaultBranch="people.defaultBranch">
         <div class="scene-branch-4"></div>
       </people>
     </div>
-    <div class="general-container">
+    <div class="general-container" v-show="item.level==1">
       <general :defaultBranch="general.defaultBranch">
         <div class="scene-branch-6"></div>
       </general>
     </div>
-    <div class="captain-container">
+    <div class="captain-container" v-show="item.level==2">
       <captain :defaultBranch="captain.defaultBranch">
         <div class="scene-branch-3"></div>
       </captain>
     </div>
-    <div class="commander-container">
+    <div class="commander-container" v-show="item.level==3">
       <commander :defaultBranch="commander.defaultBranch">
         <div class="scene-branch-5"></div>
       </commander>
     </div>
-    <div class="wizard-container">
+    <div class="wizard-container" v-show="item.level==4">
       <wizard :defaultBranch="wizard.defaultBranch">
         <div class="scene-branch-7"></div>
       </wizard>
     </div>
-    <div class="guard-container">
+    <div class="guard-container" v-show="item.level==5">
       <guard :defaultBranch="guard.defaultBranch">
         <div class="scene-branch"></div>
       </guard>
     </div>
-    <div class="king-container">
+    <div class="king-container"  v-show="item.level==6">
       <king :defaultBranch="people.defaultBranch">
-      </king>
-  </div>
+      </king>  
+    </div>
     <div class="coins-container">
       <coins-rolling></coins-rolling>
     </div>
+  </div>  
     <slot>
     </slot>
   </div>
@@ -68,6 +70,12 @@
   import coinsRolling from './coinsRolling.vue'
   export default {
     name: 'Scene',
+    props:{
+      mallList: {
+        type: Array,
+        default: []
+      },
+    },
     data() {
       return {
         people: {

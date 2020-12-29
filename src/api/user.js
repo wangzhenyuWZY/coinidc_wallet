@@ -4,29 +4,54 @@ import request from '@/utils/request'
 
 // 登录
 export function login(data) {
-  return request({
-    url: api.Login,
-    method: 'post',
+  return request(
+    api.Login,
+    'post',
     data
-  })
+  )
 }
 
-// 用户信息 post 方法
-export function getUserInfo(data) {
-  return request({
-    url: api.UserInfo,
-    method: 'post',
-    data,
-    hideloading: true
-  })
+// 查询猫头鹰
+export function queryMyOwlList(data) {
+  return request(
+    api.queryMyOwlList,
+    'get',
+    data
+  )
 }
 
-// 用户名称 get 方法
-export function getUserName(params) {
-  return request({
-    url: api.UserName,
-    method: 'get',
-    params,
-    hideloading: true
-  })
+// 一键喂养
+export function feedMyOwls(params) {
+  return request(
+    api.feedMyOwls,
+    'post',
+    params
+  )
+}
+
+// 我的好友
+export function queryMyFriends(params) {
+  return request(
+    api.queryMyFriends,
+    'get',
+    params
+  )
+}
+
+// 猫头鹰首页数据
+export function getIndexInfo(params) {
+  return request(
+    api.getIndexInfo,
+    'get',
+    params
+  )
+}
+
+// 猫头鹰商店
+export function queryPalaceOwls(params) {
+  return request(
+    api.queryPalaceOwls,
+    'get',
+    params
+  )
 }
