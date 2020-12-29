@@ -47,7 +47,11 @@
         <div class="scene-branch"></div>
       </guard>
     </div>
-    <div class="coins-container" v-show="item.level==6">
+    <div class="king-container"  v-show="item.level==6">
+      <king :defaultBranch="people.defaultBranch">
+      </king>  
+    </div>
+    <div class="coins-container">
       <coins-rolling></coins-rolling>
     </div>
   </div>  
@@ -62,6 +66,7 @@
   import commander from './commander.vue'
   import captain from './captain.vue'
   import guard from './guard.vue'
+  import king from './king.vue'
   import coinsRolling from './coinsRolling.vue'
   export default {
     name: 'Scene',
@@ -90,6 +95,9 @@
         },
         guard: {
           defaultBranch: false
+        },
+        king: {
+          defaultBranch: false
         }
       }
     },
@@ -100,6 +108,7 @@
       commander,
       captain,
       guard,
+      king,
       coinsRolling
     },
     methods: {
