@@ -102,6 +102,10 @@
       <div class="bamboo">
         <img src="../themes/images/common/bamboo.png" alt="">
       </div>
+      <div class="health">
+        <div class="name">{{name}}</div>
+        <div class="progress" :style="{width: health + '%'}"></div>
+      </div>
     </div>
     <div class="ripple"></div>
   </div>
@@ -116,6 +120,18 @@
       }
     },
     props: {
+      showHealth: {
+        type: Boolean,
+        default: false
+      },
+      name: {
+        type: String,
+        default: '',
+      },
+      health: {
+        type: [String,Number],
+        default: 50,
+      },
       defaultBranch: {
         type: Boolean,
         default: false,

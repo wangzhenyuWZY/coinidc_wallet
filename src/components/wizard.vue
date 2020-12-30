@@ -88,6 +88,10 @@
           <img src="../themes/images/common/mouth.png" alt="">
         </div>
       </div>
+      <div class="health">
+        <div class="name">{{name}}</div>
+        <div class="progress" :style="{width: health + '%'}"></div>
+      </div>
       <div class="reel">
         <div class="reel-left"></div>
         <div class="painting" :class="[waveClass]">
@@ -120,6 +124,18 @@
       }
     },
     props: {
+      showHealth: {
+        type: Boolean,
+        default: false
+      },
+      name: {
+        type: String,
+        default: '',
+      },
+      health: {
+        type: [String,Number],
+        default: 50,
+      },
       defaultBranch: {
         type: Boolean,
         default: true,

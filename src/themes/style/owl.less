@@ -379,7 +379,7 @@
 
 .owl .body .head .eye .circle.right .eyebrow {
     position: absolute;
-    right: 13%;
+    right: 15%;
     top: 0%;
     height: 42%;
     font-size: 0;
@@ -514,4 +514,31 @@
     visibility: visible;
     top: -2%;
     animation: bambooHammer .3s cubic-bezier(.6, 0.2, .92, .4) 1;
+}
+
+.owl {
+    .health {
+        position: absolute;
+        top: -10%;
+        left: 24%;
+        width: 45%;
+        height: 7%;
+        background: #fff;
+        border-radius: 1000px;
+        .name {
+            position: absolute;
+            top: -280%;
+            left: 50%;
+            height: 7%;
+            color: #fff;
+            font-size: 12px;
+            white-space: nowrap;
+            transform: translateX(-50%);
+        }
+        .progress {
+            height: 100%;
+            background: linear-gradient(left, #ECD287, #E68327);
+            border-radius: 1000px;
+        }
+    }
 }

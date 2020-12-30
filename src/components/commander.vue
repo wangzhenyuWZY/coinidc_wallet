@@ -105,6 +105,10 @@
       <div class="bamboo">
         <img src="../themes/images/skin/commander-sword.png" alt="">
       </div>
+      <div class="health">
+        <div class="name">{{name}}</div>
+        <div class="progress" :style="{width: health + '%'}"></div>
+      </div>
     </div>
   </div>
 </template>
@@ -119,6 +123,18 @@
       }
     },
     props: {
+      showHealth: {
+        type: Boolean,
+        default: false
+      },
+      name: {
+        type: String,
+        default: '',
+      },
+      health: {
+        type: [String,Number],
+        default: 50,
+      },
       defaultBranch: {
         type: Boolean,
         default: true,
