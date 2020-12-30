@@ -55,7 +55,7 @@ module.exports = {
     // proxy: {
     //   //配置跨域
     //   '/api': {
-    //       target: "http://owlapi.apitest.date",
+    //       target: "https://api.coinidc.com",
     //       // ws:true,
     //       changOrigin:true,
     //       pathRewrite:{

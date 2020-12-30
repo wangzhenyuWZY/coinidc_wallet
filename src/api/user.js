@@ -55,3 +55,48 @@ export function queryPalaceOwls(params) {
     params
   )
 }
+
+// 收益列表
+export function queryIncomeList(params) {
+  return request(
+    api.queryIncomeList+'/'+params.pageNum,
+    'get',
+    params
+  )
+}
+
+// 公告列表
+export function queryNoticeList(params) {
+  return request(
+    api.queryNoticeList+'/'+params.pageNum,
+    'get',
+    params
+  )
+}
+
+// 公告详情
+export function readNoticeContent(params) {
+  return request(
+    api.readNoticeContent,
+    'get',
+    params
+  )
+}
+
+// 公告详情
+export function createBuyOwlOrder(params) {
+  return request(
+    api.createBuyOwlOrder,
+    'post',
+    params
+  )
+}
+
+// 玩法说明
+export function getPlayWay(params) {
+  return request(
+    api.getPlayWay,
+    'get',
+    params
+  )
+}
