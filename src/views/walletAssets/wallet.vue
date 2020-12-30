@@ -29,73 +29,15 @@
         </div>
       </div>
       <div class="currency__list">
-        <div class="item">
+        <div class="item" v-for="(item,index) in coinList" :key="index">
           <div class="item_top">
             <img src="../../assets/currency/IDC.svg" alt="">
             <div class="item_assets">
               <p>
-                <span>IDC</span>
-                <span>2393846</span>
+                <span>{{item.name}}</span>
+                <span>{{item.balance}}</span>
               </p>
               <p>
-                <span>IDCOIN</span>
-                <span>≈10283.32 USDT</span>
-              </p>
-            </div>
-          </div>
-          <div class="item_btn">
-            <div class=currency_btn>提币</div>
-            <div class=currency_btn>冲币</div>
-          </div>
-        </div>
-        <div class="item">
-          <div class="item_top">
-            <img src="../../assets/currency/IDC.svg" alt="">
-            <div class="item_assets">
-              <p>
-                <span>IDC</span>
-                <span>2393846</span>
-              </p>
-              <p>
-                <span>IDCOIN</span>
-                <span>≈10283.32 USDT</span>
-              </p>
-            </div>
-          </div>
-          <div class="item_btn">
-            <div class=currency_btn>提币</div>
-            <div class=currency_btn>冲币</div>
-          </div>
-        </div>
-        <div class="item">
-          <div class="item_top">
-            <img src="../../assets/currency/IDC.svg" alt="">
-            <div class="item_assets">
-              <p>
-                <span>IDC</span>
-                <span>2393846</span>
-              </p>
-              <p>
-                <span>IDCOIN</span>
-                <span>≈10283.32 USDT</span>
-              </p>
-            </div>
-          </div>
-          <div class="item_btn">
-            <div class=currency_btn>提币</div>
-            <div class=currency_btn>冲币</div>
-          </div>
-        </div>
-        <div class="item">
-          <div class="item_top">
-            <img src="../../assets/currency/IDC.svg" alt="">
-            <div class="item_assets">
-              <p>
-                <span>IDC</span>
-                <span>2393846</span>
-              </p>
-              <p>
-                <span>IDCOIN</span>
                 <span>≈10283.32 USDT</span>
               </p>
             </div>
@@ -131,14 +73,33 @@
 
 <script>
 const TronWeb = require('tronweb');
+import axios from 'axios'
 import { getStore, setStore, objIsNull } from "@/config/utils";
 import Title from '@/components/Title'
 import {login} from '@/api/user'
+import contracts from '@/api/contracts'
 export default {
   data() {
     return {
       active: 0,
-      tronWeb:null
+      tronWeb:null,
+      trxBalance:0,
+      coinList:[{
+        name:'TRX',
+        decimals:6,
+        balance:0,
+        price:0
+      },{
+        name:'IDC',
+        decimals:6,
+        balance:0,
+        price:0
+      },{
+        name:'USDT',
+        decimals:6,
+        balance:0,
+        price:0
+      }]
     }
   },
   components: {
@@ -154,17 +115,45 @@ export default {
       console.log(index)
     },
     createTronWeb(){
+      let that = this
       let walletItem = getStore("walletItem");
       let privateKey = ''
       if (!objIsNull(walletItem)) {
         walletItem = JSON.parse(walletItem)
         privateKey = walletItem.wallet.privateKey
       }
-      debugger
-      const fullNode = 'https://api.trongrid.io';
-      const solidityNode = 'https://api.trongrid.io';
-      const eventServer = 'https://api.trongrid.io';
-      this.tronWeb = new TronWeb(fullNode,solidityNode,eventServer,privateKey);
+      const fullNode = 'https://api.shasta.trongrid.io';
+      const solidityNode = 'https://api.shasta.trongrid.io';
+      const eventServer = 'https://api.shasta.trongrid.io';
+      this.tronWeb = new TronWeb(fullNode,solidityNode,eventServer,privateKey)
+      this.tronWeb.trx.getBalance(this.tronWeb.defaultAddress.base58).then(res => {
+        that.coinList[0].balance = that.tronWeb.fromSun(res)   
+      })
+      this.getIdcBalance()
+      this.getUsdtBalance()
+      this.getTokenPrice()
+    },
+    async getIdcBalance(){
+      let that = this
+      let func = 'balanceOf(address)'
+      let params = [{'type':'address','value':this.tronWeb.defaultAddress.base58}]
+      this.tronWeb.transactionBuilder.triggerConstantContract(contracts.IDC,func, {},params).then(res=>{
+        let balance = parseInt(res.constant_result[0],16)
+        that.coinList[1].balance = balance/Math.pow(10,6)
+      })
+    },
+    async getUsdtBalance(){
+      let that = this
+      let func = 'balanceOf(address)'
+      let params = [{'type':'address','value':this.tronWeb.defaultAddress.base58}]
+      this.tronWeb.transactionBuilder.triggerConstantContract(contracts.USDT,func, {},params).then(res=>{
+        let balance = parseInt(res.constant_result[0],16)
+        that.coinList[2].balance = balance/Math.pow(10,6)
+      })
+    },
+    async getTokenPrice(){
+      let res = await axios.get('https://api.coinidc.com/openapi/quote/v1/klines?interval=1m&limit=1&symbol=TRXUSDT')
+      console.log(res)
     },
     userLogin(){
       let that = this
@@ -184,7 +173,16 @@ export default {
         })
       }
     },
-    
+    sendToken(){
+      let that = this
+      let func = 'approve(address,uint256)'
+      let params = [
+        {'type':'address','value':this.tronWeb.defaultAddress.base58},
+        {'type':'uint256','value':100000000}
+      ]
+      let transfer = this.tronWeb.transactionBuilder.triggerConstantContract(contracts.USDT,func, {},params)
+      let sign = this.tronWeb.trx.sign(transfer)
+    }
   }
 }
 </script>

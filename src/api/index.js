@@ -4,7 +4,12 @@ const api = {
   feedMyOwls: '/owl/feedMyOwls',
   queryMyFriends: '/user/queryMyFriends',
   getIndexInfo: '/account/getIndexInfo',
-  queryPalaceOwls:'/owl/queryPalaceOwls'
+  queryPalaceOwls:'/owl/queryPalaceOwls',
+  queryIncomeList:'/account/queryIncomeList',
+  queryNoticeList:'/notice/queryNoticeList',
+  readNoticeContent:'/notice/readNoticeContent',
+  createBuyOwlOrder:'/owl/createBuyOwlOrder',
+  getPlayWay:'/notice/getPlayWay'
 }
 
 export default api
