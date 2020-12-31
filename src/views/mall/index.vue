@@ -1,27 +1,25 @@
 <template>
   <div class="container">
     <alert1 :show='show' label="玩法说明" @close="show = false">
-      <div class="ct_cneter">
-        这里有很多字这里有很多字这里有很多字这里有很多字这里有很多字这里有很多字这里有很这里有很多字这里有很多字这里有很多字多字这里有很多字这里有很多字这里有很多字这里有很多字这里有很多字这里有很多字这里有很
-        这里有很多字这里有很多字这里有很多字多字这里有很多字这里有很多字这里有很多字这里有很多字这里有很多字这里有很多字这里有很这里有很多字这里有很多字这里有很多字多字
+      <div class="ct_cneter" v-html="playWayDetail">
       </div>
     </alert1>
     <alert1 :show='show2' label="公告" @close="show2 = false">
       <div class="announcement" @click.stop.prevent>
         <ul class="an1">
-          <li class="an1li" v-for="(item,index) in data" :key="'add'+index" @click="show6 = true;show2=false;">
-            <p>{{item.time}}</p>
-            <p>{{item.text}}</p>
+          <li class="an1li" v-for="(item,index) in noticeList" :key="index" @click="getNoticeDetail(item)">
+            <p>{{item.createTime}}</p>
+            <p>{{item.titleHk}}</p>
           </li>
         </ul>
       </div>
     </alert1>
     <alert2 :show='show6' label="公告详情" @close="show6 = false" :mall="true" @closeback="show6 = false; show2= true;">
       <div class="ct_ditile">
-        <div>标题标题标题</div>
+        <div>{{noticeDetail.titleHk}}</div>
         <p>
-          这里有很多字这里有很多字这里有很多字这里有很多字这里有很多字这里有很多字这里有很这里有很多字这里有很多字这里有很多字多字这里有很多字这里有很多字这里有很多字这里有很多字这里有很多字这里有很多字这里有很
-          这里有很多字这里有很多字这里有很多字多字这里有很多字这里有很多字这里有很多字这里有很
+          {{noticeDetail.detail}}
+          
         </p>
 
       </div>
@@ -30,30 +28,15 @@
     <alert1 :show='show3' label="公告" @close="show3 = false">
       <div class="announcement announcement2">
         <div class="accets">
-          <p>2505 <span>USDT</span></p>
-          <p>≈ 2505 USDT</p>
+          <p>{{homeInfo.idctBalance}} <span>IDCT</span></p>
+          <p>≈ {{homeInfo.convertUsdtBalance}} USDT</p>
         </div>
         <div class="btns m_top20">提币</div>
         <ul class="an2 m_top20">
-          <li class="an2li">
-            <p>2020-12-12 12:00:00</p>
-            <p>1.您的猫头鹰共创1.02 IDCT收益</p>
-            <p>2.您的猫头鹰子民共纳税 3.03 IDCT收益</p>
-          </li>
-          <li class="an2li">
-            <p>2020-12-12 12:00:00</p>
-            <p>1.您的猫头鹰共创1.02 IDCT收益</p>
-            <p>2.您的猫头鹰子民共纳税 3.03 IDCT收益</p>
-          </li>
-          <li class="an2li">
-            <p>2020-12-12 12:00:00</p>
-            <p>1.您的猫头鹰共创1.02 IDCT收益</p>
-            <p>2.您的猫头鹰子民共纳税 3.03 IDCT收益</p>
-          </li>
-          <li class="an2li">
-            <p>2020-12-12 12:00:00</p>
-            <p>1.您的猫头鹰共创1.02 IDCT收益</p>
-            <p>2.您的猫头鹰子民共纳税 3.03 IDCT收益</p>
+          <li class="an2li" v-for="(item,index) in incomeList" :key="index">
+            <p>{{item.createTime}}</p>
+            <p>1.您的猫头鹰共创{{item.owlIncome}} IDCT收益</p>
+            <p>2.您的猫头鹰子民共纳税 {{item.taxIncome}} IDCT收益</p>
           </li>
         </ul>
       </div>
@@ -61,11 +44,11 @@
     <alert1 :show='show4' label="我的好友" @close="show4 = false">
       <div class="announcement friend">
         <ul class="friendul">
-          <li class="friendli" v-for="(item,index) in data4" :key="index">
-            <div> <img src="" alt=""></div>
+          <li class="friendli" v-for="(item,index) in friendList" :key="index">
+            <div> <img :src="item.portrait" alt=""></div>
             <div>
-              <p>张大臣</p>
-              <p>chen****@gmailcom</p>
+              <p>{{item.name}}</p>
+              <p>{{item.highestTitle}}</p>
             </div>
           </li>
         </ul>
@@ -75,19 +58,19 @@
       <div class="mall">
         <div class="scoll">
           <ul class="mallul">
-            <li class="mallli" v-for="(item,index) in data5 " :key="index" @click="setIndex(index)">
+            <li class="mallli" v-for="(item,index) in mallPlace " :key="index" @click="setIndex(item,index)">
               <div :class="toindex == index?'malllibg':''"> </div>
             </li>
           </ul>
         </div>
         <div class="mall_dtail">
           <div class="dt_lt">
-            <p>卫兵<span>3000<span>USDT</span></span></p>
-            <p>领养卫兵最高可获得600 USDT收益</p>
+            <p>{{mallDetail.name}}<span>{{mallDetail.usdtPrice}}<span>USDT</span></span></p>
+            <p>{{mallDetail.summary}}</p>
           </div>
           <div class="dt_rg">
             <div class="btns">
-              <div @click="show55= true; show5= false">领养</div>
+              <div @click="mallDetail.buyType=='buy'?show55=true:show77=true;show5=false">{{mallDetail.buyType=='buy'?'领养':'抽奖'}}</div>
             </div>
           </div>
         </div>
@@ -98,16 +81,15 @@
       <div class="mall2">
         <div class="ditals_bg">
           <div class="dital2">
-            <div class="imgs"> <img src="../../assets/logo.png" alt=""> </div>
-            <p class="weib">卫兵</p>
-            <p class="linwe">领养卫兵需支付300 USDT，可带来价值约600 USDT 的 IDCT。 </p>
-            <p class="linwe">猫头鹰臣民每日需要喂养100金币的食物，否则将无法产出IDCT，金币可证首页看提供的视频广告获得！</p>
+            <div class="imgs"> <img :src="mallDetail.portrait" alt=""> </div>
+            <p class="weib">{{mallDetail.name}}</p>
+            <p class="linwe">{{mallDetail.describe}}</p>
           </div>
         </div>
 
-        <div class="btn_slet"><img src="../../assets/btn_unselect.svg" alt=""><span class="seta">300 USDT</span><span class="seta1">(余额：500
+        <div class="btn_slet"><img src="../../assets/btn_unselect.svg" alt=""><span class="seta">{{mallDetail.usdtPrice}} USDT</span><span class="seta1">(余额：500
             USDT)</span> </div>
-        <div class="btns" @click="show55=false;show56 =true">确定支付</div>
+        <div class="btns" @click="createOrder">确定支付</div>
       </div>
     </alert2>
     <alert2 :show='show56' label="商城" @close="show56 = false" @closeback="show56 = false; show55= true;">
@@ -165,31 +147,33 @@
         <div class="btns btnst" @click="show7 = false">确定</div>
       </div>
     </alert2>
-    <scene>
+    <scene :mallList='mallList'>
       <div class="ps_list">
-        <div class="play " @click="show = true"> <img src="../../assets/play.svg" alt=""> <span class="play_size">玩法</span> </div>
-        <div class="play play1" @click="show2 = true"> <img src="../../assets/announcement.svg" alt=""> <span
-                class="play_size p_announcement">公告</span> </div>
-        <div class="play play1 " @click="show5 = true"> <img src="../../assets/mall.svg" alt=""> <span class="play_size p_mall">商城</span> </div>
-        <div class="play play1 " @click="show3 = true"> <img src="../../assets/earnings.svg" alt=""> <span class="play_size p_earnings">收益</span>
+        <div class="play " @click="checkPlayWay"> <img src="../../assets/play.svg" alt=""> <span class="play_size">玩法</span> </div>
+        <div class="play play1" @click="getNoticeList"> <img src="../../assets/announcement.svg" alt=""> <span
+                class="play_size p_announcement">公告</span><a class="num" v-show="homeInfo.unReadNoticeCount">{{homeInfo.unReadNoticeCount}}</a> </div>
+        <div class="play play1 " @click="getPalaceOwls"> <img src="../../assets/mall.svg" alt=""> <span class="play_size p_mall">商城</span> </div>
+        <div class="play play1 " @click="getIncomeList"> <img src="../../assets/earnings.svg" alt=""> <span class="play_size p_earnings">收益</span>
         </div>
       </div>
       <div class="ps_nav">
-        <div class="play " @click="show4 = true"> <img src="../../assets/haoyou.svg" alt=""> <span class="play_size">好友</span> </div>
+        <div class="play " @click="getMyFriends"> <img src="../../assets/haoyou.svg" alt=""> <span class="play_size">好友</span> </div>
         <div class="play1 " @click="show7 = true">
-          <div class="ceter_img">2000</div> <span class="play_size">免费赚金币</span>
+          <div class="ceter_img">{{homeInfo.goldBalance}}</div> <span class="play_size">免费赚金币</span>
         </div>
-        <div class="play "> <img src="../../assets/weiyang.svg" alt=""> <span class="play_size play_sizec">一键喂养</span> </div>
+        <div class="play " @click="feedOwls"> <img src="../../assets/weiyang.svg" alt=""> <span class="play_size play_sizec">一键喂养</span> </div>
       </div>
     </scene>
   </div>
 </template>
 
 <script>
+import { getStore, objIsNull } from "@/config/utils";
 import alert1 from './globelModel'
 import alert2 from './globelModel2'
 import scene from '@/components/scene'
 import mallmodel from './mallModel'
+import {queryMyOwlList,feedMyOwls,getIndexInfo,queryMyFriends,queryPalaceOwls,queryIncomeList,queryNoticeList,readNoticeContent,createBuyOwlOrder,getPlayWay} from '@/api/user'
 export default {
   components: {
     alert1,
@@ -210,41 +194,126 @@ export default {
       toindex: 0,
       show7: false,
       show77: false,
-      data: [
-        {
-          time: '2020-12-12',
-          text: '新闻标题新闻标题新闻标题题新闻标题新闻新闻标题新闻标题新闻标题题新闻标题新闻新闻标题新闻标题新闻标题题新闻标题新闻'
-        },
-        {
-          time: '2020-12-12',
-          text: '新闻标题新闻标题新闻标题题新闻标题新闻新闻标题新闻标题新闻标题题新闻标题新闻新闻标题新闻标题新闻标题题新闻标题新闻'
-        },
-        {
-          time: '2020-12-12',
-          text: '新闻标题新闻标题新闻标题题新闻标题新闻新闻标题新闻标题新闻标题题新闻标题新闻新闻标题新闻标题新闻标题题新闻标题新闻'
-        },
-        {
-          time: '2020-12-12',
-          text: '新闻标题新闻标题新闻标题题新闻标题新闻新闻标题新闻标题新闻标题题新闻标题新闻新闻标题新闻标题新闻标题题新闻标题新闻'
-        },
-        {
-          time: '2020-12-12',
-          text: '新闻标题新闻标题新闻标题题新闻标题新闻新闻标题新闻标题新闻标题题新闻标题新闻新闻标题新闻标题新闻标题题新闻标题新闻'
-        }
-      ],
-      data4: [1, 2, 4, 5, 6, 7, 8, 9],
-      data5: [1, 2, 4, 5, 6, 7, 8, 9, 2, 4, 5, 6, 7]
+      mallList:[],
+      friendList:[],
+      homeInfo:{},
+      mallPlace:[],
+      mallDetail:[],
+      incomeList:[],
+      noticeList:[],
+      noticeDetail:{},
+      orderDetail:{},
+      playWayDetail:''
     }
   },
+  created(){
+    this.getHomeInfo()
+    this.getMyOwlList()
+  },
   methods: {
-    setIndex(index) {
+    setIndex(item,index) {
       this.toindex = index
+      this.mallDetail = item
+    },
+    getMyOwlList(){
+      let that = this
+      queryMyOwlList().then(res=>{
+        if(res.data.resultCode==999999){
+          that.mallList = res.data.resultData
+        }
+        console.log(res)
+      })
+    },
+    feedOwls(){
+      let that = this
+      feedMyOwls().then(res=>{
+        if(res.data.resultCode==999999){
+          that.getMyOwlList()
+        }
+      })
+    },
+    getHomeInfo(){
+      let that = this
+      getIndexInfo().then(res=>{
+        if(res.data.resultCode==999999){
+          that.homeInfo = res.data.resultData
+        }
+      })
+    },
+    getMyFriends(){
+      let that = this
+      that.show4 = true
+      queryMyFriends().then(res=>{
+        if(res.data.resultCode==999999){
+          that.friendList = res.data.resultData
+        }
+      })
+    },
+    getPalaceOwls(){
+      let that = this
+      that.show5 = true
+      queryPalaceOwls().then(res=>{
+        if(res.data.resultCode==999999){
+          that.mallPlace = res.data.resultData
+          that.mallDetail = res.data.resultData[0]
+        }
+      })
+    },
+    getIncomeList(){
+      let that = this
+      that.show3 = true
+      queryIncomeList({pageNum:0}).then(res=>{
+        if(res.data.resultCode==999999){
+          that.incomeList = res.data.resultData
+        }
+      })
+    },
+    getNoticeList(){
+      let that = this
+      that.show2 = true
+      queryNoticeList({pageNum:0}).then(res=>{
+        if(res.data.resultCode==999999){
+          that.noticeList = res.data.resultData
+        }
+      })
+    },
+    getNoticeDetail(item){
+      this.show6 = true
+      this.show2 = false
+      readNoticeContent({noticeId:item.id}).then(res=>{
+        if(res.data.resultCode==999999){
+          that.noticeDetail = res.data.resultData
+        }
+      })
+    },
+    checkPlayWay(){
+      let that = this
+      this.show = true
+      getPlayWay().then(res=>{
+        if(res.data.resultCode==999999){
+          that.playWayDetail = res.data.resultData
+        }
+      })
+    },
+    createOrder(){
+      let that = this
+      let data = {
+        nickName:'11',
+        owlLevel:this.mallDetail.level,
+        drawCode:''
+      }
+      createBuyOwlOrder(data).then(res=>{
+        if(res.data.resultCode==999999){
+          that.orderDetail = res.data.resultData
+        }
+      })
     }
   }
 }
 </script>
 
 <style lang="less" scoped>
+.scene{height:100%;}
 ul {
   li {
     width: auto;
@@ -658,6 +727,19 @@ ul {
   .play {
     position: relative;
     height: 40px;
+    .num{
+      position:absolute;
+      top:-5px;
+      right:-3px;
+      border-radius: 50%;
+      text-align:center;
+      font-size:12px;
+      color:#fff;
+      line-height:18px;
+      width:18px;
+      height:18px;
+      background:#ff0000
+    }
     &.play1 {
       margin-top: 17px;
     }

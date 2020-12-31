@@ -1,7 +1,15 @@
 const api = {
   Login: '/user/login',
-  UserInfo: '/user/userinfo',
-  UserName: '/user/name'
+  queryMyOwlList: '/owl/queryMyOwlList',
+  feedMyOwls: '/owl/feedMyOwls',
+  queryMyFriends: '/user/queryMyFriends',
+  getIndexInfo: '/account/getIndexInfo',
+  queryPalaceOwls:'/owl/queryPalaceOwls',
+  queryIncomeList:'/account/queryIncomeList',
+  queryNoticeList:'/notice/queryNoticeList',
+  readNoticeContent:'/notice/readNoticeContent',
+  createBuyOwlOrder:'/owl/createBuyOwlOrder',
+  getPlayWay:'/notice/getPlayWay'
 }
 
 export default api

@@ -81,16 +81,16 @@ export default {
       }
       let wallet = JSON.parse(getStore("walletItem"));
         if (objIsNull(wallet)) {
-            createWallet();
-            this.$router.push({
-                path: "/wallet/step2",
-                query: {
-                    walletName:this.name,
-                    walletPassword: this.password
-                }
-            });
+            createWallet(this.password).then((res)=>{
+              this.$router.push({
+                  path: "/wallet/step2",
+                  query: {
+                      walletName:this.name,
+                      walletPassword: this.password
+                  }
+              });
+            })
         }
-      this.$router.push('/wallet/step2')
     }
   }
 }

@@ -49,9 +49,10 @@
       <div class="hat">
         <img src="../themes/images/skin/commander-hat.png" alt="">
       </div>
-      <!-- <div class="branch">
+      <div class="branch" v-if="defaultBranch">
         <img src="../themes/images/common/branch.png" alt="">
-      </div> -->
+      </div>
+      <slot></slot>
       <div class="feet">
         <div class="left">
           <img src="../themes/images/common/foot.png" alt="">
@@ -104,6 +105,10 @@
       <div class="bamboo">
         <img src="../themes/images/skin/commander-sword.png" alt="">
       </div>
+      <div class="health">
+        <div class="name">{{name}}</div>
+        <div class="progress" :style="{width: health + '%'}"></div>
+      </div>
     </div>
   </div>
 </template>
@@ -115,6 +120,24 @@
         fly: '',
         fighting: '',
         lighting: ''
+      }
+    },
+    props: {
+      showHealth: {
+        type: Boolean,
+        default: false
+      },
+      name: {
+        type: String,
+        default: '',
+      },
+      health: {
+        type: [String,Number],
+        default: 50,
+      },
+      defaultBranch: {
+        type: Boolean,
+        default: true,
       }
     },
     methods: {

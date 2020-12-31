@@ -1,17 +1,9 @@
 <template>
-  <div
-    class="owl general regular"
-    ref="owl"
-    :class="[fly, fighting]"
-    @touchstart="touchstart"
-    >
-    <div class="halo"></div>
-    <div class="ripple">
-        <div class="ripple-1">
-            <div class="ripple-2"></div>
-        </div>
-    </div>
+  <div class="owl king regular" ref="owl" :class="[fly, fighting]" @touchstart="touchstart">
     <div class="body">
+      <div class="backrest">
+        <img src="../themes/images/skin/king-backrest.png" alt="">
+      </div>
       <div class="wings folded">
         <div class="left">
           <img src="../themes/images/common/folded-wing-left.png" alt="">
@@ -43,13 +35,16 @@
         <img src="../themes/images/common/body.png" alt="">
       </div>
       <div class="clothes">
-        <img src="../themes/images/skin/general-clothes.png" alt="">
+        <img src="../themes/images/skin/king-clothes.png" alt="">
       </div>
       <div class="hat">
-        <img src="../themes/images/skin/general-hat.png" alt="">
+        <img src="../themes/images/skin/king-hat.png" alt="">
       </div>
-      <div class="branch" v-if="defaultBranch">
+      <!-- <div class="branch" v-if="defaultBranch">
         <img src="../themes/images/common/branch.png" alt="">
+      </div> -->
+      <div class="throne">
+        <img src="../themes/images/skin/king-throne.png" alt="">
       </div>
       <slot></slot>
       <div class="feet">
@@ -74,9 +69,9 @@
             <div class="contour">
               <img src="../themes/images/common/eye-circle-left.png" alt="">
             </div>
-            <div class="eyebrow left">
+            <!-- <div class="eyebrow left">
               <img src="../themes/images/common/eyebrow-left.png" alt="">
-            </div>
+            </div> -->
             <div class="eyeball">
               <div class="pupil"></div>
               <div class="star-1"></div>
@@ -87,34 +82,38 @@
             <div class="contour">
               <img src="../themes/images/common/eye-circle-right.png" alt="">
             </div>
-            <div class="eyebrow right">
+            <!-- <div class="eyebrow right">
               <img src="../themes/images/common/eyebrow-right.png" alt="">
-            </div>
+            </div> -->
             <div class="eyeball">
               <div class="pupil"></div>
               <div class="star-1"></div>
               <div class="star-2"></div>
             </div>
           </div>
+          <div class="king-eyebrow">
+            <img src="../themes/images/skin/king-eyebrow.png" alt="">
+          </div>
         </div>
-        <div class="mouth">
+        <!-- <div class="mouth">
           <img src="../themes/images/common/mouth.png" alt="">
-        </div>
+        </div> -->
       </div>
       <div class="bamboo">
-        <img src="../themes/images/skin/general-spear.png" alt="">
+        <img src="../themes/images/common/bamboo.png" alt="">
       </div>
       <div class="health">
         <div class="name">{{name}}</div>
         <div class="progress" :style="{width: health + '%'}"></div>
       </div>
     </div>
+    <div class="ripple"></div>
   </div>
 </template>
 <script>
   export default {
-    name: 'general',
-    data () {
+    name: 'king',
+    data() {
       return {
         fly: '',
         fighting: ''
@@ -135,31 +134,16 @@
       },
       defaultBranch: {
         type: Boolean,
-        default: true,
+        default: false,
       }
     },
     methods: {
-      touchstart () {
-        let self = this
-        let timer1, timer2
-        self.fly = 'fly'
-        timer1 = setTimeout(function () {
-          self.fly = ''
-          self.fighting = 'fighting'
-        }, 500)
-        timer2 = setTimeout(function () {
-          self.fighting = ''
-          clearTimeout(timer1)
-          clearTimeout(timer2)
-        }, 1200)
-      }
+      touchstart() {}
     },
-    mounted () {
-
-    }
+    mounted() {}
   }
 </script>
 <style lang="less" scoped>
   @import "../themes/style/owl.less";
-  @import "../themes/style/general.less";
+  @import "../themes/style/king.less";
 </style>
