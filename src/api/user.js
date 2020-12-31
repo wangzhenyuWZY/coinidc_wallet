@@ -100,3 +100,12 @@ export function getPlayWay(params) {
     params
   )
 }
+
+// 钱包余额
+export function queryWalletList(params) {
+  return request(
+    api.queryWalletList,
+    'get',
+    params
+  )
+}

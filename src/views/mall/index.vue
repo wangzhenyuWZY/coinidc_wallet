@@ -25,7 +25,7 @@
       </div>
     </alert2>
     <!-- 我的收益 -->
-    <alert1 :show='show3' label="公告" @close="show3 = false">
+    <alert1 :show='show3' label="收益" @close="show3 = false">
       <div class="announcement announcement2">
         <div class="accets">
           <p>{{homeInfo.idctBalance}} <span>IDCT</span></p>
@@ -36,7 +36,7 @@
           <li class="an2li" v-for="(item,index) in incomeList" :key="index">
             <p>{{item.createTime}}</p>
             <p>1.您的猫头鹰共创{{item.owlIncome}} IDCT收益</p>
-            <p>2.您的猫头鹰子民共纳税 {{item.taxIncome}} IDCT收益</p>
+            <p>2.您的猫头鹰子民共纳税 {{item.taxIncome}} IDCT</p>
           </li>
         </ul>
       </div>
@@ -87,9 +87,9 @@
           </div>
         </div>
 
-        <div class="btn_slet"><img src="../../assets/btn_unselect.svg" alt=""><span class="seta">{{mallDetail.usdtPrice}} USDT</span><span class="seta1">(余额：500
+        <div class="btn_slet"><img src="../../assets/btn_unselect.svg" alt=""><span class="seta">{{mallDetail.usdtPrice}} USDT</span><span class="seta1">(余额：{{usdtBalance}}
             USDT)</span> </div>
-        <div class="btns" @click="createOrder">确定支付</div>
+        <div class="btns" @click="createOrder">{{isApproved?'确定支付':'授权'}}</div>
       </div>
     </alert2>
     <alert2 :show='show56' label="商城" @close="show56 = false" @closeback="show56 = false; show55= true;">
@@ -147,6 +147,37 @@
         <div class="btns btnst" @click="show7 = false">确定</div>
       </div>
     </alert2>
+    <alert2 :show='show8' label="提币" @close="show8= false" :mall="false" :hideback="true">
+      <div class="announcement announcement2">
+        <div class="accets">
+          <p>{{homeInfo.idctBalance}} <span>IDCT</span></p>
+          <p>≈ {{homeInfo.convertUsdtBalance}} USDT</p>
+        </div>
+        <div class="ditals_bg">
+          <div class="dital2">
+            <div class="willt_pwd" style="padding-top:10px;">提币数量</div>
+            <div class="inputs" style="padding-bottom:10px;"><input type="password" placeholder="最低提202 IDCT"></div>
+          </div>
+        </div>
+        <div class="btns btnst" @click="show77 = true;show56= false ">提币</div>
+        <div class="tipbox">
+          <h2>注</h2>
+          <p>1.首次提币限额为价值2 USDT的 IDCT起</p>
+          <p>2.第二次提币限额为价值10 USDT的 IDCT起</p>
+          <p>3.第三次提币限额为价值20 USDT的 IDCT起</p>
+        </div>
+        <div class="widthrawList">
+          <div class="widthrawBar">
+            <p>20 IDCT<span>2020-12-12 12:00:00</span></p>
+            <p>20 IDCT<span>2020-12-12 12:00:00</span></p>
+            <p>20 IDCT<span>2020-12-12 12:00:00</span></p>
+            <p>20 IDCT<span>2020-12-12 12:00:00</span></p>
+            <p>20 IDCT<span>2020-12-12 12:00:00</span></p>
+            <p>20 IDCT<span>2020-12-12 12:00:00</span></p>
+          </div>
+        </div>
+      </div>
+    </alert2>
     <scene :mallList='mallList'>
       <div class="ps_list">
         <div class="play " @click="checkPlayWay"> <img src="../../assets/play.svg" alt=""> <span class="play_size">玩法</span> </div>
@@ -168,11 +199,13 @@
 </template>
 
 <script>
+const TronWeb = require('tronweb');
 import { getStore, objIsNull } from "@/config/utils";
 import alert1 from './globelModel'
 import alert2 from './globelModel2'
 import scene from '@/components/scene'
 import mallmodel from './mallModel'
+import contracts from '@/api/contracts'
 import {queryMyOwlList,feedMyOwls,getIndexInfo,queryMyFriends,queryPalaceOwls,queryIncomeList,queryNoticeList,readNoticeContent,createBuyOwlOrder,getPlayWay} from '@/api/user'
 export default {
   components: {
@@ -194,6 +227,7 @@ export default {
       toindex: 0,
       show7: false,
       show77: false,
+      show8:true,
       mallList:[],
       friendList:[],
       homeInfo:{},
@@ -203,17 +237,49 @@ export default {
       noticeList:[],
       noticeDetail:{},
       orderDetail:{},
-      playWayDetail:''
+      playWayDetail:'',
+      approvedBalance:0,
+      usdtBalance:0,
+      isApproved:false
     }
   },
   created(){
+    if(!window.tronWeb){
+      this.getTronWeb()
+    }else{
+      this.allowance()
+      this.getUsdtBalance()
+    }
     this.getHomeInfo()
     this.getMyOwlList()
   },
   methods: {
+    getTronWeb(){
+      let that = this
+      let walletItem = getStore("walletItem");
+      let privateKey = ''
+      if (!objIsNull(walletItem)) {
+        walletItem = JSON.parse(walletItem)
+        privateKey = walletItem.wallet.privateKey
+      }
+      const fullNode = 'https://api.shasta.trongrid.io';
+      const solidityNode = 'https://api.shasta.trongrid.io';
+      const eventServer = 'https://api.shasta.trongrid.io';
+      window.tronWeb = new TronWeb(fullNode,solidityNode,eventServer,privateKey)
+      if(window.tronWeb){
+        window.tronWeb.setAddress(window.tronWeb.defaultAddress.base58)
+        that.allowance()
+        that.getUsdtBalance()
+      }
+    },
     setIndex(item,index) {
       this.toindex = index
       this.mallDetail = item
+      if(this.approvedBalance && this.approvedBalance>this.mallDetail.usdtPrice){
+        this.isApproved = true
+      }else{
+        this.isApproved = false
+      }
     },
     getMyOwlList(){
       let that = this
@@ -256,6 +322,11 @@ export default {
         if(res.data.resultCode==999999){
           that.mallPlace = res.data.resultData
           that.mallDetail = res.data.resultData[0]
+          if(that.approvedBalance && that.approvedBalance>that.mallDetail.usdtPrice){
+            that.isApproved = true
+          }else{
+            that.isApproved = false
+          }
         }
       })
     },
@@ -295,6 +366,13 @@ export default {
         }
       })
     },
+    checkAppreve(){
+      if(this.isApproved){
+        this.createOrder()
+      }else{
+        this.approved()
+      }
+    },
     createOrder(){
       let that = this
       let data = {
@@ -305,9 +383,79 @@ export default {
       createBuyOwlOrder(data).then(res=>{
         if(res.data.resultCode==999999){
           that.orderDetail = res.data.resultData
+          debugger
+          if(that.approvedBalance && that.approvedBalance>that.mallDetail.usdtPrice){
+            that.sendToken()
+          }else{
+            that.isApproved = false
+          }
         }
       })
-    }
+    },
+    allowance(){
+      let that = this
+      var functionSelector = 'allowance(address,address)'
+      var parameter = [
+        { type: 'address', value: window.tronWeb.defaultAddress.base58 },
+        { type: 'address', value: contracts.OWL }
+      ]
+      window.tronWeb.transactionBuilder.triggerConstantContract(contracts.IDC, functionSelector, {}, parameter).then((res) => {
+        let hex = ''
+        if (res._hex) {
+          hex = parseInt(res._hex, 16)
+        }
+        if (res.remaining) {
+          hex = parseInt(res.remaining._hex, 16)
+        }
+        if (res.constant_result) {
+          hex = parseInt(res.constant_result[0], 16)
+        }
+        that.approvedBalance = hex/Math.pow(10,6)
+        console.log('approvedBalance======='+that.approvedBalance)
+      })
+    },
+    async approved(){
+      let that = this
+      let func = 'approve(address,uint256)'
+      let params = [
+        {'type':'address','value':contracts.OWL},
+        {'type':'uint256','value':100000000000000000000000000}
+      ]
+      let transfer = await window.tronWeb.transactionBuilder.triggerSmartContract(contracts.IDC,func, {},params)
+      window.tronWeb.trx.sign(transfer.transaction).then(function(signedTransaction) {
+          window.tronWeb.trx
+            .sendRawTransaction(signedTransaction)
+            .then(function(res) {
+              that.isApproved = true
+            })
+        })
+    },
+    async sendToken(){
+      let that = this
+      let func = 'buy(uint256,string)'
+      let params = [
+        {'type':'uint256','value':111},
+        {'type':'string','value':'aaa'}
+      ]
+      let transfer = await window.tronWeb.transactionBuilder.triggerSmartContract(contracts.OWL,func, {},params)
+      window.tronWeb.trx.sign(transfer.transaction).then(function(signedTransaction) {
+          window.tronWeb.trx
+            .sendRawTransaction(signedTransaction)
+            .then(function(res) {
+              
+            })
+        })
+    },
+    async getUsdtBalance(){
+      let that = this
+      let func = 'balanceOf(address)'
+      let params = [{'type':'address','value':window.tronWeb.defaultAddress.base58}]
+      window.tronWeb.transactionBuilder.triggerConstantContract(contracts.USDT,func, {},params).then(res=>{
+        let balance = parseInt(res.constant_result[0],16)
+        that.usdtBalance = balance/Math.pow(10,6)
+        console.log('usdtBalance====='+that.usdtBalance)
+      })
+    },
   }
 }
 </script>
@@ -539,24 +687,7 @@ ul {
     }
   }
 }
-.mall2 {
-  background: #dadeec;
-  box-shadow: 2px 2px 1px 0px rgba(38, 47, 131, 0.61);
-  border-radius: 5px;
-  padding: 25px 10px 10px;
-  .ditals_bg {
-  }
-  .dital2 {
-    background: #f9fbff;
-    box-shadow: 2px 2px 2px 0px #bfc2d8;
-    border-radius: 5px;
-    padding: 38px 12px 33px 10px;
-    .willt_pwd {
-      font-size: 16px;
-      font-weight: 400;
-      color: #000000;
-    }
-    .inputs {
+.inputs {
       display: flex;
       margin-top: 10px;
       input {
@@ -576,6 +707,25 @@ ul {
         }
       }
     }
+.willt_pwd {
+      font-size: 16px;
+      font-weight: 400;
+      color: #000000;
+    }    
+.mall2 {
+  background: #dadeec;
+  box-shadow: 2px 2px 1px 0px rgba(38, 47, 131, 0.61);
+  border-radius: 5px;
+  padding: 25px 10px 10px;
+  .ditals_bg {
+  }
+  .dital2 {
+    background: #f9fbff;
+    box-shadow: 2px 2px 2px 0px #bfc2d8;
+    border-radius: 5px;
+    padding: 38px 12px 33px 10px;
+    
+    
     .imgs {
       text-align: center;
       img {
@@ -898,6 +1048,43 @@ ul {
     font-size: 14px;
     font-weight: 400;
     color: #303030;
+  }
+}
+.widthrawList{
+  background: #f9fbff;
+  box-shadow: 0.05333rem 0.05333rem 0.05333rem 0 #bfc2d8;
+  border-radius: 0.13333rem;
+  padding: 0.34667rem 0 0.34667rem 0.26667rem;
+  margin-bottom: 0.26667rem;
+  margin-top:0.3rem;
+  overflow:hidden;
+  .widthrawBar{
+    height:3rem;
+    p{
+      font-size: 0.32rem;
+      color: #303030;
+      font-weight: 400;
+      padding-right:0.34667rem;
+      line-height:0.6rem;
+      span{
+        float:right;
+        color:#8D91AB;
+        font-size:0.3rem;
+      }
+    }
+  }
+}
+.tipbox{
+  padding-top:0.3rem;
+  h2{
+    font-size:0.32rem;
+    color:#8D91AB;
+    line-height:100%;
+  }
+  p{
+    font-size:0.32rem;
+    color:#303030;
+    line-height:0.6rem;
   }
 }
 </style>

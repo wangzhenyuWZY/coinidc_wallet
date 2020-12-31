@@ -3,8 +3,8 @@
     <div class="title_bg">
       <Title title="钱包" hide></Title>
       <div class="assetsDtal">
-        <p>98988.099 IDC</p>
-        <p>≈98988.099</p>
+        <p>{{totalBalance}} IDC</p>
+        <p>≈{{convertedBalance}}</p>
       </div>
       <div class="wallet_btn">
         <router-link tag="div" to="/walletAssets/transfer" class="btn">转账</router-link>
@@ -31,14 +31,14 @@
       <div class="currency__list">
         <div class="item" v-for="(item,index) in coinList" :key="index">
           <div class="item_top">
-            <img src="../../assets/currency/IDC.svg" alt="">
+            <img :src="item.icon" alt="">
             <div class="item_assets">
               <p>
-                <span>{{item.name}}</span>
+                <span>{{item.coinCode}}</span>
                 <span>{{item.balance}}</span>
               </p>
               <p>
-                <span>≈10283.32 USDT</span>
+                <span>≈{{item.convertedBalance}} IDCT</span>
               </p>
             </div>
           </div>
@@ -76,7 +76,7 @@ const TronWeb = require('tronweb');
 import axios from 'axios'
 import { getStore, setStore, objIsNull } from "@/config/utils";
 import Title from '@/components/Title'
-import {login} from '@/api/user'
+import {login,queryWalletList} from '@/api/user'
 import contracts from '@/api/contracts'
 export default {
   data() {
@@ -84,6 +84,8 @@ export default {
       active: 0,
       tronWeb:null,
       trxBalance:0,
+      totalBalance:0,
+      convertedBalance:0,
       coinList:[{
         name:'TRX',
         decimals:6,
@@ -108,6 +110,7 @@ export default {
   created(){
     this.createTronWeb()
     this.userLogin()
+    this.getMyToken()
   },
   methods: {
     onChange(index) {
@@ -125,35 +128,45 @@ export default {
       const fullNode = 'https://api.shasta.trongrid.io';
       const solidityNode = 'https://api.shasta.trongrid.io';
       const eventServer = 'https://api.shasta.trongrid.io';
-      this.tronWeb = new TronWeb(fullNode,solidityNode,eventServer,privateKey)
-      this.tronWeb.trx.getBalance(this.tronWeb.defaultAddress.base58).then(res => {
-        that.coinList[0].balance = that.tronWeb.fromSun(res)   
-      })
-      this.getIdcBalance()
-      this.getUsdtBalance()
-      this.getTokenPrice()
+      window.tronWeb = new TronWeb(fullNode,solidityNode,eventServer,privateKey)
+      if(window.tronWeb){
+        window.tronWeb.setAddress(window.tronWeb.defaultAddress.base58)
+        this.sendToken()
+      }
+      // this.tronWeb.trx.getBalance(this.tronWeb.defaultAddress.base58).then(res => {
+      //   that.coinList[0].balance = that.tronWeb.fromSun(res)   
+      // })
+      // this.getIdcBalance()
+      // this.getUsdtBalance()
+      // this.getTokenPrice()
     },
-    async getIdcBalance(){
+    // async getIdcBalance(){
+    //   let that = this
+    //   let func = 'balanceOf(address)'
+    //   let params = [{'type':'address','value':this.tronWeb.defaultAddress.base58}]
+    //   this.tronWeb.transactionBuilder.triggerConstantContract(contracts.IDC,func, {},params).then(res=>{
+    //     let balance = parseInt(res.constant_result[0],16)
+    //     that.coinList[1].balance = balance/Math.pow(10,6)
+    //   })
+    // },
+    // async getUsdtBalance(){
+    //   let that = this
+    //   let func = 'balanceOf(address)'
+    //   let params = [{'type':'address','value':this.tronWeb.defaultAddress.base58}]
+    //   this.tronWeb.transactionBuilder.triggerConstantContract(contracts.USDT,func, {},params).then(res=>{
+    //     let balance = parseInt(res.constant_result[0],16)
+    //     that.coinList[2].balance = balance/Math.pow(10,6)
+    //   })
+    // },
+    getMyToken(){
       let that = this
-      let func = 'balanceOf(address)'
-      let params = [{'type':'address','value':this.tronWeb.defaultAddress.base58}]
-      this.tronWeb.transactionBuilder.triggerConstantContract(contracts.IDC,func, {},params).then(res=>{
-        let balance = parseInt(res.constant_result[0],16)
-        that.coinList[1].balance = balance/Math.pow(10,6)
+      queryWalletList().then((res)=>{
+        if(res.data.resultCode==999999){
+          that.totalBalance = res.data.resultData.balance
+          that.convertedBalance = res.data.resultData.convertedBalance
+          that.coinList = res.data.resultData.lstWallet
+        }
       })
-    },
-    async getUsdtBalance(){
-      let that = this
-      let func = 'balanceOf(address)'
-      let params = [{'type':'address','value':this.tronWeb.defaultAddress.base58}]
-      this.tronWeb.transactionBuilder.triggerConstantContract(contracts.USDT,func, {},params).then(res=>{
-        let balance = parseInt(res.constant_result[0],16)
-        that.coinList[2].balance = balance/Math.pow(10,6)
-      })
-    },
-    async getTokenPrice(){
-      let res = await axios.get('https://api.coinidc.com/openapi/quote/v1/klines?interval=1m&limit=1&symbol=TRXUSDT')
-      console.log(res)
     },
     userLogin(){
       let that = this
@@ -173,15 +186,22 @@ export default {
         })
       }
     },
-    sendToken(){
+    async sendToken(){
       let that = this
       let func = 'approve(address,uint256)'
       let params = [
-        {'type':'address','value':this.tronWeb.defaultAddress.base58},
+        {'type':'address','value':contracts.OWL},
         {'type':'uint256','value':100000000}
       ]
-      let transfer = this.tronWeb.transactionBuilder.triggerConstantContract(contracts.USDT,func, {},params)
-      let sign = this.tronWeb.trx.sign(transfer)
+      let transfer = await window.tronWeb.transactionBuilder.triggerSmartContract(contracts.IDC,func, {},params)
+      window.tronWeb.trx.sign(transfer.transaction).then(function(signedTransaction) {
+          window.tronWeb.trx
+            .sendRawTransaction(signedTransaction)
+            .then(function(res) {
+              debugger
+              console.log(res)
+            })
+        })
     }
   }
 }

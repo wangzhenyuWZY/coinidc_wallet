@@ -9,7 +9,8 @@ const api = {
   queryNoticeList:'/notice/queryNoticeList',
   readNoticeContent:'/notice/readNoticeContent',
   createBuyOwlOrder:'/owl/createBuyOwlOrder',
-  getPlayWay:'/notice/getPlayWay'
+  getPlayWay:'/notice/getPlayWay',
+  queryWalletList:'/wallet/queryWalletList'
 }
 
 export default api
