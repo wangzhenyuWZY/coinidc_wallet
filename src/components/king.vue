@@ -1,5 +1,8 @@
 <template>
   <div class="owl king regular" ref="owl" :class="[fly, fighting]" @touchstart="touchstart">
+    <div class="shining" v-if="showShining">
+			<img src="../themes/images/common/shining.jpg" v-if="showShining" alt="">
+		</div>
     <div class="body">
       <div class="backrest">
         <img src="../themes/images/skin/king-backrest.png" alt="">
@@ -120,6 +123,10 @@
       }
     },
     props: {
+			showShining: {
+        type: Boolean,
+        default: false
+      },
       showHealth: {
         type: Boolean,
         default: false

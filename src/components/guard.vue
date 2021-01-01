@@ -5,6 +5,9 @@
     :class="[fly, fighting]"
     @touchstart="touchstart"
     >
+    <div class="shining" v-if="showShining">
+      <img src="../themes/images/common/shining.jpg" alt="">
+    </div>
     <div class="halo"></div>
     <div class="ripple">
         <div class="ripple-1">
@@ -121,6 +124,10 @@
       }
     },
     props: {
+      showShining: {
+        type: Boolean,
+        default: false
+      },
       showHealth: {
         type: Boolean,
         default: false
