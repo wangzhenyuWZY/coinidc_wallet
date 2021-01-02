@@ -18,37 +18,37 @@
     <div class="broadleaf"></div> -->
     <div v-for="(item,index) in mallList" :key="index">
       <div class="people-container" v-show="item.level==0">
-        <people :defaultBranch="people.defaultBranch" :showHealth="people.showHealth" :name="item.name" :health="item.health">
+        <people :defaultBranch="people.defaultBranch" :showHealth="people.showHealth" :name="item.name" :health="item.hunger">
           <div class="scene-branch-4"></div>
         </people>
       </div>
       <div class="general-container" v-show="item.level==1">
-        <general :defaultBranch="general.defaultBranch" :showHealth="general.showHealth" :name="item.name" :health="item.health">
+        <general :defaultBranch="general.defaultBranch" :showHealth="general.showHealth" :name="item.name" :health="item.hunger">
           <div class="scene-branch-6"></div>
         </general>
       </div>
       <div class="captain-container" v-show="item.level==2">
-        <captain :defaultBranch="captain.defaultBranch" :showHealth="captain.showHealth" :name="item.name" :health="item.health">
+        <captain :defaultBranch="captain.defaultBranch" :showHealth="captain.showHealth" :name="item.name" :health="item.hunger">
           <div class="scene-branch-3"></div>
         </captain>
       </div>
       <div class="commander-container" v-show="item.level==3">
-        <commander :defaultBranch="commander.defaultBranch" :showHealth="commander.showHealth" :name="item.name" :health="item.health">
+        <commander :defaultBranch="commander.defaultBranch" :showHealth="commander.showHealth" :name="item.name" :health="item.hunger">
           <div class="scene-branch-5"></div>
         </commander>
       </div>
       <div class="wizard-container" v-show="item.level==4">
-        <wizard :defaultBranch="wizard.defaultBranch" :showHealth="wizard.showHealth" :name="item.name" :health="item.health">
+        <wizard :defaultBranch="wizard.defaultBranch" :showHealth="wizard.showHealth" :name="item.name" :health="item.hunger">
           <div class="scene-branch-7"></div>
         </wizard>
       </div>
       <div class="guard-container" v-show="item.level==5">
-        <guard :defaultBranch="guard.defaultBranch" :showHealth="guard.showHealth" :name="item.name" :health="item.health">
+        <guard :defaultBranch="guard.defaultBranch" :showHealth="guard.showHealth" :name="item.name" :health="item.hunger">
           <div class="scene-branch"></div>
         </guard>
       </div>
       <div class="king-container" v-show="item.level==6">
-        <king :defaultBranch="people.defaultBranch" :showHealth="people.showHealth" :name="item.name" :health="item.health">
+        <king :defaultBranch="people.defaultBranch" :showHealth="people.showHealth" :name="item.name" :health="item.hunger">
         </king>
       </div>
       <div class="coins-container">
