@@ -151,6 +151,8 @@
     methods: {
       touchstart () {
         let self = this
+        self.createDom();
+        self.createSpell();
         let timer1
         self.fly = 'fly'
         function run () {
@@ -167,12 +169,13 @@
       },
       createDom () {
         let self = this;
-        let oUl = document.querySelector('.painting .inner');
+        let oUl = self.$refs.paintingInner;
         self.paintingInnerLeft = self.$refs.owl.offsetWidth * 0.05 + 'px';
         self.paintingInnerWidth = self.$refs.owl.offsetWidth * 0.9 + 'px';
         let uHTML = '';
         let num = self.num;
-        let paintingWidth = document.getElementsByClassName('reel')[0].getBoundingClientRect().width * 0.9;
+        // let paintingWidth = document.getElementsByClassName('reel')[0].getBoundingClientRect().width * 0.9;
+        let paintingWidth = self.$refs.owl.offsetWidth * 0.9;
         let widthUnit = paintingWidth / num;
         let emptyStyle = document.createElement('style');
         self.emptyStyle = emptyStyle;
@@ -189,7 +192,7 @@
       },
       createSpell () {
         let self = this;
-        let oUl = document.querySelector('.spell .inner');
+        let oUl = self.$refs.spellInner;
         let uHTML = '';
         let spellString = '丨亅丿乛一乙乚丶八勹匕冫卜厂刀刂儿二匚阝丷几卩冂力冖凵人亻入十厶亠匸讠廴又艹屮彳巛川辶寸大飞干工弓廾广彐彑巾口马门宀女犭山彡尸饣士扌氵纟巳土囗兀夕小忄幺弋尢夂子己一 乙二丁人入十儿了又干于亏工七士土下兀与才寸上口山巾zhi亿千乞川夕久凡个义丸么勺及广亡门丫之尸已己巳卫弓也女刃小飞叉习马子乡';
         spellString += spellString;
@@ -234,8 +237,10 @@
     },
     mounted () {
       let self = this;
-      self.createDom();
-      self.createSpell();
+      self.$nextTick(() => {
+          self.createDom();
+          self.createSpell();
+      })
     }
   }
 </script>

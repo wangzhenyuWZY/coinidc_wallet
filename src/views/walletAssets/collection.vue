@@ -21,7 +21,7 @@
 
 <script>
 const TronWeb = require('tronweb');
-import Clipboard from 'clipboard'; 
+// import Clipboard from 'clipboard'; 
 import { getStore, objIsNull } from "@/config/utils";
 import Title from '@/components/Title'
 import VueQr from 'vue-qr'
