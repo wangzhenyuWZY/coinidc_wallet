@@ -246,6 +246,9 @@
           self.createDom();
           self.createSpell();
       })
+      self.$on('bridge', () => {
+        self.touchstart();
+      });
     }
   }
 </script>
