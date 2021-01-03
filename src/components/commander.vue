@@ -1,19 +1,14 @@
 <template>
-  <div
-    class="owl commander regular"
-    ref="owl"
-    :class="[fly, fighting, lighting]"
-    @touchstart="touchstart"
-    >
+  <div class="owl commander regular" ref="owl" :class="[fly, fighting, lighting]" @touchstart="touchstart">
     <div class="shining" v-if="showShining">
       <img src="../themes/images/common/shining.jpg" alt="">
     </div>
     <div class="halo"></div>
     <div class="lightning">
-        <div class="light-1"></div>
-        <div class="light-2"></div>
-        <div class="light-3"></div>
-        <div class="light-4"></div>
+      <div class="light-1"></div>
+      <div class="light-2"></div>
+      <div class="light-3"></div>
+      <div class="light-4"></div>
     </div>
     <div class="body">
       <div class="wings folded">
@@ -118,7 +113,7 @@
 <script>
   export default {
     name: 'commander',
-    data () {
+    data() {
       return {
         fly: '',
         fighting: '',
@@ -143,7 +138,7 @@
         default: '',
       },
       health: {
-        type: [String,Number],
+        type: [String, Number],
         default: 50,
       },
       defaultBranch: {
@@ -152,16 +147,16 @@
       }
     },
     methods: {
-      touchstart (e) {
+      touchstart(e) {
         let self = this
-        if(self.preventTouch) return
+        if (self.preventTouch) return
         let timer1, timer2
         // self.fly = 'fly'
         self.fighting = 'fighting'
-        timer1 = setTimeout(function () {
+        timer1 = setTimeout(function() {
           self.lighting = 'lighting'
         }, 600)
-        timer2 = setTimeout(function () {
+        timer2 = setTimeout(function() {
           self.lighting = ''
           self.fighting = ''
           clearTimeout(timer1)
@@ -169,8 +164,11 @@
         }, 1000)
       }
     },
-    mounted () {
-
+    mounted() {
+      let self = this;
+      self.$on('bridge', () => {
+        self.touchstart();
+      });
     }
   }
 </script>

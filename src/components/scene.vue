@@ -16,7 +16,7 @@
     <div class="cartoon-right"></div>
     <div class="grass"></div>
     <div class="broadleaf"></div> -->
-    <div v-for="(item, index) in mallList" :class="'container-' + index" :key="index" @touchstart="touchstartList($event, index)">
+    <div v-for="(item, index) in mallList" :class="['container-' + index, {'king-container': item.level === 6}]" :key="index" @touchstart="touchstartList($event, index)">
       <people v-if="item.level==0" :preventTouch="thumbnail.preventTouch" :defaultBranch="thumbnail.defaultBranch" :showHealth="thumbnail.showHealth" :name="item.name" :health="item.hunger">
         <!-- <div class="scene-branch-4"></div> -->
       </people>
@@ -41,29 +41,29 @@
     <div class="coins-container">
       <coins-rolling></coins-rolling>
     </div>
-    <div class="mask" v-if="activeRole !== null">
+    <div class="mask" v-show="activeRole !== null">
       <div class="close-region" @touchstart="touchstartMask"></div>
       <div class="mask-container">
-        <div v-for="(item, index) in mallList" :key="index" v-if="activeRole === index">
-          <people v-if="item.level==0" :preventTouch="detail.preventTouch" :defaultBranch="detail.defaultBranch" :showHealth="detail.showHealth" :name="item.name" :health="item.hunger">
+        <div v-for="(item, index) in mallList" :key="index" v-show="activeRole === index">
+          <people v-if="item.level==0" ref="index" :preventTouch="detail.preventTouch" :defaultBranch="detail.defaultBranch" :showHealth="detail.showHealth" :name="item.name" :health="item.hunger">
             <!-- <div class="scene-branch-4"></div> -->
           </people>
-          <general v-if="item.level==1" :preventTouch="detail.preventTouch" :defaultBranch="detail.defaultBranch" :showHealth="detail.showHealth" :name="item.name" :health="item.hunger">
+          <general v-if="item.level==1" ref="index" :preventTouch="detail.preventTouch" :defaultBranch="detail.defaultBranch" :showHealth="detail.showHealth" :name="item.name" :health="item.hunger">
             <!-- <div class="scene-branch-6"></div> -->
           </general>
-          <captain v-if="item.level==2" :preventTouch="detail.preventTouch" :defaultBranch="detail.defaultBranch" :showHealth="detail.showHealth" :name="item.name" :health="item.hunger">
+          <captain v-if="item.level==2" ref="index" :preventTouch="detail.preventTouch" :defaultBranch="detail.defaultBranch" :showHealth="detail.showHealth" :name="item.name" :health="item.hunger">
             <!-- <div class="scene-branch-3"></div> -->
           </captain>
-          <commander v-if="item.level==3" :preventTouch="detail.preventTouch" :defaultBranch="detail.defaultBranch" :showHealth="detail.showHealth" :name="item.name" :health="item.hunger">
+          <commander v-if="item.level==3" ref="index" :preventTouch="detail.preventTouch" :defaultBranch="detail.defaultBranch" :showHealth="detail.showHealth" :name="item.name" :health="item.hunger">
             <!-- <div class="scene-branch-5"></div> -->
           </commander>
-          <wizard v-if="item.level==4" :preventTouch="detail.preventTouch" :defaultBranch="detail.defaultBranch" :showHealth="detail.showHealth" :name="item.name" :health="item.hunger">
+          <wizard v-if="item.level==4" ref="index" :preventTouch="detail.preventTouch" :defaultBranch="detail.defaultBranch" :showHealth="detail.showHealth" :name="item.name" :health="item.hunger">
             <!-- <div class="scene-branch-7"></div> -->
           </wizard>
-          <guard v-if="item.level==5" :preventTouch="detail.preventTouch" :defaultBranch="detail.defaultBranch" :showHealth="detail.showHealth" :name="item.name" :health="item.hunger">
+          <guard v-if="item.level==5" ref="index" :preventTouch="detail.preventTouch" :defaultBranch="detail.defaultBranch" :showHealth="detail.showHealth" :name="item.name" :health="item.hunger">
             <!-- <div class="scene-branch"></div> -->
           </guard>
-          <king v-if="item.level==6" :preventTouch="detail.preventTouch" :defaultBranch="detail.defaultBranch" :showHealth="detail.showHealth" :name="item.name" :health="item.hunger">
+          <king v-if="item.level==6" ref="index" :preventTouch="detail.preventTouch" :defaultBranch="detail.defaultBranch" :showHealth="detail.showHealth" :name="item.name" :health="item.hunger">
           </king>
         </div>
       </div>
@@ -88,7 +88,7 @@
       mallList: {
         type: Array,
         default: () => [{
-          level: 2,
+          level: 0,
           name: '小明',
           health: 50
         }, {
@@ -147,6 +147,11 @@
         e.stopPropagation();
         let self = this;
         self.activeRole = index;
+        self.$nextTick(() => {
+          setTimeout(function() {
+            self.$refs.index[index].$emit('bridge');
+          }, 0)
+        })
       },
       touchstartMask() {
         let self = this;

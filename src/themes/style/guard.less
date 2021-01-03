@@ -1,59 +1,71 @@
 @keyframes hatBreath {
   0% {
-      transform: translateY(0%) scaleY(1);
+    transform: translateY(0%) scaleY(1);
   }
+
   15% {
-      transform: translateY(2%);
+    transform: translateY(2%);
   }
+
   25% {
-      transform: translateY(0%) scaleY(1);
+    transform: translateY(0%) scaleY(1);
   }
+
   35% {
-      transform: translateY(2%);
+    transform: translateY(2%);
   }
+
   50% {
-      transform: translateY(0%) scaleY(1);
+    transform: translateY(0%) scaleY(1);
   }
+
   100% {
-      transform: translateY(0%) scaleY(1);
+    transform: translateY(0%) scaleY(1);
   }
 }
+
 @keyframes hammer {
   0% {
-      top: 32%;
-      transform: skewY(0deg);
+    top: 32%;
+    transform: skewY(0deg);
   }
+
   50% {
-      top: 22%;
-      transform: skewY(24deg);
+    top: 22%;
+    transform: skewY(24deg);
   }
+
   100% {
-      top: 32%;
-      transform: skewY(0deg);
+    top: 32%;
+    transform: skewY(0deg);
   }
 }
 
 @keyframes handHammer {
   0% {
-      top: 32%;
+    top: 32%;
   }
+
   50% {
-      top: 13%;
+    top: 13%;
   }
+
   100% {
-      top: 32%;
+    top: 32%;
   }
 }
 
 @keyframes bambooHammer {
   0% {
-      top: -2%;
+    top: -2%;
   }
+
   50% {
-      top: -19%;
+    top: -19%;
   }
+
   100% {
-      top: -2%;
+    top: -2%;
   }
 }
 
@@ -66,12 +78,14 @@
     width: 15%;
     height: 6%;
   }
+
   50% {
     top: 83%;
     left: -28%;
     width: 63%;
     height: 27%;
   }
+
   100% {
     visibility: visible;
 
@@ -81,6 +95,7 @@
     height: 6%;
   }
 }
+
 .owl.guard {
   .halo {
     visibility: hidden;
@@ -90,9 +105,14 @@
     left: -4%;
     width: 15%;
     height: 6%;
-    background: radial-gradient(rgba(244,195,111,.7), transparent);
+    background: radial-gradient(rgba(244, 195, 111, .7), transparent);
     border-radius: 50%;
   }
+
+  .health {
+    top: -22%;
+  }
+
   .ripple {
     visibility: hidden;
     position: absolute;
@@ -100,10 +120,10 @@
     left: 3%;
     width: 15%;
     height: 6%;
-    border: 1px solid rgba(144,98,66, .3);
+    border: 1px solid rgba(144, 98, 66, .3);
     border-radius: 50%;
     transform: translate(-50%, -50%);
-    
+
     .ripple-1 {
       position: absolute;
       left: 50%;
@@ -111,8 +131,9 @@
       transform: translate(-50%, -50%);
       width: 70%;
       height: 64%;
-      border: 1px solid rgba(144,98,66, .7);
+      border: 1px solid rgba(144, 98, 66, .7);
       border-radius: 50%;
+
       .ripple-2 {
         position: absolute;
         left: 50%;
@@ -120,39 +141,46 @@
         transform: translate(-50%, -50%);
         width: 50%;
         height: 54%;
-        border: 1px solid rgba(144,98,66, 1);
+        border: 1px solid rgba(144, 98, 66, 1);
         border-radius: 50%;
       }
     }
   }
+
   &.fighting .halo {
-    animation: halo .2s linear 1 .3s;
+    // animation: halo .2s linear 1 .3s;
   }
+
   &.fighting .ripple {
+    opacity: .2;
     visibility: visible;
-    width: 50%;
-    height: 20%;
-    border: 3px solid rgba(144,98,66, .3);
-    transition: all .1s linear .3s;
-    
+    width: 80%;
+    height: 50%;
+    border: 3px solid rgba(144, 98, 66, .3);
+    transition: all .3s linear .3s;
+    // animation: halo .2s linear 1 .3s;
+
     .ripple-1 {
       width: 70%;
       height: 64%;
-      border: 3px solid rgba(144,98,66, .7);
+      border: 3px solid rgba(144, 98, 66, .7);
+
       .ripple-2 {
         width: 50%;
         height: 54%;
-        border: 3px solid rgba(144,98,66, 1);
-      } 
+        border: 3px solid rgba(144, 98, 66, 1);
+      }
     }
   }
+
   .body {
     .hat {
       position: absolute;
-      left: 19.1%;
-      top: -10%;
+      left: 19.7%;
+      top: -11%;
       height: 43%;
     }
+
     .clothes {
       position: absolute;
       left: 21.3%;
@@ -162,6 +190,7 @@
   }
 
 }
+
 .owl.fly {
   .body {
     .wings.folded {
