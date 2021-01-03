@@ -5,16 +5,16 @@
     <div class="createContainer">
       <p class="createTitle">创建钱包<span>(Step1/<span class="title_colr">2</span>)</span></p>
       <div class="set_input">
-        <Input label="昵称" placeholder="请输入昵称" v-model="name" />
+        <Input label="昵称" :icon='false' placeholder="请输入昵称" v-model="name" />
       </div>
       <div class="set_input">
-        <Input label="设置密码" placeholder="请输入密码" v-model="password" />
+        <Input :showEye="false" label="设置密码" placeholder="请输入密码" v-model="password" />
       </div>
       <div class="set_input">
-        <Input label="确认密码" placeholder="请再次输入密码" v-model="passwordAgain" />
+        <Input :showEye="false" label="确认密码" placeholder="请再次输入密码" v-model="passwordAgain" />
       </div>
       <div class="set_input">
-        <Input label="邀请码" placeholder="请输入邀请码" v-model="inviteCode" />
+        <Input label="邀请码" :icon='false' placeholder="请输入邀请码" v-model="inviteCode" />
       </div>
       <div class="btn">
         <!-- <van-button class="globel_button" :loading="false" :disabled='disableds' type="info" loading-text="下载Keystore文件">下载Keystore文件</van-button> -->
@@ -28,7 +28,8 @@
 <script>
 import Title from '@/components/Title'
 import Input from '@/components/Input'
-import { objIsNull, removeStore, getStore, createWallet } from "@/config/utils";
+import { Notify } from 'vant'
+import { objIsNull, removeStore, getStore,setStore, createWallet } from "@/config/utils";
 export default {
   data() {
     return {
@@ -82,6 +83,11 @@ export default {
       let wallet = JSON.parse(getStore("walletItem"));
         if (objIsNull(wallet)) {
             createWallet(this.password).then((res)=>{
+              let data = {
+                      walletName:this.name,
+                      walletPassword: this.password
+                  }
+              setStore('namepsd', data)
               this.$router.push({
                   path: "/wallet/step2",
                   query: {

@@ -11,8 +11,7 @@
               <div class="bordrs_lt">
 
                 <div class="inputs">
-                  <input type="text" placeholder="请输入密码">
-                  <img src="../../assets/closeit.svg" alt="">
+                  <input type="text" disabled v-model="myAccount">
                 </div>
               </div>
             </div>
@@ -23,8 +22,7 @@
             <div class="borders">
               <div class="bordrs_lt">
                 <div class="inputs">
-                  <input type="text" placeholder="请输入账户">
-                  <img class="saoyisao" src="../../assets/saoyisao.png" alt="">
+                  <input type="text" placeholder="请输入账户" @input="checkAddress" v-model="toAccount">
                 </div>
               </div>
             </div>
@@ -35,7 +33,7 @@
               <div class="bordrs_lt">
 
                 <div class="inputs">
-                  <div class="input_lt">USDT</div>
+                  <div class="input_lt">{{transferCoin.coinCode}}</div>
                   <img src="../../assets/back.svg" alt="">
                 </div>
               </div>
@@ -43,13 +41,13 @@
           </div>
           <div class="account_title">
             <div class="title ">
-              <div class="title2"> <span>转账数量</span><span>可转账数量 8399.02</span></div>
+              <div class="title2"> <span>转账数量</span><span>可转账数量 {{transferCoin.balance}}</span></div>
             </div>
             <div class="borders">
               <div class="bordrs_lt">
                 <div class="inputs">
-                  <input type="text" placeholder="请输入数量">
-                  <span class="input_rg">全部</span>
+                  <input type="text" placeholder="请输入数量" v-model="transNum">
+                  <span class="input_rg" @click="transNum=transferCoin.balance">全部</span>
                 </div>
                 <div class="poundage">
                   <span>手续费</span>
@@ -62,33 +60,84 @@
         </div>
       </div>
       <div class="btns">
-        <van-button class="globel_button" :loading="false" :disabled='true' type="info" loading-text="确定">发送</van-button>
+        <van-button class="globel_button" :loading="false" :disabled='false' type="info" @click="transfer" loading-text="确定">发送</van-button>
       </div>
     </div>
     <van-popup v-model="showPicker" round position="bottom">
       <van-picker show-toolbar title="" :columns="columns" @cancel="showPicker = false" item-height="40" @confirm="onConfirm"
                   confirm-button-text="确定" />
     </van-popup>
+    <alert2 :show='show56' label="密码" @close="show56 = false" @closeback="show56 = false;">
+      <div class="mall2">
+        <div class="ditals_bg">
+          <div class="dital2">
+            <div class="willt_pwd">钱包密码</div>
+            <div class="inputs"><input type="password" v-model="password" placeholder="请输入钱包密码"></div>
+
+          </div>
+        </div>
+        <div class="btns btnst" @click="doTransfer">确定</div>
+      </div>
+    </alert2>
   </div>
 </template>
 
 <script>
+const TronWeb = require('tronweb');
+import alert2 from '../mall/globelModel2'
+import bigNumber from 'bignumber.js'
 import Title from '@/components/Title'
+import { Notify } from 'vant';
+import {queryWalletList} from '@/api/user'
+import { getStore, objIsNull } from "@/config/utils";
 export default {
   data() {
     return {
+      show56:false,
       active: 0,
       navIndex: 1,
-      value: '',
+      transferCoin: {},
       showPicker: false,
-      columns: ['杭州', '宁波', '温州', '绍兴', '湖州', '嘉兴', '金华', '衢州', '宁波', '温州', '绍兴', '湖州', '嘉兴', '金华', '衢州']
-
+      columns: ['USDT', 'IDCT', 'TRX'],
+      myAccount:'',
+      toAccount:'',
+      coinList:[],
+      transNum:0,
+      password:''
     }
   },
   components: {
-    Title
+    Title,
+    alert2
+  },
+  created(){
+    if(!window.tronWeb){
+      this.createTronWeb()
+    }else{
+      this.myAccount = window.tronWeb.defaultAddress.base58
+    }
+    this.getMyToken()
   },
   methods: {
+    getMyToken(){
+      let that = this
+      queryWalletList().then((res)=>{
+        if(res.data.resultCode==999999){
+          that.coinList = res.data.resultData.lstWallet
+          this.coinList.forEach((item,index)=>{
+            if(this.$route.query.coin){
+              if(this.$route.query.coin==item.coinCode){
+                this.transferCoin = item
+              }
+            }else{
+              if(item.coinCode=='USDT'){
+                this.transferCoin = item
+              }
+            }
+          })
+        }
+      })
+    },
     onChange(index) {
       this.active = index
       console.log(index)
@@ -97,9 +146,95 @@ export default {
       this.navIndex = index
     },
     onConfirm(value) {
-      this.value = value
       this.showPicker = false
-    }
+      this.coinList.forEach((item,index)=>{
+        if(item.coinCode==value){
+          this.transferCoin = item
+        }
+      })
+    },
+    transfer(){
+      let isAddress = window.tronWeb.isAddress(this.toAccount)
+      if(!isAddress){
+        Notify({ type: 'warning', message: '请输入正确的地址' });
+        return
+      }
+      if(this.transNum==0){
+        Notify({ type: 'warning', message: '请输入转账数量' });
+        return
+      }
+      if(this.transNum>this.transferCoin.balance){
+        Notify({ type: 'warning', message: '余额不足' });
+        return
+      }
+      this.show56 = true
+    },
+    async doTransfer(){
+      let that = this
+      this.show56 = false
+      let namePsd = getStore('namepsd')
+      namePsd = JSON.parse(namePsd)
+      let passwordTrue = namePsd.walletPassword
+      if(this.password!==passwordTrue){
+        Notify({ type: 'warning', message: '密码不正确' });
+        return
+      }
+      let transNum = new bigNumber(this.transNum)
+        transNum = transNum.times(Math.pow(10,6))
+      if(this.transferCoin.coinCode=='TRX'){
+        let transObj = await window.tronWeb.transactionBuilder.sendTrx(this.toAccount, transNum.toFixed(), window.tronWeb.defaultAddress.base58)
+        window.tronWeb.trx.sign(transObj).then(function(signedTransaction) {
+            window.tronWeb.trx
+              .sendRawTransaction(signedTransaction)
+              .then(function(res) {
+                that.password = ''
+                that.transNum = ''
+                that.toAccount = ''
+                Notify({ type: 'success', message: '等待区块确认' });
+              })
+          })
+
+     }else{
+        let that = this
+        let func = 'transfer(address,uint256)'
+        let params = [
+          {'type':'address','value':this.toAccount},
+          {'type':'uint256','value':transNum.toFixed()}
+        ]
+        console.log(this.transferCoin.contract,func)
+        let transfer = await window.tronWeb.transactionBuilder.triggerSmartContract(this.transferCoin.contract,func, {},params)
+        window.tronWeb.trx.sign(transfer.transaction).then(function(signedTransaction) {
+            window.tronWeb.trx
+              .sendRawTransaction(signedTransaction)
+              .then(function(res) {
+                Notify({ type: 'success', message: '等待区块确认' });
+              })
+          })
+      }
+    },
+    checkAddress(){
+      let isAddress = window.tronWeb.isAddress(this.toAccount)
+      if(!isAddress){
+        Notify({ type: 'warning', message: '请输入正确的地址' });
+      }
+    },
+    createTronWeb(){
+      let that = this
+      let walletItem = getStore("walletItem");
+      let privateKey = ''
+      if (!objIsNull(walletItem)) {
+        walletItem = JSON.parse(walletItem)
+        privateKey = walletItem.wallet.privateKey
+      }
+      const fullNode = 'https://api.trongrid.io';
+      const solidityNode = 'https://api.trongrid.io';
+      const eventServer = 'https://api.trongrid.io';
+      window.tronWeb = new TronWeb(fullNode,solidityNode,eventServer,privateKey)
+      this.myAccount = window.tronWeb.defaultAddress.base58
+      if(window.tronWeb){
+        window.tronWeb.setAddress(window.tronWeb.defaultAddress.base58) 
+      }
+    }  
   }
 }
 </script>
@@ -128,7 +263,7 @@ export default {
     padding-top: 20px;
     padding-right: 15px;
     padding-left: 11px;
-    height: 560px;
+    height: 460px;
     .account_title {
       .title {
         font-size: 16px;
@@ -225,6 +360,105 @@ export default {
     }
   }
 }
+.willt_pwd {
+      font-size: 16px;
+      font-weight: 400;
+      color: #000000;
+    }    
+.mall2 {
+  background: #dadeec;
+  box-shadow: 2px 2px 1px 0px rgba(38, 47, 131, 0.61);
+  border-radius: 5px;
+  padding: 25px 10px 10px;
+  .ditals_bg {
+  }
+  .dital2 {
+    background: #f9fbff;
+    box-shadow: 2px 2px 2px 0px #bfc2d8;
+    border-radius: 5px;
+    padding: 38px 12px 33px 10px;
+    
+    
+    .imgs {
+      text-align: center;
+      img {
+        width: 100px;
+        height: 100px;
+      }
+    }
+    .weib {
+      font-size: 16px;
+      font-weight: 600;
+      color: #303030;
+      text-align: center;
+      margin-top: 12px;
+      margin-bottom: 5px;
+    }
+    .linwe {
+      font-size: 12px;
+      font-weight: 400;
+      color: #4f5f7f;
+      text-indent: 30px;
+    }
+  }
+  .btn_slet {
+    display: flex;
+    align-items: center;
+    margin: 12px 0;
+    img {
+      width: 14px;
+      height: 14px;
+    }
+    .seta {
+      font-size: 14px;
+      font-weight: 600;
+      color: #303030;
+      margin: 0 10px;
+    }
+    .seta1 {
+      font-size: 12px;
+      font-weight: 400;
+      color: #8997b3;
+    }
+  }
+  .btns {
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    background: linear-gradient(360deg, #545fa8 0%, #8894e4 100%);
+    box-shadow: 2px 2px 0px 0px rgba(224, 225, 255, 0.5);
+    border-radius: 6px;
+    color: #ffffff;
+    border: 1px solid #4b56a0;
+    font-size: 16px;
+    font-weight: 500;
+    padding:0;
+    &.btnst {
+      margin-top: 10px;
+    }
+  }
+  .inputs {
+      display: flex;
+      margin-top: 10px;
+      input {
+        flex: 1;
+        height: 50px;
+        background: #ffffff;
+        box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.08);
+        border-radius: 6px;
+        border: 1px solid #cad5de;
+        font-size: 14px;
+        font-weight: 400;
+        color: #000;
+        padding-left: 10px;
+        width: auto;
+        &::placeholder {
+          color: #b6c6d3;
+        }
+      }
+    }
+}
+
 /deep/ .van-picker-column__item--selected {
   background: #f4f6fa;
   height: 60px;

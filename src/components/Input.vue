@@ -26,11 +26,13 @@ export default {
     },
     icon: {
       default: true
+    },
+    showEye:{
+      default: true
     }
   },
   data() {
     return {
-      showEye: false
     }
   },
   methods: {

@@ -14,7 +14,9 @@ import { baseApi } from '@/config'
 //       'Content-Type': "application/x-www-form-urlencoded"
 //   }
 // })\
-
+function getUrlKey(name,url){
+  　　return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(url) || [, ""])[1].replace(/\+/g, '%20')) || null
+}
 const service = (url,method,data) =>{
   const jsonUrl = (json) => {
     let arr = []
@@ -30,8 +32,8 @@ const service = (url,method,data) =>{
   let res = {}
   let headers = {
     'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8',
-    'lang':'zh_CN',
-    'token':'c1b71a7db89d4445bd637e6b7d22ac19'
+    'lang':getUrlKey('lang',window.location.href) || 'zh_CN',
+    'token':getStore('token')
   }
   if(type === 'get'){
     console.log(realUrl)

@@ -10,7 +10,12 @@ const api = {
   readNoticeContent:'/notice/readNoticeContent',
   createBuyOwlOrder:'/owl/createBuyOwlOrder',
   getPlayWay:'/notice/getPlayWay',
-  queryWalletList:'/wallet/queryWalletList'
+  queryWalletList:'/wallet/queryWalletList',
+  queryWithdrawList:'/account/queryWithdrawList',
+  payOwlOrder:'/owl/payOwlOrder',
+  getdraw:'/owl/draw',
+  withdrawIncome:'/account/withdrawIncome',
+  verifyZjadReward:'/account/verifyZjadReward',
 }
 
 export default api
