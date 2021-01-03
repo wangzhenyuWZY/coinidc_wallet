@@ -88,7 +88,7 @@
       mallList: {
         type: Array,
         default: () => [{
-          level: 2,
+          level: 0,
           name: '小明',
           health: 50
         }, {

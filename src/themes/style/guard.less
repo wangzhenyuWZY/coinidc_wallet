@@ -148,15 +148,17 @@
   }
 
   &.fighting .halo {
-    animation: halo .2s linear 1 .3s;
+    // animation: halo .2s linear 1 .3s;
   }
 
   &.fighting .ripple {
+    opacity: .2;
     visibility: visible;
-    width: 50%;
-    height: 20%;
+    width: 80%;
+    height: 50%;
     border: 3px solid rgba(144, 98, 66, .3);
-    transition: all .1s linear .3s;
+    transition: all .3s linear .3s;
+    // animation: halo .2s linear 1 .3s;
 
     .ripple-1 {
       width: 70%;
