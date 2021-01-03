@@ -351,12 +351,12 @@ export default {
     }
   },
   created(){
-    if(!window.tronWeb){
-      this.getTronWeb()
-    }else{
-      this.allowance()
-      this.getUsdtBalance()
-    }
+    // if(!window.tronWeb){
+    //   this.getTronWeb()
+    // }else{
+    //   this.allowance()
+    //   this.getUsdtBalance()
+    // }
     this.getHomeInfo()
     this.getMyOwlList()
   },
