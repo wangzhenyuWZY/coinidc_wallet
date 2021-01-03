@@ -1,5 +1,5 @@
 <template>
-  <div class="coins-rolling" ref="coins" :class="rolling" @touchstart="touchstart">
+  <div class="coins-rolling" ref="coins" :class="rolling">
     <div v-for="num in coinsNum" class="coin" :key="num" :class="'coin-' + num">
       <img src="../themes/images/common/coin.jpg" alt="">
     </div>
@@ -17,6 +17,10 @@
       coinsNum: {
         type: Number,
         default: 8
+      },
+      show: {
+        type: Boolean,
+        default: false
       }
     },
     methods: {
@@ -26,10 +30,20 @@
         window.coinsRollingTimer = setTimeout(function() {
           self.rolling = '';
           clearTimeout(window.coinsRollingTimer);
+          self.$emit('close')
         }, 1400)
       }
     },
-    mounted() {}
+    watch:{
+      show(isShow){
+        if(isShow){
+          this.touchstart()
+        }
+      }
+    },
+    mounted() {
+      
+    }
   }
 </script>
 <style lang="less">

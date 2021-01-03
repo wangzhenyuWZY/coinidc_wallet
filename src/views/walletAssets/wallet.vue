@@ -281,6 +281,7 @@ export default {
         font-weight: 400;
         color: #000000;
         margin-bottom: 5px;
+font-family: PingFangSC-Regular, PingFang SC;
       }
       .dv2 {
         height: 6px;
@@ -299,7 +300,7 @@ export default {
         color: #8997b3;
         span {
           font-size: 14px;
-          font-weight: 500;
+          font-weight: 600;
           color: #000000;
         }
       }
@@ -319,6 +320,7 @@ export default {
         display: flex;
         img {
           width: 40px;
+          height: 40px;
           margin-right: 9px;
         }
         .item_assets {
@@ -329,6 +331,7 @@ export default {
             &:nth-child(2) {
               margin-top: 2px;
             }
+            
             span {
               &:nth-child(1) {
                 font-size: 12px;
@@ -337,11 +340,14 @@ export default {
                 color: #000000;
               }
               &:nth-child(2) {
-                font-size: 10px;
+                font-size: 12px;
                 font-family: PingFangSC-Medium, PingFang SC;
                 font-weight: 500;
                 color: #8997b3;
               }
+            }
+            &:first-child{
+              span{font-weight:600;}
             }
           }
         }
