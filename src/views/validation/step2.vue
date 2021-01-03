@@ -87,10 +87,9 @@ export default {
       }
     },
     hdelClick(d,index) {
-      d.show = true
-      this.$set(this.wordsList, index, d)
-      let hasItem = this.wordsListCopy.filter((res)=>{return res==d.mnemonic})
-      if(hasItem.length==0){
+      if(!d.show){
+        d.show = true
+        this.$set(this.wordsList, index, d)
         this.wordsListCopy.push(d.mnemonic)
       }
     },
@@ -113,10 +112,8 @@ export default {
         walletList.push(walletItem);
         setStore("walletList", walletList);
       }
-      // removeStore("mnemonic");
-      // removeStore("walletItem");
-      // register();
-      this.$router.replace({ name: "wallet" });
+      this.$router.push('/wallet/step2')
+      // this.$router.replace({ name: "wallet" });
     },
     goBack(){
       this.$router.go(-1)

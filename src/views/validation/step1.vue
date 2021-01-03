@@ -28,7 +28,7 @@
         </div>
       </div>
       <div class="btn_list m_top20">
-        <router-link to="/wallet/step2"><div class="btn1">下一步</div></router-link>
+        <router-link to="/validation/step2"><div class="btn1">下一步</div></router-link>
         <!-- <div class="btn2 m_top20">上一步</div> -->
       </div>
     </div>

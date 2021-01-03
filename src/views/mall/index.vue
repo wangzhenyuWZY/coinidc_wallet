@@ -75,37 +75,37 @@
     <mallmodel :show='show5' label="商城" @close="show5 = false" :mall="true" :hide="true">
       <div class="malltop">
         <div class="people-container" v-show="mallDetail.level==0">
-          <people  :defaultBranch="false" :showHealth="false">
+          <people  :defaultBranch="false" :showShining='true' :showHealth="false">
             <div class="scene-branch-4"></div>
           </people>
         </div>
         <div class="general-container" v-show="mallDetail.level==1">
-          <general  :defaultBranch="false" :showHealth="false">
+          <general  :defaultBranch="false" :showShining='true' :showHealth="false">
             <div class="scene-branch-6"></div>
           </general>
         </div>
         <div class="captain-container" v-show="mallDetail.level==2">
-          <captain :defaultBranch="false" :showHealth="false">
+          <captain :defaultBranch="false" :showShining='true' :showHealth="false">
             <div class="scene-branch-3"></div>
           </captain>
         </div>
         <div class="commander-container" v-show="mallDetail.level==3">
-          <commander  :defaultBranch="false" :showHealth="false">
+          <commander  :defaultBranch="false" :showShining='true' :showHealth="false">
             <div class="scene-branch-5"></div>
           </commander>
         </div>
         <div class="wizard-container" v-show="mallDetail.level==4">
-          <wizard  :defaultBranch="false" :showHealth="false">
+          <wizard  :defaultBranch="false" :showShining='true' :showHealth="false">
             <div class="scene-branch-7"></div>
           </wizard>
         </div>
         <div class="guard-container" v-show="mallDetail.level==5">
-          <guard :defaultBranch="false" :showHealth="false">
+          <guard :defaultBranch="false" :showShining='true' :showHealth="false">
             <div class="scene-branch"></div>
           </guard>
         </div>
         <div class="king-container" v-show="mallDetail.level==6">
-          <king :defaultBranch="false" :showHealth="false" >
+          <king :defaultBranch="false" :showShining='true' :showHealth="false" >
           </king>
         </div>
       </div>
@@ -114,7 +114,7 @@
           <ul class="mallul">
             <li class="mallli" v-for="(item,index) in mallPlace " :key="index" @click="setIndex(item,index)">
               <div :class="toindex == index?'malllibg':''">
-                <img src="@/assets/mall.jpg" width="100%">
+                <img :src="item.portrait" width="100%">
               </div>
             </li>
           </ul>
@@ -143,7 +143,7 @@
           </div>
         </div>
 
-        <div class="btn_slet"><img src="../../assets/btn_unselect.svg" alt=""><span class="seta">{{mallDetail.usdtPrice}} USDT</span><span class="seta1">(余额：{{usdtBalance}}
+        <div class="btn_slet"><img src="../../assets/btn_unselect.svg" alt=""><span class="seta">{{mallDetail.usdtPrice}} IDCT</span><span class="seta1">(余额：{{usdtBalance}}
             IDCT)</span> </div>
         <div class="btns" @click="checkAppreve">{{isApproved?'确定支付':'授权'}}</div>
       </div>
@@ -259,6 +259,7 @@
         <div class="play " @click="feedOwls"> <img src="../../assets/weiyang.svg" alt=""> <span class="play_size play_sizec">一键喂养</span> </div>
       </div>
     </scene>
+    <coinsRolling :show="isAddGold" @close="isAddGold=false" class="coinsroll"></coinsRolling>
   </div>
 </template>
 
@@ -274,14 +275,15 @@ import mallmodel from './mallModel'
 import contracts from '@/api/contracts'
 import {verifyZjadReward,withdrawIncome,getdraw,payOwlOrder,queryMyOwlList,feedMyOwls,getIndexInfo,queryMyFriends,queryPalaceOwls,queryIncomeList,queryNoticeList,readNoticeContent,createBuyOwlOrder,getPlayWay,queryWithdrawList,queryWalletList} from '@/api/user'
 import people from '@/components/people.vue'
-  import wizard from '@/components/wizard.vue'
-  import general from '@/components/general.vue'
-  import commander from '@/components/commander.vue'
-  import captain from '@/components/captain.vue'
-  import guard from '@/components/guard.vue'
-  import king from '@/components/king.vue'
-  import { Notify } from 'vant';
-  import { List } from 'vant';
+import wizard from '@/components/wizard.vue'
+import general from '@/components/general.vue'
+import commander from '@/components/commander.vue'
+import captain from '@/components/captain.vue'
+import guard from '@/components/guard.vue'
+import king from '@/components/king.vue'
+import coinsRolling from '@/components/coinsRolling'
+import { Notify } from 'vant';
+import { List } from 'vant';
 export default {
   components: {
     alert1,
@@ -289,12 +291,13 @@ export default {
     alert2,
     mallmodel,
     people,
-      wizard,
-      general,
-      commander,
-      captain,
-      guard,
-      king,
+    wizard,
+    general,
+    commander,
+    captain,
+    guard,
+    king,
+    coinsRolling
   },
   data() {
     return {
@@ -340,7 +343,8 @@ export default {
       pageNum2:0,
       loading3: false,
       finished3: false,
-      pageNum3:0
+      pageNum3:0,
+      isAddGold:false
     }
   },
   created(){
@@ -405,17 +409,19 @@ export default {
     },
     feedOwls(){
       let that = this
+      
       feedMyOwls().then(res=>{
         if(res.data.resultCode==999999){
           that.getMyOwlList()
-        }else{
+          
+        }else if(res.data.resultCode==100006){
           that.show7 = true
         }
       })
     },
     getFeecoin(){
       this.show7 = false
-
+      this.feeGold()
     },
     getHomeInfo(){
       let that = this
@@ -635,7 +641,7 @@ export default {
       let that = this
       let func = 'buy(uint256,string)'
       let idcnum = new bigNumber(this.mallDetail.usdtPrice)
-      idcnum = idcnum.div(that.orderDetail.idctPrice)
+      // idcnum = idcnum.div(that.orderDetail.idctPrice)
       idcnum = idcnum.times(Math.pow(10,6))
       let params = [
         {'type':'uint256','value':idcnum.toFixed(0)},
@@ -732,6 +738,7 @@ export default {
         }
     },
     verifyAdReward(transId){
+      let that = this
       var u = navigator.userAgent;
       var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
       var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
@@ -743,6 +750,7 @@ export default {
       }
       verifyZjadReward({"device":device,"transId": transId}).then(res=>{
         if(res.data.resultCode==999999){
+          that.isAddGold = true
           Notify({ type: 'success', message: res.data.resultDesc });
         }else{
           Notify({ type: 'warning', message: res.data.resultDesc });
@@ -920,11 +928,16 @@ ul {
     .mallli {
       width: 75px;
       height: 75px;
-      background: red;
+      background: #fff;
+      border-radius:5px;
       .malllibg {
         background: #ffb679;
         width: 100%;
         height: 100%;
+        img{
+          width:70px;
+          height:70px;
+        }
       }
     }
   }
@@ -1392,5 +1405,12 @@ ul {
     width: 135px;
     height: 135px;
     left: 32%;
+}
+.coinsroll{
+  position: absolute;
+  bottom:50%;
+  left:45%;
+  width:50px;
+  height:50px;
 }
 </style>
