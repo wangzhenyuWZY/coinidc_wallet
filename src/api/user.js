@@ -32,7 +32,7 @@ export function feedMyOwls(params) {
 // 我的好友
 export function queryMyFriends(params) {
   return request(
-    api.queryMyFriends,
+    api.queryMyFriends+'/'+params.pageNum,
     'get',
     params
   )

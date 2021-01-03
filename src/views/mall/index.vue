@@ -260,7 +260,7 @@
       </div>
     </scene>
     <coinsRolling :show="isAddGold" @close="isAddGold=false" class="coinsroll"></coinsRolling>
-    <chouJing :show='show77' @closepop='show77=false;show5=true' @drawcode='getDrawCode' :drawNum='mallDetail.level'></chouJing>
+    <chouJing :show='show77' @closepop='show77=false;show5=true' @notGold='show7=true;show77=false' @drawcode='getDrawCode' :drawNum='mallDetail.level'></chouJing>
   </div>
 </template>
 
@@ -380,6 +380,9 @@ export default {
       }
     },
     getDrawCode(code){
+      this.show77 = false
+      this.show5 = true
+      this.mallDetail.buyType=='buy'
       this.drawCode = code
     },
     setIndex(item,index) {

@@ -77,13 +77,17 @@ import {getdraw} from '@/api/user'
                 this.start_one()
                 this.start_two()
                 setTimeout(function(){
-                    getdraw({'level':that.drawNum}).then(res=>{
+                    getdraw({'owlLevel':that.drawNum}).then(res=>{
+                        that.end()
                         if(res.data.resultCode==999999){
-                            that.end()
                             if(res.data.resultData.result=='Y'){
                                 that.drawCode = res.data.resultData
                                 that.$emit('drawcode',drawCode)
                             }
+                        }else if(res.data.resultCode=100006){
+                            that.$emit('notGold')
+                        }else{
+
                         }
                     })
                 },2000)
@@ -103,9 +107,9 @@ import {getdraw} from '@/api/user'
 				}
 			},
 			end(i) {
-                this.awardCode[0].value = require('@/assets/mall'+drawNum+'.png')
-                this.awardCode[1].value = require('@/assets/mall'+drawNum+'.png')
-                this.awardCode[2].value = require('@/assets/mall'+drawNum+'.png')
+                this.awardCode[0].value = require('@/assets/mall'+this.drawNum+'.png')
+                this.awardCode[1].value = require('@/assets/mall'+this.drawNum+'.png')
+                this.awardCode[2].value = require('@/assets/mall'+this.drawNum+'.png')
 				clearInterval(this.interval)
                 this.interval = null
                 clearInterval(this.interval_one)
