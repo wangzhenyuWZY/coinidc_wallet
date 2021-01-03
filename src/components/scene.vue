@@ -16,7 +16,7 @@
     <div class="cartoon-right"></div>
     <div class="grass"></div>
     <div class="broadleaf"></div> -->
-    <div v-for="(item, index) in mallList" :class="['container-' + index, {'king-container': item.level === 6}]" :key="index" @touchstart="touchstartList($event, index)">
+    <div v-for="(item, index) in mallList" :class="['container-' + index, {'king-con': item.level === 6}]" :key="index" @touchstart="touchstartList($event, index)">
       <people v-if="item.level==0" :preventTouch="thumbnail.preventTouch" :defaultBranch="thumbnail.defaultBranch" :showHealth="thumbnail.showHealth" :name="item.name" :health="item.hunger">
         <!-- <div class="scene-branch-4"></div> -->
       </people>
@@ -92,7 +92,7 @@
           name: '小明',
           health: 50
         }, {
-          level: 3,
+          level: 4,
           name: '小明',
           health: 50
         }, {
@@ -100,11 +100,11 @@
           name: '小明',
           health: 50
         }, {
-          level: 5,
+          level: 4,
           name: '小明',
           health: 50
         }, {
-          level: 6,
+          level: 4,
           name: '小明',
           health: 50
         }]
