@@ -357,11 +357,8 @@ export default {
       this.allowance()
       this.getUsdtBalance()
     }
-    // this.payOrder()
     this.getHomeInfo()
     this.getMyOwlList()
-    // axios.post('/openapi/quote/v1/klines?interval=1m&limit=1&symbol=IDCTUSDT')
-    console.log(this.$route.query.lang)
   },
   methods: {
     getTronWeb(){
