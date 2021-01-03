@@ -121,7 +121,7 @@
         </div>
         <div class="mall_dtail">
           <div class="dt_lt">
-            <p>{{mallDetail.name}}<span>{{mallDetail.usdtPrice}}<span>USDT</span></span></p>
+            <p>{{mallDetail.name}}<span>{{mallDetail.usdtPrice}}<span>IDCT</span></span></p>
             <p>{{mallDetail.summary}}</p>
           </div>
           <div class="dt_rg" v-show="mallDetail.buyType!=='none'">
@@ -151,11 +151,11 @@
     <alert2 :show='show56' label="密码" @close="show56 = false" @closeback="show56 = false;">
       <div class="mall2">
         <div class="ditals_bg">
-          <div class="dital2">
+          <div class="dital2" style="border-radius:0;box-shadow:none;">
             <div class="willt_pwd">昵称</div>
             <div class="inputs"><input v-model="mallName" placeholder="请为爱宠取个名字"></div>
           </div>
-          <div class="dital2" style="padding-top:0;">
+          <div class="dital2" style="padding-top:0;border-radius:0;box-shadow:none;">
             <div class="willt_pwd">钱包密码</div>
             <div class="inputs"><input type="password" v-model="password" placeholder="请输入钱包密码"></div>
           </div>
@@ -164,7 +164,7 @@
       </div>
     </alert2>
 
-    <alert2 :show='show77' label="商城" @close="show77= false" :mall="true" @closeback="show77 = false; show56= true;">
+    <!-- <alert2 :show='show77' label="商城" @close="show77= false" :mall="true" @closeback="show77 = false; show56= true;">
       <div class="mall3" @click.stop.prevent>
         <div class="mall_center">
           <div class="imgs">
@@ -193,7 +193,7 @@
           <div @click="doDraw">立即抽奖</div>
         </div>
       </div>
-    </alert2>
+    </alert2> -->
     <alert2 :show='show7' label="系统提示" @close="show7= false" :mall="false" :hideback="true">
       <div class="styme_model" @click.stop.prevent>
         <div class="stemes">
@@ -260,6 +260,7 @@
       </div>
     </scene>
     <coinsRolling :show="isAddGold" @close="isAddGold=false" class="coinsroll"></coinsRolling>
+    <chouJing :show='show77' @closepop='show77=false;show5=true' @drawcode='getDrawCode' :drawNum='mallDetail.level'></chouJing>
   </div>
 </template>
 
@@ -283,7 +284,8 @@ import guard from '@/components/guard.vue'
 import king from '@/components/king.vue'
 import coinsRolling from '@/components/coinsRolling'
 import { Notify } from 'vant';
-import { List } from 'vant';
+import { List } from 'vant'
+import chouJing from './shouJing'
 export default {
   components: {
     alert1,
@@ -297,7 +299,8 @@ export default {
     captain,
     guard,
     king,
-    coinsRolling
+    coinsRolling,
+    chouJing
   },
   data() {
     return {
@@ -354,11 +357,8 @@ export default {
       this.allowance()
       this.getUsdtBalance()
     }
-    // this.payOrder()
     this.getHomeInfo()
     this.getMyOwlList()
-    // axios.post('/openapi/quote/v1/klines?interval=1m&limit=1&symbol=IDCTUSDT')
-    console.log(this.$route.query.lang)
   },
   methods: {
     getTronWeb(){
@@ -378,6 +378,9 @@ export default {
         that.allowance()
         that.getUsdtBalance()
       }
+    },
+    getDrawCode(code){
+      this.drawCode = code
     },
     setIndex(item,index) {
       this.toindex = index
@@ -834,7 +837,7 @@ ul {
     }
   }
   .an2 {
-    height: 310px;
+    min-height: 100px;
     overflow-y: scroll;
     &::-webkit-scrollbar {
       width: 0;
