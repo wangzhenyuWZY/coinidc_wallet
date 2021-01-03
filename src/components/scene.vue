@@ -7,53 +7,39 @@
     </div>
     <div class="branch-1"></div>
     <div class="branch-2"></div>
-    <!-- <div class="branch-3"></div>
+    <div class="branch-3"></div>
     <div class="branch-4"></div>
     <div class="branch-5"></div>
     <div class="branch-6"></div>
-    <div class="branch-7"></div> -->
+    <div class="branch-7"></div>
     <!-- <div class="cartoon-left"></div>
     <div class="cartoon-right"></div>
     <div class="grass"></div>
     <div class="broadleaf"></div> -->
-    <div v-for="(item,index) in mallList" :key="index">
-      <div class="people-container" v-if="item.level==0">
-        <people :defaultBranch="people.defaultBranch" :showHealth="people.showHealth" :name="item.name" :health="item.hunger">
-          <div class="scene-branch-4"></div>
-        </people>
-      </div>
-      <div class="general-container" v-if="item.level==1">
-        <general :defaultBranch="general.defaultBranch" :showHealth="general.showHealth" :name="item.name" :health="item.hunger">
-          <div class="scene-branch-6"></div>
-        </general>
-      </div>
-      <div class="captain-container" v-if="item.level==2">
-        <captain :defaultBranch="captain.defaultBranch" :showHealth="captain.showHealth" :name="item.name" :health="item.hunger">
-          <div class="scene-branch-3"></div>
-        </captain>
-      </div>
-      <div class="commander-container" v-if="item.level==3">
-        <commander :defaultBranch="commander.defaultBranch" :showHealth="commander.showHealth" :name="item.name" :health="item.hunger">
-          <div class="scene-branch-5"></div>
-        </commander>
-      </div>
-      <div class="wizard-container" v-if="item.level==4">
-        <wizard :defaultBranch="wizard.defaultBranch" :showHealth="wizard.showHealth" :name="item.name" :health="item.hunger">
-          <div class="scene-branch-7"></div>
-        </wizard>
-      </div>
-      <div class="guard-container" v-if="item.level==5">
-        <guard :defaultBranch="guard.defaultBranch" :showHealth="guard.showHealth" :name="item.name" :health="item.hunger">
-          <div class="scene-branch"></div>
-        </guard>
-      </div>
-      <div class="king-container" v-if="item.level==6">
-        <king :defaultBranch="people.defaultBranch" :showHealth="people.showHealth" :name="item.name" :health="item.hunger">
-        </king>
-      </div>
-      <div class="coins-container">
-        <coins-rolling></coins-rolling>
-      </div>
+    <div v-for="(item, index) in mallList" :class="'container-' + index" :key="index">
+      <people v-if="item.level==0" :defaultBranch="people.defaultBranch" :showHealth="people.showHealth" :name="item.name" :health="item.hunger">
+        <!-- <div class="scene-branch-4"></div> -->
+      </people>
+      <general v-if="item.level==1" :defaultBranch="general.defaultBranch" :showHealth="general.showHealth" :name="item.name" :health="item.hunger">
+        <!-- <div class="scene-branch-6"></div> -->
+      </general>
+      <captain v-if="item.level==2" :defaultBranch="captain.defaultBranch" :showHealth="captain.showHealth" :name="item.name" :health="item.hunger">
+        <!-- <div class="scene-branch-3"></div> -->
+      </captain>
+      <commander v-if="item.level==3" :defaultBranch="commander.defaultBranch" :showHealth="commander.showHealth" :name="item.name" :health="item.hunger">
+        <!-- <div class="scene-branch-5"></div> -->
+      </commander>
+      <wizard v-if="item.level==4" :defaultBranch="wizard.defaultBranch" :showHealth="wizard.showHealth" :name="item.name" :health="item.hunger">
+        <!-- <div class="scene-branch-7"></div> -->
+      </wizard>
+      <guard v-if="item.level==5" :defaultBranch="guard.defaultBranch" :showHealth="guard.showHealth" :name="item.name" :health="item.hunger">
+        <!-- <div class="scene-branch"></div> -->
+      </guard>
+      <king v-if="item.level==6" :defaultBranch="people.defaultBranch" :showHealth="people.showHealth" :name="item.name" :health="item.hunger">
+      </king>
+    </div>
+    <div class="coins-container">
+      <coins-rolling></coins-rolling>
     </div>
     <slot>
     </slot>
@@ -74,7 +60,7 @@
       type: Array,
       mallList: {
         type: Array,
-        default:() => [{
+        default: () => [{
           level: 0,
           name: '小明',
           health: 50
@@ -92,14 +78,6 @@
           health: 50
         }, {
           level: 4,
-          name: '小明',
-          health: 50
-        }, {
-          level: 5,
-          name: '小明',
-          health: 50
-        }, {
-          level: 6,
           name: '小明',
           health: 50
         }]
