@@ -60,13 +60,13 @@
         </template>
         <div class="tabbar_zise">资产</div>
       </van-tabbar-item>
-      <van-tabbar-item>
+      <van-tabbar-item  @click="toMall">
         <template>
           <div class="tabbar_img">
             <img :src="active == 1?require('../../assets/liulanqs.png'):require('../../assets/liulanq.svg')" />
           </div>
         </template>
-        <div class="tabbar_zise" @click="toMall">浏览器</div>
+        <div class="tabbar_zise">浏览器</div>
       </van-tabbar-item>
     </van-tabbar>
   </div>
