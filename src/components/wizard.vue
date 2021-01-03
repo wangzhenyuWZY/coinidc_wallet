@@ -173,6 +173,7 @@
         let uHTML = '';
         let num = self.num;
         let paintingWidth = document.getElementsByClassName('reel')[0].getBoundingClientRect().width * 0.9;
+        let paintingWidth1 = document.querySelector('.painting .inner')[0].getBoundingClientRect().width * 0.9;
         let widthUnit = paintingWidth / num;
         let emptyStyle = document.createElement('style');
         self.emptyStyle = emptyStyle;
@@ -234,8 +235,10 @@
     },
     mounted () {
       let self = this;
-      self.createDom();
-      self.createSpell();
+      self.$nextTick(() => {
+          self.createDom();
+          self.createSpell();
+      })
     }
   }
 </script>

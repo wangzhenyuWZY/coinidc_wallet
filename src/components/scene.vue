@@ -3,7 +3,7 @@
     <div class="meteor" ref="meteor">
     </div>
     <div class="moon">
-      <img src="themes/images/scene/moon.svg" alt="">
+      <!-- <img src="themes/images/scene/moon.svg" alt=""> -->
     </div>
     <div class="branch-1"></div>
     <div class="branch-2"></div>
