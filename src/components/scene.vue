@@ -104,7 +104,7 @@
           name: '小明',
           health: 50
         }, {
-          level: 1,
+          level: 3,
           name: '小明',
           health: 50
         }]

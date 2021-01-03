@@ -131,6 +131,7 @@
 
 .owl.commander {
   .halo {
+    pointer-events: none;
     opacity: 0;
     position: absolute;
     top: -142%;
@@ -140,6 +141,7 @@
     background: radial-gradient(rgba(255,213,92,.5), transparent 71%);
   }
   .lightning {
+    pointer-events: none;
     position: absolute;
     top: -122%;
     left: -10%;
@@ -237,9 +239,11 @@
 .owl.fighting {
   &.lighting {
     .halo {
+      pointer-events: none;
       animation: halo .4s linear 0s;
     }
     .lightning {
+      pointer-events: none;
       animation: lightning .2s linear .2s;
       .light-1 {
         visibility: visible;

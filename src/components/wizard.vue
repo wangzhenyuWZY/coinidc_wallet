@@ -1,5 +1,5 @@
 <template>
-  <div class="owl wizard regular" ref="owl" :class="[fly, fighting]" @touchstart="touchstart">
+  <div class="owl wizard regular" ref="wizard" :class="[fly, fighting]" @touchstart="touchstart">
     <div class="shining" v-if="showShining">
       <img src="../themes/images/common/shining.jpg" alt="">
     </div>
@@ -175,14 +175,15 @@
       createDom () {
         let self = this;
         let oUl = self.$refs.paintingInner;
-        self.paintingInnerLeft = self.$refs.owl.offsetWidth * 0.05 + 'px';
-        self.paintingInnerWidth = self.$refs.owl.offsetWidth * 0.9 + 'px';
+        self.paintingInnerLeft = self.$refs.wizard.offsetWidth * 0.05 + 'px';
+        self.paintingInnerWidth = self.$refs.wizard.offsetWidth * 0.9 + 'px';
         let uHTML = '';
         let num = self.num;
         // let paintingWidth = document.getElementsByClassName('reel')[0].getBoundingClientRect().width * 0.9;
-        let paintingWidth = self.$refs.owl.offsetWidth * 0.9;
+        let paintingWidth = self.$refs.wizard.offsetWidth * 0.9;
         let widthUnit = paintingWidth / num;
-        let emptyStyle = document.createElement('style');
+        let emptyStyle = document.querySelector('#emptyStyle');
+        emptyStyle = emptyStyle ? emptyStyle : document.createElement('style');
         self.emptyStyle = emptyStyle;
         self.widthUnit = widthUnit;
         let head = document.getElementsByTagName('head')[0];
@@ -202,7 +203,7 @@
         let spellString = '丨亅丿乛一乙乚丶八勹匕冫卜厂刀刂儿二匚阝丷几卩冂力冖凵人亻入十厶亠匸讠廴又艹屮彳巛川辶寸大飞干工弓廾广彐彑巾口马门宀女犭山彡尸饣士扌氵纟巳土囗兀夕小忄幺弋尢夂子己一 乙二丁人入十儿了又干于亏工七士土下兀与才寸上口山巾zhi亿千乞川夕久凡个义丸么勺及广亡门丫之尸已己巳卫弓也女刃小飞叉习马子乡';
         spellString += spellString;
         for(let i = 0; i < spellString.length; i ++) {
-          uHTML += '<span style="position: absolute;top: ' + 100 * Math.random() + '%;left:' + 100 * Math.random() + '%;font-size: ' + self.$refs.owl.offsetWidth / 100 + 'px;color: rgba(255,255,255,.3);">' + spellString[i] + '</span>'
+          uHTML += '<span style="position: absolute;top: ' + 100 * Math.random() + '%;left:' + 100 * Math.random() + '%;font-size: ' + self.$refs.wizard.offsetWidth / 100 + 'px;color: rgba(255,255,255,.3);">' + spellString[i] + '</span>'
         }
         oUl.innerHTML = uHTML;
       },
@@ -213,7 +214,7 @@
         let widthUnit = self.widthUnit;
 
         let direction = -1;
-        let base = 5;
+        let base = 3;
         let count = 1;
         let timer = setInterval(function() {
           let total = 3 * Math.PI;
