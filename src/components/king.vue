@@ -105,7 +105,7 @@
       <div class="bamboo">
         <img src="../themes/images/common/bamboo.png" alt="">
       </div>
-      <div class="health">
+      <div class="health" v-if="showHealth">
         <div class="name">{{name}}</div>
         <div class="progress" :style="{width: health + '%'}"></div>
       </div>
@@ -123,7 +123,11 @@
       }
     },
     props: {
-			showShining: {
+      preventTouch: {
+        type: Boolean,
+        default: false
+      },
+	    showShining: {
         type: Boolean,
         default: false
       },
@@ -145,7 +149,8 @@
       }
     },
     methods: {
-      touchstart() {}
+      touchstart(e) {
+      }
     },
     mounted() {}
   }

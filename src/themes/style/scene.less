@@ -326,4 +326,30 @@
     height: 119%;
     background: transparent url(../images/scene/branch7.png) no-repeat center center / contain;
   }
+
+  .mask {
+    z-index: 200;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgba(0, 0, 0, .6);
+    .close-region {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
+    .mask-container {
+      position: absolute;
+      top: 50%;
+      right: 0;
+      left: 50%;
+      width: 200px;
+      height: 200px;
+      transform: translate(-50%, -50%);
+    }
+  }
 }

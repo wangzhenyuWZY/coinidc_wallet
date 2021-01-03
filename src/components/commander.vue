@@ -108,7 +108,7 @@
       <div class="bamboo">
         <img src="../themes/images/skin/commander-sword.png" alt="">
       </div>
-      <div class="health">
+      <div class="health" v-if="showHealth">
         <div class="name">{{name}}</div>
         <div class="progress" :style="{width: health + '%'}"></div>
       </div>
@@ -126,6 +126,10 @@
       }
     },
     props: {
+      preventTouch: {
+        type: Boolean,
+        default: false
+      },
       showShining: {
         type: Boolean,
         default: false
@@ -148,8 +152,9 @@
       }
     },
     methods: {
-      touchstart () {
+      touchstart (e) {
         let self = this
+        if(self.preventTouch) return
         let timer1, timer2
         // self.fly = 'fly'
         self.fighting = 'fighting'

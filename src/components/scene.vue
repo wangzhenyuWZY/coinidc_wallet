@@ -16,30 +16,57 @@
     <div class="cartoon-right"></div>
     <div class="grass"></div>
     <div class="broadleaf"></div> -->
-    <div v-for="(item, index) in mallList" :class="'container-' + index" :key="index">
-      <people v-if="item.level==0" :defaultBranch="people.defaultBranch" :showHealth="people.showHealth" :name="item.name" :health="item.hunger">
+    <div v-for="(item, index) in mallList" :class="'container-' + index" :key="index" @touchstart="touchstartList($event, index)">
+      <people v-if="item.level==0" :preventTouch="thumbnail.preventTouch" :defaultBranch="thumbnail.defaultBranch" :showHealth="thumbnail.showHealth" :name="item.name" :health="item.hunger">
         <!-- <div class="scene-branch-4"></div> -->
       </people>
-      <general v-if="item.level==1" :defaultBranch="general.defaultBranch" :showHealth="general.showHealth" :name="item.name" :health="item.hunger">
+      <general v-if="item.level==1" :preventTouch="thumbnail.preventTouch" :defaultBranch="thumbnail.defaultBranch" :showHealth="thumbnail.showHealth" :name="item.name" :health="item.hunger">
         <!-- <div class="scene-branch-6"></div> -->
       </general>
-      <captain v-if="item.level==2" :defaultBranch="captain.defaultBranch" :showHealth="captain.showHealth" :name="item.name" :health="item.hunger">
+      <captain v-if="item.level==2" :preventTouch="thumbnail.preventTouch" :defaultBranch="thumbnail.defaultBranch" :showHealth="thumbnail.showHealth" :name="item.name" :health="item.hunger">
         <!-- <div class="scene-branch-3"></div> -->
       </captain>
-      <commander v-if="item.level==3" :defaultBranch="commander.defaultBranch" :showHealth="commander.showHealth" :name="item.name" :health="item.hunger">
+      <commander v-if="item.level==3" :preventTouch="thumbnail.preventTouch" :defaultBranch="thumbnail.defaultBranch" :showHealth="thumbnail.showHealth" :name="item.name" :health="item.hunger">
         <!-- <div class="scene-branch-5"></div> -->
       </commander>
-      <wizard v-if="item.level==4" :defaultBranch="wizard.defaultBranch" :showHealth="wizard.showHealth" :name="item.name" :health="item.hunger">
+      <wizard v-if="item.level==4" :preventTouch="thumbnail.preventTouch" :defaultBranch="thumbnail.defaultBranch" :showHealth="thumbnail.showHealth" :name="item.name" :health="item.hunger">
         <!-- <div class="scene-branch-7"></div> -->
       </wizard>
-      <guard v-if="item.level==5" :defaultBranch="guard.defaultBranch" :showHealth="guard.showHealth" :name="item.name" :health="item.hunger">
+      <guard v-if="item.level==5" :preventTouch="thumbnail.preventTouch" :defaultBranch="thumbnail.defaultBranch" :showHealth="thumbnail.showHealth" :name="item.name" :health="item.hunger">
         <!-- <div class="scene-branch"></div> -->
       </guard>
-      <king v-if="item.level==6" :defaultBranch="people.defaultBranch" :showHealth="people.showHealth" :name="item.name" :health="item.hunger">
+      <king v-if="item.level==6" :preventTouch="thumbnail.preventTouch" :defaultBranch="thumbnail.defaultBranch" :showHealth="thumbnail.showHealth" :name="item.name" :health="item.hunger">
       </king>
     </div>
     <div class="coins-container">
       <coins-rolling></coins-rolling>
+    </div>
+    <div class="mask" v-if="activeRole !== null">
+      <div class="close-region" @touchstart="touchstartMask"></div>
+      <div class="mask-container">
+        <div v-for="(item, index) in mallList" :key="index" v-if="activeRole === index">
+          <people v-if="item.level==0" :preventTouch="detail.preventTouch" :defaultBranch="detail.defaultBranch" :showHealth="detail.showHealth" :name="item.name" :health="item.hunger">
+            <!-- <div class="scene-branch-4"></div> -->
+          </people>
+          <general v-if="item.level==1" :preventTouch="detail.preventTouch" :defaultBranch="detail.defaultBranch" :showHealth="detail.showHealth" :name="item.name" :health="item.hunger">
+            <!-- <div class="scene-branch-6"></div> -->
+          </general>
+          <captain v-if="item.level==2" :preventTouch="detail.preventTouch" :defaultBranch="detail.defaultBranch" :showHealth="detail.showHealth" :name="item.name" :health="item.hunger">
+            <!-- <div class="scene-branch-3"></div> -->
+          </captain>
+          <commander v-if="item.level==3" :preventTouch="detail.preventTouch" :defaultBranch="detail.defaultBranch" :showHealth="detail.showHealth" :name="item.name" :health="item.hunger">
+            <!-- <div class="scene-branch-5"></div> -->
+          </commander>
+          <wizard v-if="item.level==4" :preventTouch="detail.preventTouch" :defaultBranch="detail.defaultBranch" :showHealth="detail.showHealth" :name="item.name" :health="item.hunger">
+            <!-- <div class="scene-branch-7"></div> -->
+          </wizard>
+          <guard v-if="item.level==5" :preventTouch="detail.preventTouch" :defaultBranch="detail.defaultBranch" :showHealth="detail.showHealth" :name="item.name" :health="item.hunger">
+            <!-- <div class="scene-branch"></div> -->
+          </guard>
+          <king v-if="item.level==6" :preventTouch="detail.preventTouch" :defaultBranch="detail.defaultBranch" :showHealth="detail.showHealth" :name="item.name" :health="item.hunger">
+          </king>
+        </div>
+      </div>
     </div>
     <slot>
     </slot>
@@ -61,14 +88,6 @@
       mallList: {
         type: Array,
         default: () => [{
-          level: 0,
-          name: '小明',
-          health: 50
-        }, {
-          level: 1,
-          name: '小明',
-          health: 50
-        }, {
           level: 2,
           name: '小明',
           health: 50
@@ -80,38 +99,29 @@
           level: 4,
           name: '小明',
           health: 50
+        }, {
+          level: 5,
+          name: '小明',
+          health: 50
+        }, {
+          level: 6,
+          name: '小明',
+          health: 50
         }]
       },
     },
     data() {
       return {
-        people: {
+        activeRole: null,
+        thumbnail: {
+          preventTouch: true,
           showHealth: true,
           defaultBranch: false
         },
-        wizard: {
-          showHealth: true,
-          defaultBranch: false
-        },
-        general: {
-          showHealth: true,
-          defaultBranch: false
-        },
-        commander: {
-          showHealth: true,
-          defaultBranch: false
-        },
-        captain: {
-          showHealth: true,
-          defaultBranch: false
-        },
-        guard: {
-          showHealth: true,
-          defaultBranch: false
-        },
-        king: {
-          showHealth: true,
-          defaultBranch: false
+        detail: {
+          preventTouch: false,
+          showHealth: false,
+          defaultBranch: true
         }
       }
     },
@@ -132,6 +142,15 @@
         setInterval(function() {
           meteor.style.transform = 'translateY(' + 400 * Math.random() + '%)';
         }, 5000)
+      },
+      touchstartList(e, index) {
+        e.stopPropagation();
+        let self = this;
+        self.activeRole = index;
+      },
+      touchstartMask() {
+        let self = this;
+        self.activeRole = null
       }
     },
     mounted() {
