@@ -32,7 +32,7 @@ export function feedMyOwls(params) {
 // 我的好友
 export function queryMyFriends(params) {
   return request(
-    api.queryMyFriends,
+    api.queryMyFriends+'/'+params.pageNum,
     'get',
     params
   )
@@ -106,6 +106,51 @@ export function queryWalletList(params) {
   return request(
     api.queryWalletList,
     'get',
+    params
+  )
+}
+
+// 提现列表
+export function queryWithdrawList(params) {
+  return request(
+    api.queryWithdrawList+'/'+params.pageNum,
+    'get',
+    params
+  )
+}
+
+// 订单支付
+export function payOwlOrder(params) {
+  return request(
+    api.payOwlOrder,
+    'post',
+    params
+  )
+}
+
+// 抽奖
+export function getdraw(params) {
+  return request(
+    api.getdraw,
+    'post',
+    params
+  )
+}
+
+// 提现
+export function withdrawIncome(params) {
+  return request(
+    api.withdrawIncome,
+    'post',
+    params
+  )
+}
+
+// 赚金币
+export function verifyZjadReward(params) {
+  return request(
+    api.verifyZjadReward,
+    'post',
     params
   )
 }

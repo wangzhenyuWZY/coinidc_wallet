@@ -5,13 +5,13 @@
       <div class="title">扫描二维码向我付款</div>
       <div class="qrcode">
         <div class="padds">
-          <vue-qr :correctLevel="3" :autoColor="false" :text="codeUrl" :size="121" :margin="0" :logoMargin="3"></vue-qr>
+          <vue-qr :correctLevel="3" :autoColor="false" :text="address" :size="121" :margin="0" :logoMargin="3"></vue-qr>
         </div>
       </div>
-      <div class="ids m_top20">sljwef</div>
-      <div class="ids2">TFF34F23423YHsdhakj…Zkjjxj003492342</div>
+      <div class="ids m_top20">{{walletName}}</div>
+      <div class="ids2">{{address}}</div>
       <div class="btns">
-        <van-button class="globel_button" type="info">复制收款账户</van-button>
+        <van-button class="globel_button tag-read" type="info" @click="copyAddress" :data-clipboard-text="address">复制收款账户</van-button>
         <div class="sive_qrcode m_top20">保存二维码</div>
       </div>
     </div>
@@ -20,19 +20,37 @@
 </template>
 
 <script>
+const TronWeb = require('tronweb');
+// import Clipboard from 'clipboard'; 
+import { getStore, objIsNull } from "@/config/utils";
 import Title from '@/components/Title'
 import VueQr from 'vue-qr'
+import { Notify } from 'vant';
 export default {
   data() {
     return {
       active: 0,
       navIndex: 1,
-      codeUrl: 'www.baidu.com'
+      codeUrl: 'www.baidu.com',
+      walletName:'',
+      address:''
     }
   },
   components: {
     Title,
     VueQr
+  },
+  created(){
+    if(window.tronWeb){
+      this.address = window.tronWeb.defaultAddress.base58
+
+    }else{
+      this.createTronWeb()
+    }
+    
+    let namePsd = getStore('namepsd')
+    namePsd = JSON.parse(namePsd)
+    this.walletName = namePsd.walletName
   },
   methods: {
     onChange(index) {
@@ -41,6 +59,37 @@ export default {
     },
     nav(index) {
       this.navIndex = index
+    },
+    createTronWeb(){
+      let that = this
+      let walletItem = getStore("walletItem");
+      let privateKey = ''
+      if (!objIsNull(walletItem)) {
+        walletItem = JSON.parse(walletItem)
+        privateKey = walletItem.wallet.privateKey
+      }
+      const fullNode = 'https://api.shasta.trongrid.io';
+      const solidityNode = 'https://api.shasta.trongrid.io';
+      const eventServer = 'https://api.shasta.trongrid.io';
+      window.tronWeb = new TronWeb(fullNode,solidityNode,eventServer,privateKey)
+      this.address = window.tronWeb.defaultAddress.base58
+      if(window.tronWeb){
+        window.tronWeb.setAddress(window.tronWeb.defaultAddress.base58) 
+      }
+    },
+    copyAddress(){
+      var clipboard = new Clipboard('.tag-read')  
+          clipboard.on('success', e => {  
+            Notify({ type: 'success', message: '复制成功' });
+          // 释放内存  
+          clipboard.destroy()  
+        })  
+        clipboard.on('error', e => {  
+          // 不支持复制  
+          console.log('该浏览器不支持自动复制')  
+          // 释放内存  
+          clipboard.destroy()  
+        })
     }
   }
 }

@@ -1,10 +1,8 @@
 <template>
-  <div
-    class="owl captain regular"
-    ref="owl"
-    :class="[fly, fighting]"
-    @touchstart="touchstart"
-    >
+  <div class="owl captain regular" ref="owl" :class="[fly, fighting]" @touchstart="touchstart">
+    <div class="shining" v-if="showShining">
+      <img src="../themes/images/common/shining.jpg" alt="">
+    </div>
     <div class="halo">
     </div>
     <div class="body">
@@ -100,7 +98,7 @@
       <div class="bamboo">
         <img src="../themes/images/skin/captain-spear.png" alt="">
       </div>
-      <div class="health">
+      <div class="health" v-if="showHealth">
         <div class="name">{{name}}</div>
         <div class="progress" :style="{width: health + '%'}"></div>
       </div>
@@ -110,13 +108,21 @@
 <script>
   export default {
     name: 'captain',
-    data () {
+    data() {
       return {
         fly: '',
         fighting: ''
       }
     },
     props: {
+      preventTouch: {
+        type: Boolean,
+        default: false
+      },
+      showShining: {
+        type: Boolean,
+        default: false
+      },
       showHealth: {
         type: Boolean,
         default: false
@@ -126,7 +132,7 @@
         default: '',
       },
       health: {
-        type: [String,Number],
+        type: [String, Number],
         default: 50,
       },
       defaultBranch: {
@@ -135,23 +141,27 @@
       }
     },
     methods: {
-      touchstart () {
+      touchstart(e) {
         let self = this
+        if (self.preventTouch) return
         let timer1, timer2
         self.fly = 'fly'
-        timer1 = setTimeout(function () {
+        timer1 = setTimeout(function() {
           self.fly = ''
           self.fighting = 'fighting'
         }, 500)
-        timer2 = setTimeout(function () {
+        timer2 = setTimeout(function() {
           self.fighting = ''
           clearTimeout(timer1)
           clearTimeout(timer2)
         }, 1200)
       }
     },
-    mounted () {
-
+    mounted() {
+      let self = this;
+      self.$on('bridge', () => {
+        self.touchstart();
+      });
     }
   }
 </script>

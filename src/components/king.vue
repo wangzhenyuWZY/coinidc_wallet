@@ -1,5 +1,8 @@
 <template>
   <div class="owl king regular" ref="owl" :class="[fly, fighting]" @touchstart="touchstart">
+    <div class="shining" v-if="showShining">
+			<img src="../themes/images/common/shining.jpg" v-if="showShining" alt="">
+		</div>
     <div class="body">
       <div class="backrest">
         <img src="../themes/images/skin/king-backrest.png" alt="">
@@ -102,7 +105,7 @@
       <div class="bamboo">
         <img src="../themes/images/common/bamboo.png" alt="">
       </div>
-      <div class="health">
+      <div class="health" v-if="showHealth">
         <div class="name">{{name}}</div>
         <div class="progress" :style="{width: health + '%'}"></div>
       </div>
@@ -120,6 +123,14 @@
       }
     },
     props: {
+      preventTouch: {
+        type: Boolean,
+        default: false
+      },
+	    showShining: {
+        type: Boolean,
+        default: false
+      },
       showHealth: {
         type: Boolean,
         default: false
@@ -138,7 +149,8 @@
       }
     },
     methods: {
-      touchstart() {}
+      touchstart(e) {
+      }
     },
     mounted() {}
   }

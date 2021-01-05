@@ -18,14 +18,14 @@
           <div class="dv2">
             <p style="width:70%"></p>
           </div>
-          <div class="dv3"><span>123012313</span>/1231654</div>
+          <div class="dv3"><span>0</span>/0</div>
         </div>
         <div class="energy_lt">
           <div class="dv1">宽带</div>
           <div class="dv2">
             <p style="width:70%"></p>
           </div>
-          <div class="dv3"><span>123012313</span>/1231654</div>
+          <div class="dv3"><span>0</span>/0</div>
         </div>
       </div>
       <div class="currency__list">
@@ -38,13 +38,14 @@
                 <span>{{item.balance}}</span>
               </p>
               <p>
+                <span>{{item.coinName}}</span>
                 <span>≈{{item.convertedBalance}} IDCT</span>
               </p>
             </div>
           </div>
           <div class="item_btn">
-            <div class=currency_btn>提币</div>
-            <div class=currency_btn>冲币</div>
+            <div class='currency_btn' @click="withdraw(item)">提币</div>
+            <div class='currency_btn' @click="chongbi">冲币</div>
           </div>
         </div>
       </div>
@@ -59,7 +60,7 @@
         </template>
         <div class="tabbar_zise">资产</div>
       </van-tabbar-item>
-      <van-tabbar-item>
+      <van-tabbar-item  @click="toMall">
         <template>
           <div class="tabbar_img">
             <img :src="active == 1?require('../../assets/liulanqs.png'):require('../../assets/liulanq.svg')" />
@@ -108,11 +109,32 @@ export default {
     Title
   },
   created(){
-    this.createTronWeb()
-    this.userLogin()
-    this.getMyToken()
+    if(!window.tronWeb){
+      this.createTronWeb()
+    }else{
+      this.userLogin()
+    }
+    
   },
   methods: {
+    withdraw(item){
+      this.$router.push({
+                  path: "/walletAssets/transfer",
+                  query: {
+                      coin:item.coinCode
+                  }
+              });
+    },
+    chongbi(){
+      this.$router.push({
+                  path: "/walletAssets/collection"
+              });
+    },
+    toMall(){
+      this.$router.push({
+                  path: "/mall"
+              });
+    },
     onChange(index) {
       this.active = index
       console.log(index)
@@ -125,13 +147,14 @@ export default {
         walletItem = JSON.parse(walletItem)
         privateKey = walletItem.wallet.privateKey
       }
-      const fullNode = 'https://api.shasta.trongrid.io';
-      const solidityNode = 'https://api.shasta.trongrid.io';
-      const eventServer = 'https://api.shasta.trongrid.io';
+      const fullNode = 'https://api.trongrid.io';
+      const solidityNode = 'https://api.trongrid.io';
+      const eventServer = 'https://api.trongrid.io';
       window.tronWeb = new TronWeb(fullNode,solidityNode,eventServer,privateKey)
       if(window.tronWeb){
         window.tronWeb.setAddress(window.tronWeb.defaultAddress.base58)
-        this.sendToken()
+        this.userLogin()
+        
       }
       // this.tronWeb.trx.getBalance(this.tronWeb.defaultAddress.base58).then(res => {
       //   that.coinList[0].balance = that.tronWeb.fromSun(res)   
@@ -170,21 +193,18 @@ export default {
     },
     userLogin(){
       let that = this
-      let walletItem = getStore("walletItem");
-      if (!objIsNull(walletItem)) {
-        walletItem = JSON.parse(walletItem)
         let data = {
           name:'xxx',
           idctUserId:'760732255497768192',
           // inviteCode:'',
-          trxAddress:walletItem.wallet.address
+          trxAddress:window.tronWeb.defaultAddress.base58
         }
         login(data).then((res)=>{
           if(res.data.resultCode==999999){
             setStore('token', res.data.resultData)
+            that.getMyToken()
           }
         })
-      }
     },
     async sendToken(){
       let that = this
@@ -261,6 +281,7 @@ export default {
         font-weight: 400;
         color: #000000;
         margin-bottom: 5px;
+font-family: PingFangSC-Regular, PingFang SC;
       }
       .dv2 {
         height: 6px;
@@ -279,7 +300,7 @@ export default {
         color: #8997b3;
         span {
           font-size: 14px;
-          font-weight: 500;
+          font-weight: 600;
           color: #000000;
         }
       }
@@ -299,6 +320,7 @@ export default {
         display: flex;
         img {
           width: 40px;
+          height: 40px;
           margin-right: 9px;
         }
         .item_assets {
@@ -309,6 +331,7 @@ export default {
             &:nth-child(2) {
               margin-top: 2px;
             }
+            
             span {
               &:nth-child(1) {
                 font-size: 12px;
@@ -317,11 +340,14 @@ export default {
                 color: #000000;
               }
               &:nth-child(2) {
-                font-size: 10px;
+                font-size: 12px;
                 font-family: PingFangSC-Medium, PingFang SC;
                 font-weight: 500;
                 color: #8997b3;
               }
+            }
+            &:first-child{
+              span{font-weight:600;}
             }
           }
         }

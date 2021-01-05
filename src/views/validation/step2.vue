@@ -13,7 +13,7 @@
         <div class="list2v ">
           <div class="list ">
             <div class="list_item" v-for="(item,index) in wordsListCopy" :key="index">
-              <span class="type">{{item.mnemonic}}</span>
+              <span class="type">{{item}}</span>
             </div>
           </div>
         </div>
@@ -42,11 +42,6 @@ export default {
     return {
       title: '创建钱包',
       showEye: false,
-      from: {
-        pwd1: '',
-        pwd2: ''
-      },
-      codeUrl: 'https://www.baidu.com/',
       show: false,
       show1: false,
       reading: false,
@@ -73,6 +68,8 @@ export default {
     let mnemonic = getStore("mnemonic");
     if (!objIsNull(mnemonic)) {
       this.mnemonic = mnemonic.split(" ");
+      console.log(this.mnemonic)
+      this.mnemonic = this.mnemonic.sort(function(){return Math.random()>0.5?-1:1;});
       this.mnemonic.forEach(element => {
         this.wordsList.push({
           mnemonic:element,
@@ -90,14 +87,19 @@ export default {
       }
     },
     hdelClick(d,index) {
-      d.show = true
-      this.$set(this.wordsList, index, d)
-      let hasItem = this.wordsListCopy.filter((res)=>{return res==d})
-      if(hasItem.length==0){
-        this.wordsListCopy.push(d)
+      if(!d.show){
+        d.show = true
+        this.$set(this.wordsList, index, d)
+        this.wordsListCopy.push(d.mnemonic)
       }
     },
     toHome(){
+      let wordsListCopy = this.wordsListCopy.join(' ')
+      let mnemonic = getStore("mnemonic");
+      if(wordsListCopy!==mnemonic){
+        alert('顺序有误')
+        return
+      }
       let wallet = this.$route.query;
       let walletList = JSON.parse(getStore("walletList"));
       let walletItem = JSON.parse(getStore("walletItem"));
@@ -110,10 +112,8 @@ export default {
         walletList.push(walletItem);
         setStore("walletList", walletList);
       }
-      // removeStore("mnemonic");
-      // removeStore("walletItem");
-      // register();
-      this.$router.replace({ name: "wallet" });
+      this.$router.push('/wallet/step2')
+      // this.$router.replace({ name: "wallet" });
     },
     goBack(){
       this.$router.go(-1)

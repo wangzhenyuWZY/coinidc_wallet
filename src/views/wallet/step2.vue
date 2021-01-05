@@ -66,10 +66,7 @@ export default {
   methods: {
     chage() {
       this.$router.push({
-        path: "/validation/step2",
-        query: {
-          ...this.$route.query
-        }
+        path: "/walletAssets/wallet"
       })
     },
     toMnemonic(){

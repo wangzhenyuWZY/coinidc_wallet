@@ -38,7 +38,7 @@ const IS_PROD = ['production', 'prod'].includes(process.env.NODE_ENV)
 // }
 
 module.exports = {
-  publicPath: '/hms/', // 署应用包时的基本 URL。 vue-router hash 模式使用
+  publicPath: './', // 署应用包时的基本 URL。 vue-router hash 模式使用
   //  publicPath: '/app/', //署应用包时的基本 URL。  vue-router history模式使用
   outputDir: 'dist', //  生产环境构建文件的目录
   assetsDir: 'static', //  outputDir的静态资源(js、css、img、fonts)目录
@@ -52,17 +52,17 @@ module.exports = {
       warnings: false,
       errors: true
     },
-    // proxy: {
-    //   //配置跨域
-    //   '/api': {
-    //       target: "https://api.coinidc.com",
-    //       // ws:true,
-    //       changOrigin:true,
-    //       pathRewrite:{
-    //           '^/api':'/'
-    //       }
-    //   }
-    // }
+    proxy: {
+      //配置跨域
+      '/api': {
+          target: "https://api.coinidc.com",
+          // ws:true,
+          changOrigin:true,
+          pathRewrite:{
+              '^/api':'/'
+          }
+      }
+    }
   },
   css: {
     extract: IS_PROD, // 是否将组件中的 CSS 提取至一个独立的 CSS 文件中 (而不是动态注入到 JavaScript 中的 inline 代码)。
