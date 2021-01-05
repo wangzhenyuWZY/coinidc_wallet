@@ -16,16 +16,16 @@
         <div class="energy_lt">
           <div class="dv1">能量</div>
           <div class="dv2">
-            <p style="width:70%"></p>
+            <p :style="'width:'+energyBi+'%'"></p>
           </div>
-          <div class="dv3"><span>0</span>/0</div>
+          <div class="dv3"><span>{{walletInfo.energy}}</span>/{{walletInfo.energyLimit}}</div>
         </div>
         <div class="energy_lt">
           <div class="dv1">宽带</div>
           <div class="dv2">
-            <p style="width:70%"></p>
+            <p  :style="'width:'+freeNetBi+'%'"></p>
           </div>
-          <div class="dv3"><span>0</span>/0</div>
+          <div class="dv3"><span>{{walletInfo.freeNet}}</span>/{{walletInfo.freeNetLimit}}</div>
         </div>
       </div>
       <div class="currency__list">
@@ -87,6 +87,9 @@ export default {
       trxBalance:0,
       totalBalance:0,
       convertedBalance:0,
+      energyBi:0,
+      freeNetBi:0,
+      walletInfo:{},
       coinList:[{
         name:'TRX',
         decimals:6,
@@ -188,6 +191,13 @@ export default {
           that.totalBalance = res.data.resultData.balance
           that.convertedBalance = res.data.resultData.convertedBalance
           that.coinList = res.data.resultData.lstWallet
+          that.walletInfo = res.data.resultData
+          if(res.data.resultData.energyLimit!==0&&res.data.resultData.energy!==0){
+            that.energyBi = res.data.resultData.energyLimit/res.data.resultData.energy
+          }
+          if(res.data.resultData.freeNetLimit!==0&&res.data.resultData.freeNet!==0){
+            that.freeNetBi = res.data.resultData.freeNetLimit/res.data.resultData.freeNet
+          }
         }
       })
     },

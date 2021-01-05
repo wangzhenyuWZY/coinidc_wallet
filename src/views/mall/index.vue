@@ -254,7 +254,7 @@
       <div class="ps_nav">
         <div class="play " @click="getMyFriends"> <img src="../../assets/haoyou.svg" alt=""> <span class="play_size">好友</span> </div>
         <div class="play1 " @click="feeGold">
-          <div class="ceter_img">{{homeInfo.goldBalance}}</div> <span class="play_size">免费赚金币</span>
+          <div class="ceter_img"><countTo v-if="homeInfo.goldBalance" ref="goldEl" :startVal='goldBalanceStart' :endVal='goldBalanceEnd' :duration='3000' :autoplay=false></countTo><span v-else>{{homeInfo.goldBalance}}</span></div> <span class="play_size">免费赚金币</span>
         </div>
         <div class="play " @click="feedOwls"> <img src="../../assets/weiyang.svg" alt=""> <span class="play_size play_sizec">一键喂养</span> </div>
       </div>
@@ -286,6 +286,7 @@ import coinsRolling from '@/components/coinsRolling'
 import { Notify } from 'vant';
 import { List } from 'vant'
 import chouJing from './shouJing'
+import countTo from 'vue-count-to';
 export default {
   components: {
     alert1,
@@ -300,7 +301,8 @@ export default {
     guard,
     king,
     coinsRolling,
-    chouJing
+    chouJing,
+    countTo
   },
   data() {
     return {
@@ -347,7 +349,9 @@ export default {
       loading3: false,
       finished3: false,
       pageNum3:0,
-      isAddGold:false
+      isAddGold:false,
+      goldBalanceStart:0,
+      goldBalanceEnd:0
     }
   },
   created(){
@@ -415,11 +419,15 @@ export default {
     },
     feedOwls(){
       let that = this
-      
       feedMyOwls().then(res=>{
         if(res.data.resultCode==999999){
           that.getMyOwlList()
-          
+          getIndexInfo().then(res=>{
+            if(res.data.resultCode==999999){
+              that.goldBalanceEnd = res.data.resultData
+              that.$refs.goldEl.start()
+            }
+          })
         }else if(res.data.resultCode==100006){
           that.show7 = true
         }
@@ -434,6 +442,10 @@ export default {
       getIndexInfo().then(res=>{
         if(res.data.resultCode==999999){
           that.homeInfo = res.data.resultData
+          that.goldBalanceStart = that.homeInfo.goldBalance
+          if(that.$refs.goldEl){
+            that.$refs.goldEl.reset()
+          }
         }
       })
     },

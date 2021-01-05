@@ -5,7 +5,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-
+import { objIsNull,getStore} from "@/config/utils";
 import bip39 from 'bip39';
 import ethers from 'ethers';
 Vue.prototype.bip39 = bip39;
@@ -25,6 +25,20 @@ import './styles/index.less'
 import './filters'
 Vue.config.productionTip = false
 
+router.beforeEach((to, from ,next) => {
+  if(to.path === '/wallet/step1'){
+    let walletItem = getStore("walletItem");
+    if (!objIsNull(walletItem)) {
+      next({path:'/walletAssets/wallet'})
+    }else{
+      next()
+    }
+  }else{
+    next()
+  }
+  
+  return
+})
 new Vue({
   el: '#app',
   router,
