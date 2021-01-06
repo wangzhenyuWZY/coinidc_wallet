@@ -1,6 +1,6 @@
 <template>
     <div>
-        <alert2 :show='show' label="商城" @close="closePop" :mall="true" @closeback="closePop">
+        <alert2 :show='show' label="宫殿" @close="closePop" :mall="true" @closeback="closePop">
       <div class="mall3" @click.stop.prevent>
         <div class="mall_center">
           <div class="imgs">

@@ -18,7 +18,7 @@
 
           </div>
           <div class="account_title">
-            <div class="title">接受账户</div>
+            <div class="title">接收账户</div>
             <div class="borders">
               <div class="bordrs_lt">
                 <div class="inputs">
