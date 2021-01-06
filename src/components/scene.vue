@@ -5,8 +5,8 @@
     <div class="moon">
       <!-- <img src="themes/images/scene/moon.svg" alt=""> -->
     </div>
-    <div class="branch-1"></div>
-    <div class="branch-2"></div>
+    <!-- <div class="branch-1"></div>
+    <div class="branch-2"></div> -->
     <div class="branch-3"></div>
     <div class="branch-4"></div>
     <div class="branch-5"></div>
@@ -16,7 +16,7 @@
     <div class="cartoon-right"></div>
     <div class="grass"></div>
     <div class="broadleaf"></div> -->
-    <div v-for="(item, index) in mallList" :class="['container-' + index, {'king-con': item.level === 6}]" :key="index" @touchstart="touchstartList($event, index)">
+    <div v-for="(item, index) in mallList" :class="['container-' + index, {'king-con': item.level === 6}]" :ref="'container-' + index" :key="index" @touchstart="touchstartList($event, index)">
       <people v-if="item.level==0" :preventTouch="thumbnail.preventTouch" :defaultBranch="thumbnail.defaultBranch" :showHealth="thumbnail.showHealth" :name="item.name" :health="item.hunger">
         <!-- <div class="scene-branch-4"></div> -->
       </people>
@@ -161,6 +161,9 @@
     mounted() {
       let self = this;
       self.randomCoordinates();
+    //   self.$nextTick(() => {
+    //     let width = document.getElementsByClassName('container-0')
+    //   })
     }
   }
 </script>
