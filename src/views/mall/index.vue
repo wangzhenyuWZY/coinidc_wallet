@@ -72,7 +72,7 @@
         </van-list>
       </div>
     </alert1>
-    <mallmodel :show='show5' label="商城" @close="show5 = false" :mall="true" :hide="true">
+    <mallmodel :show='show5' label="宫殿" @close="show5 = false" :mall="true" :hide="true">
       <div class="malltop">
         <div class="people-container" v-show="mallDetail.level==0">
           <people  :defaultBranch="false" :showShining='true' :showHealth="false">
@@ -132,7 +132,7 @@
         </div>
       </div>
     </mallmodel>
-    <alert2 :show='show55' label="商城" @close="show55 = false" @closeback="show55 = false; show5= true;">
+    <alert2 :show='show55' label="宫殿" @close="show55 = false" @closeback="show55 = false; show5= true;">
 
       <div class="mall2">
         <div class="ditals_bg">
@@ -153,11 +153,11 @@
         <div class="ditals_bg">
           <div class="dital2" style="border-radius:0;box-shadow:none;">
             <div class="willt_pwd">昵称</div>
-            <div class="inputs"><input v-model="mallName" placeholder="请为爱宠取个名字"></div>
+            <div class="inputs"><input v-model="mallName" :disabled="paying" placeholder="请为爱宠取个名字"></div>
           </div>
           <div class="dital2" style="padding-top:0;border-radius:0;box-shadow:none;">
             <div class="willt_pwd">钱包密码</div>
-            <div class="inputs"><input type="password" v-model="password" placeholder="请输入钱包密码"></div>
+            <div class="inputs"><input type="password" v-model="password" :disabled="paying" placeholder="请输入钱包密码"></div>
           </div>
         </div>
         <van-button class="btns btnst" :loading="paying" :disabled='paying' type="info" loading-text="正在支付" @click="createOrder">确定支付</van-button>
@@ -247,7 +247,7 @@
         <div class="play " @click="checkPlayWay"> <img src="../../assets/play.svg" alt=""> <span class="play_size">玩法</span> </div>
         <div class="play play1" @click="getNoticeList"> <img src="../../assets/announcement.svg" alt=""> <span
                 class="play_size p_announcement">公告</span><a class="num" v-show="homeInfo.unReadNoticeCount">{{homeInfo.unReadNoticeCount}}</a> </div>
-        <div class="play play1 " @click="getPalaceOwls"> <img src="../../assets/mall.svg" alt=""> <span class="play_size p_mall">商城</span> </div>
+        <div class="play play1 " @click="getPalaceOwls"> <img src="../../assets/mall.svg" alt=""> <span class="play_size p_mall">宫殿</span> </div>
         <div class="play play1 " @click="getIncomeList"> <img src="../../assets/earnings.svg" alt=""> <span class="play_size p_earnings">收益</span>
         </div>
       </div>
@@ -406,8 +406,10 @@ export default {
       var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
       var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
       if(isAndroid){
+        alert('isAndroid')
         ZjJSAdSdk.loadAd('zjad_241253',getStore('token'),'videoReward', 1,'rewardVideo');
       }else if(isiOS){
+        alert('isiOS')
         window.webkit.messageHandlers.loadAd.postMessage({'adid':'33011066','type':'rewardVideo'});
       }
     },
@@ -416,9 +418,18 @@ export default {
       queryMyOwlList().then(res=>{
         if(res.data.resultCode==999999){
           that.mallList = res.data.resultData
+          that.mallList.sort(that.compare('level'));
+          console.log(that.mallList)
         }
-        console.log(res)
+        
       })
+    },
+    compare(key){
+      return function(value1,value2){
+          var val1=value1[key];
+          var val2=value2[key];
+          return val2-val1;
+      }
     },
     feedOwls(){
       let that = this
@@ -685,6 +696,8 @@ export default {
               getConfirmedTransaction(res.txid).then(e=>{
                 if (e.result == 'FAILED') {
                   that.paying = false
+                  that.password = ''
+                  that.mallName = ''
                   Toast(window.tronWeb.toAscii(e.contractResult[0]))
                 }else{
                   that.payOrder(res.txid)

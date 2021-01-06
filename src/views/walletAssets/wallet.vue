@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="title_bg">
-      <Title title="钱包" hide></Title>
+      <Title title="钱包" :isback="false" hide></Title>
       <div class="assetsDtal">
         <p>{{totalBalance}} IDC</p>
         <p>≈{{convertedBalance}}</p>
@@ -68,7 +68,7 @@
             <img :src="active == 1?require('../../assets/liulanqs.png'):require('../../assets/liulanq.svg')" />
           </div>
         </template>
-        <div class="tabbar_zise">浏览器</div>
+        <div class="tabbar_zise">发现</div>
       </van-tabbar-item>
     </van-tabbar>
   </div>

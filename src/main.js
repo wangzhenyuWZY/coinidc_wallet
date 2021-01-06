@@ -24,7 +24,8 @@ import './styles/index.less'
 // filters
 import './filters'
 Vue.config.productionTip = false
-
+import VueWechatTitle from 'vue-wechat-title'//动态修改title
+Vue.use(VueWechatTitle)
 router.beforeEach((to, from ,next) => {
   if(to.path === '/wallet/step1'){
     let walletItem = getStore("walletItem");
