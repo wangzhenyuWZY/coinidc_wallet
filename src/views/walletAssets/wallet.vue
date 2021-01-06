@@ -46,7 +46,7 @@
             </div>
             <div class="item_btn">
               <div class='currency_btn' @click="withdraw(item)">提币</div>
-              <div class='currency_btn' @click="chongbi">冲币</div>
+              <div class='currency_btn' @click="chongbi">充币</div>
             </div>
           </div>
         </van-pull-refresh>
