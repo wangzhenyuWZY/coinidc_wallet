@@ -1,8 +1,8 @@
 <template>
   <div class="owl regular" ref="owl" :class="[fly, fighting]" @touchstart="touchstart">
-    <div class="shining" v-if="showShining">
+    <!-- <div class="shining" v-if="showShining">
       <img src="../themes/images/common/shining.jpg" alt="">
-    </div>
+    </div> -->
     <div class="body">
       <div class="wings folded">
         <div class="left">
