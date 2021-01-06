@@ -84,22 +84,22 @@
             <div class="scene-branch-6"></div>
           </general>
         </div>
-        <div class="captain-container" v-show="mallDetail.level==2">
+        <div class="captain-container" v-show="mallDetail.level==3">
           <captain :defaultBranch="false" :showShining='true' :showHealth="false">
             <div class="scene-branch-3"></div>
           </captain>
         </div>
-        <div class="commander-container" v-show="mallDetail.level==3">
+        <div class="commander-container" v-show="mallDetail.level==4">
           <commander  :defaultBranch="false" :showShining='true' :showHealth="false">
             <div class="scene-branch-5"></div>
           </commander>
         </div>
-        <div class="wizard-container" v-show="mallDetail.level==4">
+        <div class="wizard-container" v-show="mallDetail.level==5">
           <wizard  :defaultBranch="false" :showShining='true' :showHealth="false">
             <div class="scene-branch-7"></div>
           </wizard>
         </div>
-        <div class="guard-container" v-show="mallDetail.level==5">
+        <div class="guard-container" v-show="mallDetail.level==2">
           <guard :defaultBranch="false" :showShining='true' :showHealth="false">
             <div class="scene-branch"></div>
           </guard>
@@ -145,7 +145,7 @@
 
         <div class="btn_slet"><img src="../../assets/btn_unselect.svg" alt=""><span class="seta">{{mallDetail.usdtPrice}} IDCT</span><span class="seta1">(余额：{{usdtBalance}}
             IDCT)</span> </div>
-        <div class="btns" @click="checkAppreve">{{isApproved?'确定支付':'授权'}}</div>
+        <van-button class="btns" :loading="approveding" :disabled='approveding' type="info" :loading-text="isApproved?'确定支付':'授权'" @click="checkAppreve">{{isApproved?'确定支付':'授权'}}</van-button>
       </div>
     </alert2>
     <alert2 :show='show56' label="密码" @close="show56 = false" @closeback="show56 = false;">
@@ -160,7 +160,7 @@
             <div class="inputs"><input type="password" v-model="password" placeholder="请输入钱包密码"></div>
           </div>
         </div>
-        <div class="btns btnst" @click="createOrder">确定支付</div>
+        <van-button class="btns btnst" :loading="paying" :disabled='paying' type="info" loading-text="正在支付" @click="createOrder">确定支付</van-button>
       </div>
     </alert2>
 
@@ -283,10 +283,11 @@ import captain from '@/components/captain.vue'
 import guard from '@/components/guard.vue'
 import king from '@/components/king.vue'
 import coinsRolling from '@/components/coinsRolling'
-import { Notify } from 'vant';
+import { Toast } from 'vant';
 import { List } from 'vant'
 import chouJing from './shouJing'
 import countTo from 'vue-count-to';
+import {getConfirmedTransaction} from '@/utils/index'
 export default {
   components: {
     alert1,
@@ -351,16 +352,18 @@ export default {
       pageNum3:0,
       isAddGold:false,
       goldBalanceStart:0,
-      goldBalanceEnd:0
+      goldBalanceEnd:0,
+      approveding:false,
+      paying:false
     }
   },
   created(){
-    // if(!window.tronWeb){
-    //   this.getTronWeb()
-    // }else{
-    //   this.allowance()
-    //   this.getUsdtBalance()
-    // }
+    if(!window.tronWeb){
+      this.getTronWeb()
+    }else{
+      this.allowance()
+      this.getUsdtBalance()
+    }
     this.getHomeInfo()
     this.getMyOwlList()
   },
@@ -585,19 +588,20 @@ export default {
         this.show56 = true
         // this.createOrder()
       }else{
+        this.approveding = true
         this.approved()
       }
     },
     createOrder(){
       let that = this
-      this.show56 = false
       let namePsd = getStore('namepsd')
       namePsd = JSON.parse(namePsd)
       let passwordTrue = namePsd.walletPassword
       if(this.password!==passwordTrue){
-        Notify({ type: 'warning', message: '密码不正确' });
+        Toast('密码不正确')
         return
       }
+      this.paying = true
       let data = {
         nickName:this.mallName,
         owlLevel:this.mallDetail.level,
@@ -606,12 +610,14 @@ export default {
       createBuyOwlOrder(data).then(res=>{
         if(res.data.resultCode==999999){
           that.orderDetail = res.data.resultData
-          debugger
           if(that.approvedBalance && that.approvedBalance>that.mallDetail.usdtPrice){
             that.sendToken()
           }else{
             that.isApproved = false
           }
+        }else{
+          Toast('创建订单失败')
+          that.paying = false
         }
       })
     },
@@ -650,8 +656,14 @@ export default {
           window.tronWeb.trx
             .sendRawTransaction(signedTransaction)
             .then(function(res) {
-              that.isApproved = true
-              that.allowance()
+              getConfirmedTransaction(res.txid).then(e=>{
+                if (e.result == 'FAILED') {
+                  Toast(window.tronWeb.toAscii(e.contractResult[0]))
+                }
+                that.isApproved = true
+                that.approveding = false
+                that.allowance()
+              })
             })
         })
     },
@@ -670,7 +682,14 @@ export default {
           window.tronWeb.trx
             .sendRawTransaction(signedTransaction)
             .then(function(res) {
-              that.payOrder(res.txid)
+              getConfirmedTransaction(res.txid).then(e=>{
+                if (e.result == 'FAILED') {
+                  that.paying = false
+                  Toast(window.tronWeb.toAscii(e.contractResult[0]))
+                }else{
+                  that.payOrder(res.txid)
+                }
+              })
             })
         })
     },
@@ -684,11 +703,12 @@ export default {
       }
       withdrawIncome(data).then((res)=>{
         that.show8 = false
-        if(res.data.resultCode==999999){
-          Notify({ type: 'success', message: res.data.resultDesc });
-        }else{
-          Notify({ type: 'warning', message: res.data.resultDesc });
-        }
+        Toast(res.data.resultDesc)
+        // if(res.data.resultCode==999999){
+        //   Notify({ type: 'success', message: res.data.resultDesc });
+        // }else{
+        //   Notify({ type: 'warning', message: res.data.resultDesc });
+        // }
       })
     },
     payOrder(txid){
@@ -699,11 +719,14 @@ export default {
       }
       payOwlOrder(data).then((res)=>{
         that.show55 = false
-        if(res.data.resultCode==999999){
-          Notify({ type: 'success', message: res.data.resultDesc });
-        }else{
-          Notify({ type: 'warning', message: res.data.resultDesc });
-        }
+        that.show56 = false
+        that.paying = false
+        Toast('支付成功！')
+        // if(res.data.resultCode==999999){
+        //   Notify({ type: 'success', message: res.data.resultDesc });
+        // }else{
+        //   Notify({ type: 'warning', message: res.data.resultDesc });
+        // }
       })
     },
     async getUsdtBalance(){
@@ -769,9 +792,9 @@ export default {
       verifyZjadReward({"device":device,"transId": transId}).then(res=>{
         if(res.data.resultCode==999999){
           that.isAddGold = true
-          Notify({ type: 'success', message: res.data.resultDesc });
+          Toast(res.data.resultDesc)
         }else{
-          Notify({ type: 'warning', message: res.data.resultDesc });
+          Toast(res.data.resultDesc)
         }
       })
     }
@@ -1108,6 +1131,8 @@ ul {
     border: 1px solid #4b56a0;
     font-size: 16px;
     font-weight: 500;
+    display:block;
+    width:100%;
     &.btnst {
       margin-top: 10px;
     }
@@ -1356,6 +1381,7 @@ ul {
     font-weight: 500;
     color: #ffffff;
     text-align: center;
+    display:block;
   }
 }
 .ct_ditile {

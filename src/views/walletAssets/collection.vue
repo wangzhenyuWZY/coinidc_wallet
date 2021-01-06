@@ -12,7 +12,7 @@
       <div class="ids2">{{address}}</div>
       <div class="btns">
         <van-button class="globel_button tag-read" type="info" @click="copyAddress" :data-clipboard-text="address">复制收款账户</van-button>
-        <div class="sive_qrcode m_top20">保存二维码</div>
+        <div class="sive_qrcode m_top20" v-show="false">保存二维码</div>
       </div>
     </div>
 
@@ -21,11 +21,11 @@
 
 <script>
 const TronWeb = require('tronweb');
-// import Clipboard from 'clipboard'; 
+import Clipboard from 'clipboard'; 
 import { getStore, objIsNull } from "@/config/utils";
 import Title from '@/components/Title'
 import VueQr from 'vue-qr'
-import { Notify } from 'vant';
+import { Toast } from 'vant';
 export default {
   data() {
     return {
@@ -80,7 +80,7 @@ export default {
     copyAddress(){
       var clipboard = new Clipboard('.tag-read')  
           clipboard.on('success', e => {  
-            Notify({ type: 'success', message: '复制成功' });
+            Toast('复制成功');
           // 释放内存  
           clipboard.destroy()  
         })  
