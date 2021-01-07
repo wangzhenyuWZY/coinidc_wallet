@@ -180,7 +180,6 @@
             wizardId = self.wizardId,
             paintingWidth = self.$refs[wizardId].offsetWidth * 0.9;
         // let height = document.getElementById(wizardId);
-        let height = document.getElementsByClassName('wizard');
         self.paintingInnerLeft = self.$refs[wizardId].offsetWidth * 0.05 + 'px';
         self.paintingInnerWidth = paintingWidth + 'px';
         let num = self.num;
