@@ -32,7 +32,7 @@ const service = (url,method,data) =>{
   let res = {}
   let headers = {
     'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8',
-    'lang':getUrlKey('lang',window.location.href) || 'zh_CN',
+    'lang':getStore('lang'),
     'token':getStore('token')
   }
   if(type === 'get'){

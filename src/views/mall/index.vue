@@ -72,7 +72,7 @@
         </van-list>
       </div>
     </alert1>
-    <mallmodel :show='show5' label="商城" @close="show5 = false" :mall="true" :hide="true">
+    <mallmodel :show='show5' label="宫殿" @close="show5 = false" :mall="true" :hide="true">
       <div class="malltop">
         <div class="people-container" v-show="mallDetail.level==0">
           <people  :defaultBranch="false" :showShining='true' :showHealth="false">
@@ -84,22 +84,22 @@
             <div class="scene-branch-6"></div>
           </general>
         </div>
-        <div class="captain-container" v-show="mallDetail.level==2">
+        <div class="captain-container" v-show="mallDetail.level==3">
           <captain :defaultBranch="false" :showShining='true' :showHealth="false">
             <div class="scene-branch-3"></div>
           </captain>
         </div>
-        <div class="commander-container" v-show="mallDetail.level==3">
+        <div class="commander-container" v-show="mallDetail.level==4">
           <commander  :defaultBranch="false" :showShining='true' :showHealth="false">
             <div class="scene-branch-5"></div>
           </commander>
         </div>
-        <div class="wizard-container" v-show="mallDetail.level==4">
+        <div class="wizard-container" v-show="mallDetail.level==5">
           <wizard  :defaultBranch="false" :showShining='true' :showHealth="false">
             <div class="scene-branch-7"></div>
           </wizard>
         </div>
-        <div class="guard-container" v-show="mallDetail.level==5">
+        <div class="guard-container" v-show="mallDetail.level==2">
           <guard :defaultBranch="false" :showShining='true' :showHealth="false">
             <div class="scene-branch"></div>
           </guard>
@@ -132,7 +132,7 @@
         </div>
       </div>
     </mallmodel>
-    <alert2 :show='show55' label="商城" @close="show55 = false" @closeback="show55 = false; show5= true;">
+    <alert2 :show='show55' label="宫殿" @close="show55 = false" @closeback="show55 = false; show5= true;">
 
       <div class="mall2">
         <div class="ditals_bg">
@@ -145,7 +145,7 @@
 
         <div class="btn_slet"><img src="../../assets/btn_unselect.svg" alt=""><span class="seta">{{mallDetail.usdtPrice}} IDCT</span><span class="seta1">(余额：{{usdtBalance}}
             IDCT)</span> </div>
-        <div class="btns" @click="checkAppreve">{{isApproved?'确定支付':'授权'}}</div>
+        <van-button class="btns" :loading="approveding" :disabled='approveding' type="info" :loading-text="isApproved?'确定支付':'授权'" @click="checkAppreve">{{isApproved?'确定支付':'授权'}}</van-button>
       </div>
     </alert2>
     <alert2 :show='show56' label="密码" @close="show56 = false" @closeback="show56 = false;">
@@ -153,14 +153,14 @@
         <div class="ditals_bg">
           <div class="dital2" style="border-radius:0;box-shadow:none;">
             <div class="willt_pwd">昵称</div>
-            <div class="inputs"><input v-model="mallName" placeholder="请为爱宠取个名字"></div>
+            <div class="inputs"><input v-model="mallName" :disabled="paying" placeholder="请为爱宠取个名字"></div>
           </div>
           <div class="dital2" style="padding-top:0;border-radius:0;box-shadow:none;">
             <div class="willt_pwd">钱包密码</div>
-            <div class="inputs"><input type="password" v-model="password" placeholder="请输入钱包密码"></div>
+            <div class="inputs"><input type="password" v-model="password" :disabled="paying" placeholder="请输入钱包密码"></div>
           </div>
         </div>
-        <div class="btns btnst" @click="createOrder">确定支付</div>
+        <van-button class="btns btnst" :loading="paying" :disabled='paying' type="info" loading-text="正在支付" @click="createOrder">确定支付</van-button>
       </div>
     </alert2>
 
@@ -247,14 +247,14 @@
         <div class="play " @click="checkPlayWay"> <img src="../../assets/play.svg" alt=""> <span class="play_size">玩法</span> </div>
         <div class="play play1" @click="getNoticeList"> <img src="../../assets/announcement.svg" alt=""> <span
                 class="play_size p_announcement">公告</span><a class="num" v-show="homeInfo.unReadNoticeCount">{{homeInfo.unReadNoticeCount}}</a> </div>
-        <div class="play play1 " @click="getPalaceOwls"> <img src="../../assets/mall.svg" alt=""> <span class="play_size p_mall">商城</span> </div>
+        <div class="play play1 " @click="getPalaceOwls"> <img src="../../assets/mall.svg" alt=""> <span class="play_size p_mall">宫殿</span> </div>
         <div class="play play1 " @click="getIncomeList"> <img src="../../assets/earnings.svg" alt=""> <span class="play_size p_earnings">收益</span>
         </div>
       </div>
       <div class="ps_nav">
         <div class="play " @click="getMyFriends"> <img src="../../assets/haoyou.svg" alt=""> <span class="play_size">好友</span> </div>
         <div class="play1 " @click="feeGold">
-          <div class="ceter_img">{{homeInfo.goldBalance}}</div> <span class="play_size">免费赚金币</span>
+          <div class="ceter_img"><countTo v-if="homeInfo.goldBalance" ref="goldEl" :startVal='goldBalanceStart' :endVal='goldBalanceEnd' :duration='3000' :autoplay=false></countTo><span v-else>{{homeInfo.goldBalance}}</span></div> <span class="play_size">免费赚金币</span>
         </div>
         <div class="play " @click="feedOwls"> <img src="../../assets/weiyang.svg" alt=""> <span class="play_size play_sizec">一键喂养</span> </div>
       </div>
@@ -283,9 +283,11 @@ import captain from '@/components/captain.vue'
 import guard from '@/components/guard.vue'
 import king from '@/components/king.vue'
 import coinsRolling from '@/components/coinsRolling'
-import { Notify } from 'vant';
+import { Toast } from 'vant';
 import { List } from 'vant'
 import chouJing from './shouJing'
+import countTo from 'vue-count-to';
+import {getConfirmedTransaction} from '@/utils/index'
 export default {
   components: {
     alert1,
@@ -300,7 +302,8 @@ export default {
     guard,
     king,
     coinsRolling,
-    chouJing
+    chouJing,
+    countTo
   },
   data() {
     return {
@@ -347,7 +350,11 @@ export default {
       loading3: false,
       finished3: false,
       pageNum3:0,
-      isAddGold:false
+      isAddGold:false,
+      goldBalanceStart:0,
+      goldBalanceEnd:0,
+      approveding:false,
+      paying:false
     }
   },
   created(){
@@ -399,8 +406,10 @@ export default {
       var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
       var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
       if(isAndroid){
+        alert('isAndroid')
         ZjJSAdSdk.loadAd('zjad_241253',getStore('token'),'videoReward', 1,'rewardVideo');
       }else if(isiOS){
+        alert('isiOS')
         window.webkit.messageHandlers.loadAd.postMessage({'adid':'33011066','type':'rewardVideo'});
       }
     },
@@ -409,17 +418,30 @@ export default {
       queryMyOwlList().then(res=>{
         if(res.data.resultCode==999999){
           that.mallList = res.data.resultData
+          that.mallList.sort(that.compare('level'));
+          console.log(that.mallList)
         }
-        console.log(res)
+        
       })
+    },
+    compare(key){
+      return function(value1,value2){
+          var val1=value1[key];
+          var val2=value2[key];
+          return val2-val1;
+      }
     },
     feedOwls(){
       let that = this
-      
       feedMyOwls().then(res=>{
         if(res.data.resultCode==999999){
           that.getMyOwlList()
-          
+          getIndexInfo().then(res=>{
+            if(res.data.resultCode==999999){
+              that.goldBalanceEnd = res.data.resultData
+              that.$refs.goldEl.start()
+            }
+          })
         }else if(res.data.resultCode==100006){
           that.show7 = true
         }
@@ -434,6 +456,10 @@ export default {
       getIndexInfo().then(res=>{
         if(res.data.resultCode==999999){
           that.homeInfo = res.data.resultData
+          that.goldBalanceStart = that.homeInfo.goldBalance
+          if(that.$refs.goldEl){
+            that.$refs.goldEl.reset()
+          }
         }
       })
     },
@@ -573,19 +599,20 @@ export default {
         this.show56 = true
         // this.createOrder()
       }else{
+        this.approveding = true
         this.approved()
       }
     },
     createOrder(){
       let that = this
-      this.show56 = false
       let namePsd = getStore('namepsd')
       namePsd = JSON.parse(namePsd)
       let passwordTrue = namePsd.walletPassword
       if(this.password!==passwordTrue){
-        Notify({ type: 'warning', message: '密码不正确' });
+        Toast('密码不正确')
         return
       }
+      this.paying = true
       let data = {
         nickName:this.mallName,
         owlLevel:this.mallDetail.level,
@@ -594,12 +621,14 @@ export default {
       createBuyOwlOrder(data).then(res=>{
         if(res.data.resultCode==999999){
           that.orderDetail = res.data.resultData
-          debugger
           if(that.approvedBalance && that.approvedBalance>that.mallDetail.usdtPrice){
             that.sendToken()
           }else{
             that.isApproved = false
           }
+        }else{
+          Toast('创建订单失败')
+          that.paying = false
         }
       })
     },
@@ -638,8 +667,14 @@ export default {
           window.tronWeb.trx
             .sendRawTransaction(signedTransaction)
             .then(function(res) {
-              that.isApproved = true
-              that.allowance()
+              getConfirmedTransaction(res.txid).then(e=>{
+                if (e.result == 'FAILED') {
+                  Toast(window.tronWeb.toAscii(e.contractResult[0]))
+                }
+                that.isApproved = true
+                that.approveding = false
+                that.allowance()
+              })
             })
         })
     },
@@ -658,7 +693,16 @@ export default {
           window.tronWeb.trx
             .sendRawTransaction(signedTransaction)
             .then(function(res) {
-              that.payOrder(res.txid)
+              getConfirmedTransaction(res.txid).then(e=>{
+                if (e.result == 'FAILED') {
+                  that.paying = false
+                  that.password = ''
+                  that.mallName = ''
+                  Toast(window.tronWeb.toAscii(e.contractResult[0]))
+                }else{
+                  that.payOrder(res.txid)
+                }
+              })
             })
         })
     },
@@ -672,11 +716,12 @@ export default {
       }
       withdrawIncome(data).then((res)=>{
         that.show8 = false
-        if(res.data.resultCode==999999){
-          Notify({ type: 'success', message: res.data.resultDesc });
-        }else{
-          Notify({ type: 'warning', message: res.data.resultDesc });
-        }
+        Toast(res.data.resultDesc)
+        // if(res.data.resultCode==999999){
+        //   Notify({ type: 'success', message: res.data.resultDesc });
+        // }else{
+        //   Notify({ type: 'warning', message: res.data.resultDesc });
+        // }
       })
     },
     payOrder(txid){
@@ -687,11 +732,14 @@ export default {
       }
       payOwlOrder(data).then((res)=>{
         that.show55 = false
-        if(res.data.resultCode==999999){
-          Notify({ type: 'success', message: res.data.resultDesc });
-        }else{
-          Notify({ type: 'warning', message: res.data.resultDesc });
-        }
+        that.show56 = false
+        that.paying = false
+        Toast('支付成功！')
+        // if(res.data.resultCode==999999){
+        //   Notify({ type: 'success', message: res.data.resultDesc });
+        // }else{
+        //   Notify({ type: 'warning', message: res.data.resultDesc });
+        // }
       })
     },
     async getUsdtBalance(){
@@ -757,9 +805,9 @@ export default {
       verifyZjadReward({"device":device,"transId": transId}).then(res=>{
         if(res.data.resultCode==999999){
           that.isAddGold = true
-          Notify({ type: 'success', message: res.data.resultDesc });
+          Toast(res.data.resultDesc)
         }else{
-          Notify({ type: 'warning', message: res.data.resultDesc });
+          Toast(res.data.resultDesc)
         }
       })
     }
@@ -1096,6 +1144,8 @@ ul {
     border: 1px solid #4b56a0;
     font-size: 16px;
     font-weight: 500;
+    display:block;
+    width:100%;
     &.btnst {
       margin-top: 10px;
     }
@@ -1344,6 +1394,7 @@ ul {
     font-weight: 500;
     color: #ffffff;
     text-align: center;
+    display:block;
   }
 }
 .ct_ditile {

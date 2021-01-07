@@ -108,3 +108,20 @@ export function param2Obj(url) {
       '"}'
   )
 }
+
+export function getConfirmedTransaction (id) { // 轮询获取交易信息
+  return new Promise(function(resolve, reject) {
+    try {
+      var interval = window.setInterval(() => {
+        window.tronWeb.trx.getTransactionInfo(id).then((res) => {
+          if (res.contractResult) {
+            clearInterval(interval)
+            resolve(res)
+          }
+        })
+      }, 2000)
+    } catch (error) {
+      console.log(error)
+    }
+  })
+}

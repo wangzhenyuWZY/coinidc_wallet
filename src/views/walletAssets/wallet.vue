@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="title_bg">
-      <Title title="钱包" hide></Title>
+      <Title title="钱包" :isback="false" hide></Title>
       <div class="assetsDtal">
         <p>{{totalBalance}} IDC</p>
         <p>≈{{convertedBalance}}</p>
@@ -16,38 +16,40 @@
         <div class="energy_lt">
           <div class="dv1">能量</div>
           <div class="dv2">
-            <p style="width:70%"></p>
+            <p :style="'width:'+energyBi+'%'"></p>
           </div>
-          <div class="dv3"><span>0</span>/0</div>
+          <div class="dv3"><span>{{walletInfo.energy}}</span>/{{walletInfo.energyLimit}}</div>
         </div>
         <div class="energy_lt">
           <div class="dv1">宽带</div>
           <div class="dv2">
-            <p style="width:70%"></p>
+            <p  :style="'width:'+freeNetBi+'%'"></p>
           </div>
-          <div class="dv3"><span>0</span>/0</div>
+          <div class="dv3"><span>{{walletInfo.freeNet}}</span>/{{walletInfo.freeNetLimit}}</div>
         </div>
       </div>
       <div class="currency__list">
-        <div class="item" v-for="(item,index) in coinList" :key="index">
-          <div class="item_top">
-            <img :src="item.icon" alt="">
-            <div class="item_assets">
-              <p>
-                <span>{{item.coinCode}}</span>
-                <span>{{item.balance}}</span>
-              </p>
-              <p>
-                <span>{{item.coinName}}</span>
-                <span>≈{{item.convertedBalance}} IDCT</span>
-              </p>
+        <van-pull-refresh v-model="isLoading" @refresh="getMyToken">
+          <div class="item" v-for="(item,index) in coinList" :key="index">
+            <div class="item_top">
+              <img :src="item.icon" alt="">
+              <div class="item_assets">
+                <p>
+                  <span>{{item.coinCode}}</span>
+                  <span>{{item.balance}}</span>
+                </p>
+                <p>
+                  <span>{{item.coinName}}</span>
+                  <span>≈{{item.convertedBalance}} IDCT</span>
+                </p>
+              </div>
+            </div>
+            <div class="item_btn">
+              <div class='currency_btn' @click="withdraw(item)">提币</div>
+              <div class='currency_btn' @click="chongbi">充币</div>
             </div>
           </div>
-          <div class="item_btn">
-            <div class='currency_btn' @click="withdraw(item)">提币</div>
-            <div class='currency_btn' @click="chongbi">冲币</div>
-          </div>
-        </div>
+        </van-pull-refresh>
       </div>
     </div>
     <van-tabbar v-model="active" active-color="#6362F1" @change="onChange">
@@ -66,7 +68,7 @@
             <img :src="active == 1?require('../../assets/liulanqs.png'):require('../../assets/liulanq.svg')" />
           </div>
         </template>
-        <div class="tabbar_zise">浏览器</div>
+        <div class="tabbar_zise">发现</div>
       </van-tabbar-item>
     </van-tabbar>
   </div>
@@ -79,6 +81,7 @@ import { getStore, setStore, objIsNull } from "@/config/utils";
 import Title from '@/components/Title'
 import {login,queryWalletList} from '@/api/user'
 import contracts from '@/api/contracts'
+import { PullRefresh } from 'vant'
 export default {
   data() {
     return {
@@ -87,6 +90,10 @@ export default {
       trxBalance:0,
       totalBalance:0,
       convertedBalance:0,
+      energyBi:0,
+      freeNetBi:0,
+      walletInfo:{},
+      isLoading:false,
       coinList:[{
         name:'TRX',
         decimals:6,
@@ -106,7 +113,8 @@ export default {
     }
   },
   components: {
-    Title
+    Title,
+    VanPullRefresh:PullRefresh
   },
   created(){
     if(!window.tronWeb){
@@ -185,9 +193,17 @@ export default {
       let that = this
       queryWalletList().then((res)=>{
         if(res.data.resultCode==999999){
+          that.isLoading = false
           that.totalBalance = res.data.resultData.balance
           that.convertedBalance = res.data.resultData.convertedBalance
           that.coinList = res.data.resultData.lstWallet
+          that.walletInfo = res.data.resultData
+          if(res.data.resultData.energyLimit!==0&&res.data.resultData.energy!==0){
+            that.energyBi = res.data.resultData.energy/res.data.resultData.energyLimit*100
+          }
+          if(res.data.resultData.freeNetLimit!==0&&res.data.resultData.freeNet!==0){
+            that.freeNetBi = res.data.resultData.freeNet/res.data.resultData.freeNetLimit*100
+          }
         }
       })
     },

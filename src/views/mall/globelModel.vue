@@ -58,7 +58,7 @@ export default {
 
 <style lang="less" scoped>
 .over_lay {
-  z-index: 9999999;
+  z-index: 999;
 }
 
 .wrapper {

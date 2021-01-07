@@ -1,6 +1,6 @@
 <template>
   <van-nav-bar :title="title" left-arrow :class="hide?'mobles':''">
-    <van-icon name="arrow-left" slot="left" :color="hide?'#FFFFFF':'#2D2D2D'" size="20px" @click="goback" />
+    <van-icon name="arrow-left" slot="left" :color="hide?'#FFFFFF':'#2D2D2D'" size="20px" v-show="isback" @click="goback" />
   </van-nav-bar>
 </template>
 <script>
@@ -14,6 +14,10 @@ export default {
     hide: {
       type: Boolean,
       default: false
+    },
+    isback:{
+      type:Boolean,
+      default:true
     }
   },
   data() {
