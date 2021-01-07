@@ -358,6 +358,7 @@ export default {
     }
   },
   created(){
+    
     if(!window.tronWeb){
       this.getTronWeb()
     }else{
@@ -366,6 +367,9 @@ export default {
     }
     this.getHomeInfo()
     this.getMyOwlList()
+  },
+  mounted(){
+    window.zjJSAdSdkCallBack = (type,msg) => this.zjJSAdSdkCallBack(type,msg)
   },
   methods: {
     getTronWeb(){
@@ -407,7 +411,8 @@ export default {
       var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
       if(isAndroid){
         alert('isAndroid')
-        ZjJSAdSdk.loadAd('zjad_241253',getStore('token'),'videoReward', 1,'rewardVideo');
+        window.ZjJSAdSdk.loadAd('zjad_241253',getStore('token'),'videoReward', 1,'rewardVideo');
+        alert('android callback')
       }else if(isiOS){
         alert('isiOS')
         window.webkit.messageHandlers.loadAd.postMessage({'adid':'33011066','type':'rewardVideo'});
@@ -753,6 +758,7 @@ export default {
       })
     },
     zjJSAdSdkCallBack(type,msg) {
+      alert('进入了回调')
         switch (type) {
             case 'onZjAdLoaded':
                 alert(1);
@@ -803,6 +809,7 @@ export default {
         device = 'ios'
       }
       verifyZjadReward({"device":device,"transId": transId}).then(res=>{
+        alert('调用了金币方法')
         if(res.data.resultCode==999999){
           that.isAddGold = true
           Toast(res.data.resultDesc)

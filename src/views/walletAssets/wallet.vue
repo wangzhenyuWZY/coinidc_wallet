@@ -30,7 +30,7 @@
       </div>
       <div class="currency__list">
         <van-pull-refresh v-model="isLoading" @refresh="getMyToken">
-          <div class="item" v-for="(item,index) in coinList" :key="index">
+          <div class="item" v-for="(item,index) in coinList" :key="index" @click="toDetail(item)">
             <div class="item_top">
               <img :src="item.icon" alt="">
               <div class="item_assets">
@@ -43,10 +43,6 @@
                   <span>≈{{item.convertedBalance}} IDCT</span>
                 </p>
               </div>
-            </div>
-            <div class="item_btn">
-              <div class='currency_btn' @click="withdraw(item)">提币</div>
-              <div class='currency_btn' @click="chongbi">充币</div>
             </div>
           </div>
         </van-pull-refresh>
@@ -125,6 +121,14 @@ export default {
     
   },
   methods: {
+    toDetail(item){
+      this.$router.push({
+                  path: "/walletAssets/details",
+                  query: {
+                      coin:item
+                  }
+              });
+    },
     withdraw(item){
       this.$router.push({
                   path: "/walletAssets/transfer",
@@ -395,5 +399,8 @@ font-family: PingFangSC-Regular, PingFang SC;
 }
 .tabbar_zise {
   margin-top: 3px;
+}
+.van-tabbar{
+  box-shadow: 0px -2px 7px 0px rgba(5, 6, 51, 0.05);
 }
 </style>
