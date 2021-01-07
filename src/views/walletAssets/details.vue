@@ -1,10 +1,10 @@
 <template>
   <div class="container">
     <div class="title_bg">
-      <Title title="IDC" hide></Title>
+      <Title :title="coin.coinCode" hide></Title>
       <div class="assetsDtal">
-        <p><img src="../../assets/currency/IDC.svg" alt=""></p>
-        <p>98988.099 IDC</p>
+        <p><img :src="coin.icon" alt=""></p>
+        <p>{{coin.balance}} {{coin.coinCode}}</p>
       </div>
     </div>
     <div class="detals_nav">
@@ -35,7 +35,7 @@
       </div>
     </div>
     <van-tabbar v-model="active" active-color="#4F5F7F" @change="onChange">
-      <van-tabbar-item>
+      <van-tabbar-item @click="withdraw">
         <!-- <template #icon="props"> -->
         <router-link class="tabbar_ls tabbar_ls1" tag="div" to="/walletAssets/transfer">
           <template>
@@ -47,7 +47,7 @@
         </router-link>
 
       </van-tabbar-item>
-      <van-tabbar-item>
+      <van-tabbar-item @click="chongbi">
         <router-link class="tabbar_ls" tag="div" to="/walletAssets/collection">
           <template>
             <span class="tabbar_img">
@@ -67,11 +67,15 @@ export default {
   data() {
     return {
       active: 0,
-      navIndex: 1
+      navIndex: 1,
+      coin:this.$route.query.coin
     }
   },
   components: {
     Title
+  },
+  created(){
+    console.log(this.$route.query.coin)
   },
   methods: {
     onChange(index) {
@@ -80,7 +84,20 @@ export default {
     },
     nav(index) {
       this.navIndex = index
-    }
+    },
+    withdraw(){
+      this.$router.push({
+                  path: "/walletAssets/transfer",
+                  query: {
+                      coin:this.coin.coinCode
+                  }
+              });
+    },
+    chongbi(){
+      this.$router.push({
+                  path: "/walletAssets/collection"
+              });
+    },
   }
 }
 </script>
@@ -98,6 +115,7 @@ export default {
     p:nth-child(1) {
       img {
         width: 60px;
+        height:60px;
       }
     }
     p:nth-child(2) {
