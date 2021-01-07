@@ -111,11 +111,11 @@
 @keyframes spell-inner {
   0% {
     visibility: visible;
-    top: 0%;
+    transform: translateY(0);
   }
   100% {
     visibility: hidden;
-    top: -200%;
+    top: -300%;
   }
 }
 .owl.wizard {
@@ -210,6 +210,9 @@
         left: 0%;
         width: 100%;
         height: 300%;
+        font-size: 12px;
+        transform: translateY(0);
+        // background: linear-gradient(180deg, red, yellow);
       }
     }
   }
