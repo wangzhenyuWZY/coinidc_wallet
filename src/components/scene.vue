@@ -5,8 +5,8 @@
     <div class="moon">
       <!-- <img src="themes/images/scene/moon.svg" alt=""> -->
     </div>
-    <div class="branch-1"></div>
-    <div class="branch-2"></div>
+    <!-- <div class="branch-1"></div>
+    <div class="branch-2"></div> -->
     <div class="branch-3"></div>
     <div class="branch-4"></div>
     <div class="branch-5"></div>
@@ -161,6 +161,9 @@
     mounted() {
       let self = this;
       self.randomCoordinates();
+    //   self.$nextTick(() => {
+    //     let width = document.getElementsByClassName('container-0')
+    //   })
     }
   }
 </script>
