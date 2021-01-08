@@ -439,10 +439,11 @@ export default {
       let that = this
       feedMyOwls().then(res=>{
         if(res.data.resultCode==999999){
+          Toast('喂养成功啦！')
           that.getMyOwlList()
           getIndexInfo().then(res=>{
             if(res.data.resultCode==999999){
-              that.goldBalanceEnd = res.data.resultData
+              that.goldBalanceEnd = res.data.resultData.goldBalance
               that.$refs.goldEl.start()
             }
           })
