@@ -235,7 +235,7 @@
     top: 32%;
     left: 0%;
     height: 58%;
-    transform: skewY(0deg);
+    transform: translateY(0) skewY(0deg);
 }
 
 .owl.fighting .body .arms .left {
@@ -247,7 +247,6 @@
     z-index: 20;
     position: absolute;
     top: 32%;
-    /*top: 13%;*/
     left: -2.5%;
     height: 13%;
 }
@@ -512,23 +511,26 @@
 .owl .body .bamboo {
     visibility: hidden;
     position: absolute;
-    top: -200%;
+    transform: translateY(-200%);
+    // top: -200%;
     left: 0%;
     height: 98%;
-    transition: top .6s cubic-bezier(.6, 0.2, .92, .4) 0s;
+    transition: all .3s cubic-bezier(.6, 0.2, .92, .4) 0s;
 }
 
 .owl.fly .body .bamboo {
     visibility: visible;
     position: absolute;
-    top: -2%;
+    transform: translateY(-2%);
+    // top: -2%;
     left: 0%;
     height: 98%;
 }
 
 .owl.fighting .body .bamboo {
     visibility: visible;
-    top: -2%;
+    // top: -2%;
+    transform: translateY(-2%);
     animation: bambooHammer .3s cubic-bezier(.6, 0.2, .92, .4) 1;
 }
 

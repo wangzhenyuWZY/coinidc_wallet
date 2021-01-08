@@ -96,15 +96,15 @@
           name: '小明',
           health: 50
         }, {
-          level: 5,
+          level: 2,
           name: '小明',
           health: 50
         }, {
-          level: 5,
+          level: 3,
           name: '小明',
           health: 50
         }, {
-          level: 5,
+          level: 4,
           name: '小明',
           health: 50
         }]
