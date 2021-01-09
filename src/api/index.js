@@ -16,6 +16,8 @@ const api = {
   getdraw:'/owl/draw',
   withdrawIncome:'/account/withdrawIncome',
   verifyZjadReward:'/account/verifyZjadReward',
+  updateName:'/user/updateName',
+  queryTransaction:'/wallet/queryTransaction',
 }
 
 export default api

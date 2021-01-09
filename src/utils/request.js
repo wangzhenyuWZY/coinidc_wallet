@@ -35,7 +35,7 @@ const service = (url,method,data) =>{
     'lang':getStore('lang'),
     'token':getStore('token')
   }
-  if(type === 'get'){
+  if(type === 'get' || type==='restful'){
     console.log(realUrl)
     res = axios.get(realUrl + '?' + jsonUrl(data),{headers:headers})
     .catch(function (error) {

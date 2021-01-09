@@ -66,6 +66,14 @@
         </template>
         <div class="tabbar_zise">发现</div>
       </van-tabbar-item>
+      <van-tabbar-item>
+        <template>
+          <div class="tabbar_img">
+            <img :src="active == 2?require('../../assets/meIcoActive.png'):require('../../assets/meIco.png')" />
+          </div>
+        </template>
+        <div class="tabbar_zise">我的</div>
+      </van-tabbar-item>
     </van-tabbar>
   </div>
 </template>
