@@ -33,7 +33,8 @@ const service = (url,method,data) =>{
   let headers = {
     'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8',
     'lang':getStore('lang'),
-    'token':getStore('token')
+    // 'token':getStore('token')
+    'token':'5772784ea4cf4ce3ac97352c4432339e'
   }
   if(type === 'get' || type==='restful'){
     console.log(realUrl)

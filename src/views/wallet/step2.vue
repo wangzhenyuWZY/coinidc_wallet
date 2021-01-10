@@ -28,7 +28,7 @@
         <van-button class="globel_button" :loading="false" :disabled='!reading' type="info" loading-text="下载Keystore文件" @click="show1 = true">确定</van-button>
       </div>
     </div>
-    <modelKey :show="show" :codeUrl="codeUrl" @close="show=false" />
+    <modelKey :show="show" @close="show=false" />
     <backup :show="show1" @close="show1= false" @chage="chage" />
   </div>
 </template>
@@ -46,7 +46,6 @@ export default {
         pwd1: '',
         pwd2: ''
       },
-      codeUrl: 'https://www.baidu.com/',
       show: false,
       show1: false,
       reading: false
