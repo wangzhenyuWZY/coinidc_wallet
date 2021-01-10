@@ -56,13 +56,12 @@
     <alert1 :show='show4' label="我的好友" @close="show4 = false">
       <div class="announcement friend">
         <div class="totalinfo">
-          <span>猫头鹰国王：{{totalInfo.level6val}}</span>
-          <span>猫头鹰大臣：{{totalInfo.level5val}}</span>
-          <span>猫头鹰将军：{{totalInfo.level4val}}</span>
-          <span>猫头鹰千夫长：{{totalInfo.level3val}}</span>
-          <span>猫头鹰百夫长：{{totalInfo.level2val}}</span>
-          <span>猫头鹰卫兵：{{totalInfo.level1val}}</span>
-          <span>猫头鹰平民：{{totalInfo.level0val}}</span>
+          <p><span>国王：</span><a>{{totalInfo.level6val}}</a></p>
+          <p><span>大臣：</span><a>{{totalInfo.level5val}}</a></p>
+          <p><span>将军：</span><a>{{totalInfo.level4val}}</a></p>
+          <p><span>千夫长：</span><a>{{totalInfo.level3val}}</a></p>
+          <p><span>百夫长：</span><a>{{totalInfo.level2val}}</a></p>
+          <p><span>卫兵：</span><a>{{totalInfo.level1val}}</a></p>
         </div>
         <van-list
           v-model="loading3"
@@ -261,7 +260,7 @@
         </div>
       </div>
       <div class="ps_nav">
-        <div class="play " @click="getMyFriends"> <img src="../../assets/haoyou.svg" alt=""> <span class="play_size">好友</span> </div>
+        <div class="play " @click="getMyFriends"> <img src="../../assets/haoyou.png" alt=""> <span class="play_size">王国</span> </div>
         <div class="play1 " @click="feeGold">
           <div class="ceter_img"><countTo v-if="homeInfo.goldBalance" ref="goldEl" :startVal='goldBalanceStart' :endVal='goldBalanceEnd' :duration='3000' :autoplay=false></countTo><span v-else>{{homeInfo.goldBalance}}</span></div> <span class="play_size">免费赚金币</span>
         </div>
@@ -871,12 +870,16 @@ ul {
   overflow: auto;
   .totalinfo{
     width: 295px;
-    height: 130px;
+    height: 110px;
     background: #F9FBFF;
     box-shadow: 2px 2px 2px 0px #BFC2D8;
     border-radius: 5px;
     margin-bottom:10px;
-    span{
+    a{
+      color:#8997B3;
+      vertical-align: middle;
+    }
+    p{
       float:left;
       width:50%;
       text-indent: 10px;
@@ -884,6 +887,12 @@ ul {
       color: #303030;
       line-height: 20px;
       padding-top:10px;
+      span{
+        display:inline-block;
+        vertical-align: middle;
+        width:50%;
+        text-align:right;
+      }
     }
   }
   .an11{
