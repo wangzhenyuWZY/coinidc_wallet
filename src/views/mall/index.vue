@@ -358,6 +358,7 @@ export default {
     }
   },
   created(){
+    
     if(!window.tronWeb){
       this.getTronWeb()
     }else{
@@ -366,6 +367,9 @@ export default {
     }
     this.getHomeInfo()
     this.getMyOwlList()
+  },
+  mounted(){
+    window.zjJSAdSdkCallBack = (type,msg) => this.zjJSAdSdkCallBack(type,msg)
   },
   methods: {
     getTronWeb(){
@@ -406,11 +410,11 @@ export default {
       var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
       var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
       if(isAndroid){
-        alert('isAndroid')
         ZjJSAdSdk.loadAd('zjad_241253',getStore('token'),'videoReward', 1,'rewardVideo');
       }else if(isiOS){
         alert('isiOS')
-        window.webkit.messageHandlers.loadAd.postMessage({'adid':'33011066','type':'rewardVideo'});
+        window.webkit.messageHandlers.loadAd.postMessage({'adid':'33011066','type':'rewardVideo', "userId":getStore('token'),"rewardCount":"1"});
+        // window.webkit.messageHandlers.loadAd.postMessage({'adid':'33011066','type':'rewardVideo'});
       }
     },
     getMyOwlList(){
@@ -435,10 +439,11 @@ export default {
       let that = this
       feedMyOwls().then(res=>{
         if(res.data.resultCode==999999){
+          Toast('喂养成功啦！')
           that.getMyOwlList()
           getIndexInfo().then(res=>{
             if(res.data.resultCode==999999){
-              that.goldBalanceEnd = res.data.resultData
+              that.goldBalanceEnd = res.data.resultData.goldBalance
               that.$refs.goldEl.start()
             }
           })
@@ -753,37 +758,38 @@ export default {
       })
     },
     zjJSAdSdkCallBack(type,msg) {
+      alert('进入了回调')
         switch (type) {
             case 'onZjAdLoaded':
-                alert(1);
+                // alert(1);
                 break;
             case 'onZjAdShow':
-                alert(2);
+                // alert(2);
                 break;
             case 'onZjAdClick':
-                alert(3);
+                // alert(3);
                 break;
             case 'onZjAdShow':
-                alert(4);
+                // alert(4);
                 break;
             case 'onZjAdClose':
-                alert(5);
+                // alert(5);
                 break;
             case 'onZjAdError':
-                alert(6);
+                // alert(6);
                 break;
             case 'onZjAdVideoCached':
-                alert(7);
+                // alert(7);
                 ZjJSAdSdk.showAd();
                 break;
             case 'onZjAdShowError':
-                alert(8);
+                // alert(8);
                 break;
             case 'onZjAdVideoComplete':
-                alert(9);
+                // alert(9);
                 break;
             case 'onZjAdExpose':
-                alert(10);
+                // alert(10);
                 break;
             case 'onZjAdReward':
                 alert("获取奖励");
@@ -803,6 +809,7 @@ export default {
         device = 'ios'
       }
       verifyZjadReward({"device":device,"transId": transId}).then(res=>{
+        // alert('调用了金币方法')
         if(res.data.resultCode==999999){
           that.isAddGold = true
           Toast(res.data.resultDesc)

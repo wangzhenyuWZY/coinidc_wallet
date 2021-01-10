@@ -154,3 +154,21 @@ export function verifyZjadReward(params) {
     params
   )
 }
+
+// 转账记录
+export function queryTransaction(params) {
+  return request(
+    api.queryTransaction+'/'+params.pageNum,
+    'restful',
+    params
+  )
+}
+
+// 改昵称
+export function updateName(params) {
+  return request(
+    api.updateName,
+    'get',
+    params
+  )
+}

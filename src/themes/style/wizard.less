@@ -1,30 +1,30 @@
 @keyframes reel-spread-out {
   0% {
-    right: 92%;
+    transform: translateX(0%);
   }
   10% {
-    right: 0%;
+    transform: translateX(1150%);
   }
   90% {
-    right: 0%;
+    transform: translateX(1150%);
   }
   100% {
-    right: 92%;
+    transform: translateX(0%);
   }
 }
 
 @keyframes painting-spread-out {
   0% {
-    width: 0%;
+    transform: scaleX(0);
   }
   10% {
-    width: 100%;
+    transform: scaleX(1);
   }
   90% {
-    width: 100%;
+    transform: scaleX(1);
   }
   100% {
-    width: 0%;
+    transform: scaleX(0);
   }
 }
 
@@ -54,7 +54,7 @@
     transform: rotate(0deg);
   }
   100% {
-      top: 32%;
+    //   top: 32%;
       transform: skewY(0deg);
   }
 }
@@ -84,7 +84,7 @@
     transform: rotate(0deg);
   }
   100% {
-      top: 32%;
+    //   top: 32%;
       transform: skewY(0deg);
   }
 }
@@ -110,12 +110,10 @@
 }
 @keyframes spell-inner {
   0% {
-    visibility: visible;
-    top: 0%;
+    transform: translateY(0);
   }
   100% {
-    visibility: hidden;
-    top: -200%;
+    transform: translateY(80%);
   }
 }
 .owl.wizard {
@@ -153,7 +151,7 @@
       left: 50%;
       width: 100%;
       height: 55%;
-      transform: translateX(-50%);
+      transform: translate(-50%, 0%);
       transition: all .2s ease 0s;
       .reel-left {
         z-index: 1;
@@ -171,12 +169,16 @@
         width: 8%;
         height: 100%;
         background: transparent url('../images/skin/reel.png') no-repeat center center / contain;
+        transform-origin: left;
+        transform: translateX(0%);
       }
       .painting {
         overflow: hidden;
         position: absolute;
-        width: 0%;
+        width: 100%;
         height: 100%;
+        transform-origin: left;
+        transform: scaleX(0);
         .inner {
           position: absolute;
           top: 19.5%;
@@ -205,11 +207,15 @@
       height: 130%;
       // background: rgba(0, 0, 0, 0.5);
       .inner {
+        visibility: hidden;
         position: absolute;
-        top: 0%;
+        bottom: 0%;
         left: 0%;
         width: 100%;
-        height: 300%;
+        height: 400%;
+        font-size: 12px;
+        transform: translateY(0);
+        // background: linear-gradient(180deg, red, yellow);
       }
     }
   }
@@ -230,16 +236,18 @@
     }
     .reel {
       visibility: visible;
-      top: -90%;
+    //   top: -90%;
+      transform: translate(-50%, 200%);
       .painting {
-        animation: painting-spread-out 2s ease .2s;
+        animation: painting-spread-out 2s linear .2s;
       }
       .reel-right {
-        animation: reel-spread-out 2s ease .2s;
+        animation: reel-spread-out 2s linear .2s;
       }
     }
     .spell {
       .inner {
+        visibility: visible;
         animation: spell-inner 1.8s linear .2s;
       }
     }
