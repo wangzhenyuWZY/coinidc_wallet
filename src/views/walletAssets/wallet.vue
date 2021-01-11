@@ -66,7 +66,7 @@
         </template>
         <div class="tabbar_zise">发现</div>
       </van-tabbar-item>
-      <van-tabbar-item>
+      <van-tabbar-item @click="toHome">
         <template>
           <div class="tabbar_img">
             <img :src="active == 2?require('../../assets/meIcoActive.png'):require('../../assets/meIco.png')" />
@@ -155,6 +155,11 @@ export default {
                   path: "/mall"
               });
     },
+    toHome(){
+      this.$router.push({
+                  path: "/home"
+              });
+    },
     onChange(index) {
       this.active = index
       console.log(index)
@@ -221,8 +226,11 @@ export default {
     },
     userLogin(){
       let that = this
+      let namePsd = getStore('namepsd')
+      namePsd = JSON.parse(namePsd)
+      let walletName = namePsd.walletName
         let data = {
-          name:'xxx',
+          name:walletName,
           idctUserId:'760732255497768192',
           // inviteCode:'',
           trxAddress:window.tronWeb.defaultAddress.base58

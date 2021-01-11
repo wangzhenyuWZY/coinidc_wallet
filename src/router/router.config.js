@@ -22,6 +22,6 @@ export const constantRouterMap = [
   { path: '/walletAssets/details', name: 'details', component: () => import('@/views/walletAssets/details') }, // 币种交易明细
   { path: '/walletAssets/transfer', name: 'transfer', component: () => import('@/views/walletAssets/transfer') }, // 转账
   { path: '/walletAssets/collection', name: 'collection', component: () => import('@/views/walletAssets/collection') }, // 收款
-  { path: '/mall', name: 'mall', component: () => import('@/views/mall/index'),meta: {title: 'Owl World'} } // 玩法说明
-
+  { path: '/mall', name: 'mall', component: () => import('@/views/mall/index'),meta: {title: 'Owl World'} }, // 玩法说明
+  { path: '/validation/beifen', name: 'beifen', component: () => import('@/views/validation/beifen') },
 ]

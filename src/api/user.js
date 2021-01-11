@@ -168,6 +168,15 @@ export function queryTransaction(params) {
 export function updateName(params) {
   return request(
     api.updateName,
+    'post',
+    params
+  )
+}
+
+// 统计
+export function queryMyTeamOwl(params) {
+  return request(
+    api.queryMyTeamOwl,
     'get',
     params
   )

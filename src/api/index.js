@@ -18,6 +18,7 @@ const api = {
   verifyZjadReward:'/account/verifyZjadReward',
   updateName:'/user/updateName',
   queryTransaction:'/wallet/queryTransaction',
+  queryMyTeamOwl:'/owl/queryMyTeamOwl',
 }
 
 export default api

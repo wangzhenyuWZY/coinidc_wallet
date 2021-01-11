@@ -55,6 +55,14 @@
     </alert1>
     <alert1 :show='show4' label="我的好友" @close="show4 = false">
       <div class="announcement friend">
+        <div class="totalinfo">
+          <p><span>国王：</span><a>{{totalInfo.level6val}}</a></p>
+          <p><span>大臣：</span><a>{{totalInfo.level5val}}</a></p>
+          <p><span>将军：</span><a>{{totalInfo.level4val}}</a></p>
+          <p><span>千夫长：</span><a>{{totalInfo.level3val}}</a></p>
+          <p><span>百夫长：</span><a>{{totalInfo.level2val}}</a></p>
+          <p><span>卫兵：</span><a>{{totalInfo.level1val}}</a></p>
+        </div>
         <van-list
           v-model="loading3"
           :finished="finished3"
@@ -65,7 +73,7 @@
           <van-cell v-for="(item,index) in friendList" :key="index" class="friendli">
             <div> <img :src="item.portrait" alt=""></div>
             <div>
-              <p>{{item.name}}</p>
+              <p>{{item.name?item.name:'--'}}</p>
               <p>{{item.highestTitle}}</p>
             </div>
           </van-cell>
@@ -252,7 +260,7 @@
         </div>
       </div>
       <div class="ps_nav">
-        <div class="play " @click="getMyFriends"> <img src="../../assets/haoyou.svg" alt=""> <span class="play_size">好友</span> </div>
+        <div class="play " @click="getMyFriends"> <img src="../../assets/haoyou.png" alt=""> <span class="play_size">王国</span> </div>
         <div class="play1 " @click="feeGold">
           <div class="ceter_img"><countTo v-if="homeInfo.goldBalance" ref="goldEl" :startVal='goldBalanceStart' :endVal='goldBalanceEnd' :duration='3000' :autoplay=false></countTo><span v-else>{{homeInfo.goldBalance}}</span></div> <span class="play_size">免费赚金币</span>
         </div>
@@ -274,7 +282,7 @@ import alert2 from './globelModel2'
 import scene from '@/components/scene'
 import mallmodel from './mallModel'
 import contracts from '@/api/contracts'
-import {verifyZjadReward,withdrawIncome,getdraw,payOwlOrder,queryMyOwlList,feedMyOwls,getIndexInfo,queryMyFriends,queryPalaceOwls,queryIncomeList,queryNoticeList,readNoticeContent,createBuyOwlOrder,getPlayWay,queryWithdrawList,queryWalletList} from '@/api/user'
+import {queryMyTeamOwl,verifyZjadReward,withdrawIncome,getdraw,payOwlOrder,queryMyOwlList,feedMyOwls,getIndexInfo,queryMyFriends,queryPalaceOwls,queryIncomeList,queryNoticeList,readNoticeContent,createBuyOwlOrder,getPlayWay,queryWithdrawList,queryWalletList} from '@/api/user'
 import people from '@/components/people.vue'
 import wizard from '@/components/wizard.vue'
 import general from '@/components/general.vue'
@@ -354,7 +362,8 @@ export default {
       goldBalanceStart:0,
       goldBalanceEnd:0,
       approveding:false,
-      paying:false
+      paying:false,
+      totalInfo:{}
     }
   },
   created(){
@@ -482,6 +491,27 @@ export default {
         if(res.data.resultCode==999999){
           res.data.resultData.forEach((item,index)=>{
             that.friendList.push(item)  
+          })
+        }
+      })
+      queryMyTeamOwl().then(res=>{
+        if(res.data.resultCode==999999){
+          res.data.resultData.forEach((item,index)=>{
+            if(item.level==0){
+              that.totalInfo.level0val = item.owlCount
+            }else if(item.level==1){
+              that.totalInfo.level1val = item.owlCount
+            }else if(item.level==2){
+              that.totalInfo.level2val = item.owlCount
+            }else if(item.level==3){
+              that.totalInfo.level3val = item.owlCount
+            }else if(item.level==4){
+              that.totalInfo.level4val = item.owlCount
+            }else if(item.level==5){
+              that.totalInfo.level5val = item.owlCount
+            }else if(item.level==6){
+              that.totalInfo.level6val = item.owlCount
+            }
           })
         }
       })
@@ -838,6 +868,33 @@ ul {
   padding-top: 34px;
   max-height: 316px;
   overflow: auto;
+  .totalinfo{
+    width: 295px;
+    height: 110px;
+    background: #F9FBFF;
+    box-shadow: 2px 2px 2px 0px #BFC2D8;
+    border-radius: 5px;
+    margin-bottom:10px;
+    a{
+      color:#8997B3;
+      vertical-align: middle;
+    }
+    p{
+      float:left;
+      width:50%;
+      text-indent: 10px;
+      font-size:14px;
+      color: #303030;
+      line-height: 20px;
+      padding-top:10px;
+      span{
+        display:inline-block;
+        vertical-align: middle;
+        width:50%;
+        text-align:right;
+      }
+    }
+  }
   .an11{
     height:130px;
     overflow:auto;
@@ -871,7 +928,7 @@ ul {
   }
 }
 .announcement2 {
-  max-height: 530px;
+  max-height: 430px;
   .accets {
     background: linear-gradient(180deg, #ebedf6 0%, #ffffff 100%);
     border-radius: 5px;
@@ -933,7 +990,7 @@ ul {
 }
 .friend {
   .friendul {
-    height: 280px;
+    height: 200px;
     overflow: auto;
     &::-webkit-scrollbar {
       width: 0;
@@ -945,30 +1002,34 @@ ul {
       display: flex;
       padding: 10px;
       margin-bottom: 10px;
-      div:nth-child(1) {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        margin-right: 10px;
-        background: cornflowerblue;
-        img {
+      .van-cell__value{
+        div:nth-child(1) {
+          float:left;
           width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          margin-right: 10px;
+          background: cornflowerblue;
+          img {
+            width: 40px;
+          }
+        }
+        div:nth-child(2) {
+          p {
+            font-weight: 400;
+          }
+          p:nth-child(1) {
+            font-size: 14px;
+            color: #303030;
+          }
+          p:nth-child(2) {
+            font-size: 12px;
+            color: #8d91ab;
+            margin-top: 3px;
+          }
         }
       }
-      div:nth-child(2) {
-        p {
-          font-weight: 400;
-        }
-        p:nth-child(1) {
-          font-size: 14px;
-          color: #303030;
-        }
-        p:nth-child(2) {
-          font-size: 12px;
-          color: #8d91ab;
-          margin-top: 3px;
-        }
-      }
+      
     }
   }
 }

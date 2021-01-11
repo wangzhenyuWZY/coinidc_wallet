@@ -9,14 +9,13 @@
       <div class="popup_size m_top20">以下是钱包的私钥，请保存在安全的地方，一旦丢失将无法 找回。</div>
       <div class="popup_key">
         <div style="overflow: hidden;text-overflow: ellipsis;">{{privateKey}}</div>
-        <div class="cp"><img src="../../assets/icon_cp.svg" alt=""></div>
+        <div class="cp tag-read" :data-clipboard-text="privateKey" @click="copyAddress"><img src="../../assets/icon_cp.svg" alt=""></div>
       </div>
       <div class="qrcode">
         <vue-qr :correctLevel="3" :autoColor="false" :text="privateKey" :size="121" :margin="0" :logoMargin="3"></vue-qr>
       </div>
       <div class="popup_buttons">
         <div @click="close">备份完成</div>
-        <div>保存二维码</div>
       </div>
     </div>
   </van-popup>
@@ -25,8 +24,10 @@
 <script>
 import { getStore, objIsNull } from "@/config/utils";
 import VueQr from 'vue-qr'
+import Clipboard from 'clipboard'; 
+import { Toast } from 'vant';
 export default {
-  props: ['show', 'codeUrl'],
+  props: ['show'],
   components: {
     VueQr
   },
@@ -39,6 +40,20 @@ export default {
   methods: {
     close() {
       this.$emit('close')
+    },
+    copyAddress(){
+      var clipboard = new Clipboard('.tag-read')  
+          clipboard.on('success', e => {  
+            Toast('复制成功');
+          // 释放内存  
+          clipboard.destroy()  
+        })  
+        clipboard.on('error', e => {  
+          // 不支持复制  
+          console.log('该浏览器不支持自动复制')  
+          // 释放内存  
+          clipboard.destroy()  
+        })
     }
   },
   created(){
@@ -88,7 +103,7 @@ export default {
     display: flex;
     justify-content: space-between;
     > div {
-      width: 48%;
+      width: 98%;
       height: 50px;
       border-radius: 4px;
       line-height: 50px;
