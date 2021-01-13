@@ -1,15 +1,15 @@
 <template>
   <div class="container">
-    <alert1 :show='show' label="玩法说明" @close="show = false">
+    <alert1 :show='show' :label="$t('mall61')" @close="show = false">
       <div class="ct_cneter" v-html="playWayDetail">
       </div>
     </alert1>
-    <alert1 :show='show2' label="公告" @close="show2 = false">
+    <alert1 :show='show2' :label="$t('mall62')" @close="show2 = false">
       <div class="announcement" @click.stop.prevent>
         <van-list
           v-model="loading1"
           :finished="finished1"
-          finished-text="没有更多了"
+          :finished-text="$t('mall63')"
           @load="getNoticeList"
            class="an1"
         >
@@ -20,7 +20,7 @@
         </van-list>
       </div>
     </alert1>
-    <alert2 :show='show6' label="公告详情" @close="show6 = false" :mall="true" @closeback="show6 = false; show2= true;">
+    <alert2 :show='show6' :label="$t('mall64')" @close="show6 = false" :mall="true" @closeback="show6 = false; show2= true;">
       <div class="ct_ditile">
         <div>{{noticeDetail.titleHk}}</div>
         <p>
@@ -37,23 +37,23 @@
           <p>{{homeInfo.idctBalance}} <span>IDCT</span></p>
           <p>≈ {{homeInfo.convertUsdtBalance}} USDT</p>
         </div>
-        <div class="btns m_top20" @click="getWithdrawList">提币</div>
+        <div class="btns m_top20" @click="getWithdrawList">{{$t('mall6')}}</div>
         <van-list
           v-model="loading"
           :finished="finished"
-          finished-text="没有更多了"
+          :finished-text="$t('mall63')"
           @load="getIncomeList"
            class="an2 m_top20"
         >
           <van-cell v-for="(item,index) in incomeList" :key="index" class="an2li">
             <p>{{item.createTime}}</p>
-            <p>1.您的猫头鹰共创{{item.owlIncome}} IDCT收益</p>
-            <p>2.您的猫头鹰子民共纳税 {{item.taxIncome}} IDCT</p>
+            <p>1.{{$t('mall65')}}{{item.owlIncome}} IDCT</p>
+            <p>2.{{$t('mall66')}}{{item.taxIncome}} IDCT</p>
           </van-cell>
         </van-list>
       </div>
     </alert1>
-    <alert1 :show='show4' label="我的好友" @close="show4 = false">
+    <alert1 :show='show4' :label="$t('mall67')" @close="show4 = false">
       <div class="announcement friend">
         <div class="totalinfo">
           <p v-for="(item,index) in totalInfo" :key="index"><span>{{item.name}}：</span><a>{{item.owlCount}}</a></p>
@@ -61,7 +61,7 @@
         <van-list
           v-model="loading3"
           :finished="finished3"
-          finished-text="没有更多了"
+          :finished-text="$t('mall63')"
           @load="getMyFriends"
            class="friendul"
         >
@@ -75,7 +75,7 @@
         </van-list>
       </div>
     </alert1>
-    <mallmodel :show='show5' label="宫殿" @close="show5 = false" :mall="true" :hide="true">
+    <mallmodel :show='show5' :label="$t('mall59')" @close="show5 = false" :mall="true" :hide="true">
       <div class="malltop">
         <div class="people-container" v-show="mallDetail.level==0">
           <people  :defaultBranch="false" :showShining='true' :showHealth="false">
@@ -129,13 +129,13 @@
           </div>
           <div class="dt_rg" v-show="mallDetail.buyType!=='none'">
             <div class="btns">
-              <div @click="mallDetail.buyType=='buy'?show55=true:show77=true;show5=false">{{mallDetail.buyType=='buy'?'领养':'抽奖'}}</div>
+              <div @click="mallDetail.buyType=='buy'?show55=true:show77=true;show5=false">{{mallDetail.buyType=='buy'?$t('mall68'):$t('mall69')}}</div>
             </div>
           </div>
         </div>
       </div>
     </mallmodel>
-    <alert2 :show='show55' label="宫殿" @close="show55 = false" @closeback="show55 = false; show5= true;">
+    <alert2 :show='show55' :label="$t('mall59')" @close="show55 = false" @closeback="show55 = false; show5= true;">
 
       <div class="mall2">
         <div class="ditals_bg">
@@ -146,24 +146,24 @@
           </div>
         </div>
 
-        <div class="btn_slet"><img src="../../assets/btn_unselect.svg" alt=""><span class="seta">{{mallDetail.usdtPrice}} IDCT</span><span class="seta1">(余额：{{usdtBalance}}
+        <div class="btn_slet"><img src="../../assets/btn_unselect.svg" alt=""><span class="seta">{{mallDetail.usdtPrice}} IDCT</span><span class="seta1">({{$t('mall108')}}：{{usdtBalance}}
             IDCT)</span> </div>
-        <van-button class="btns" :loading="approveding" :disabled='approveding' type="info" :loading-text="isApproved?'确定支付':'授权'" @click="checkAppreve">{{isApproved?'确定支付':'授权'}}</van-button>
+        <van-button class="btns" :loading="approveding" :disabled='approveding' type="info" :loading-text="isApproved?$t('mall70'):$t('mall71')" @click="checkAppreve">{{isApproved?$t('mall70'):$t('mall71')}}</van-button>
       </div>
     </alert2>
-    <alert2 :show='show56' label="密码" @close="show56 = false" @closeback="show56 = false;">
+    <alert2 :show='show56' :label="$t('mall22')" @close="show56 = false" @closeback="show56 = false;">
       <div class="mall2">
         <div class="ditals_bg">
           <div class="dital2" style="border-radius:0;box-shadow:none;">
-            <div class="willt_pwd">昵称</div>
-            <div class="inputs"><input v-model="mallName" :disabled="paying" placeholder="请为爱宠取个名字"></div>
+            <div class="willt_pwd">{{$t('mall72')}}</div>
+            <div class="inputs"><input v-model="mallName" :disabled="paying" :placeholder="$t('mall73')"></div>
           </div>
           <div class="dital2" style="padding-top:0;border-radius:0;box-shadow:none;">
-            <div class="willt_pwd">钱包密码</div>
-            <div class="inputs"><input type="password" v-model="password" :disabled="paying" placeholder="请输入钱包密码"></div>
+            <div class="willt_pwd">{{$t('mall23')}}</div>
+            <div class="inputs"><input type="password" v-model="password" :disabled="paying" :placeholder="$t('mall24')"></div>
           </div>
         </div>
-        <van-button class="btns btnst" :loading="paying" :disabled='paying' type="info" loading-text="正在支付" @click="createOrder">确定支付</van-button>
+        <van-button class="btns btnst" :loading="paying" :disabled='paying' type="info" :loading-text="$t('mall74')" @click="createOrder">{{$t('mall70')}}</van-button>
       </div>
     </alert2>
 
@@ -197,19 +197,19 @@
         </div>
       </div>
     </alert2> -->
-    <alert2 :show='show7' label="系统提示" @close="show7= false" :mall="false" :hideback="true">
+    <alert2 :show='show7' :label="$t('mall75')" @close="show7= false" :mall="false" :hideback="true">
       <div class="styme_model" @click.stop.prevent>
         <div class="stemes">
           <div class="img">
             <img src="../../assets/acctove.svg" alt="">
           </div>
-          <p>金币不足</p>
-          <p>可以看广告获取更多金币哦！</p>
+          <p>{{$t('mall76')}}</p>
+          <p>{{$t('mall77')}}</p>
         </div>
-        <div class="btns btnst" @click="getFeecoin">确定</div>
+        <div class="btns btnst" @click="getFeecoin">{{$t('mall20')}}</div>
       </div>
     </alert2>
-    <alert2 :show='show8' label="提币" @close="show8= false" :mall="false" :hideback="true">
+    <alert2 :show='show8' :label="$t('mall6')" @close="show8= false" :mall="false" :hideback="true">
       <div class="announcement announcement2">
         <div class="accets">
           <p>{{homeInfo.idctBalance}} <span>IDCT</span></p>
@@ -217,23 +217,23 @@
         </div>
         <div class="ditals_bg">
           <div class="dital2">
-            <div class="willt_pwd" style="padding-top:10px;">提币数量</div>
-            <div class="inputs" style="padding-bottom:10px;"><input type="number" v-model="withdrawNum" placeholder="最低提202 IDCT"></div>
+            <div class="willt_pwd" style="padding-top:10px;">{{$t('mall78')}}</div>
+            <div class="inputs" style="padding-bottom:10px;"><input type="number" v-model="withdrawNum" :placeholder="$t('mall79')"></div>
           </div>
         </div>
-        <div class="btns btnst" @click="doWithdraw">提币</div>
+        <div class="btns btnst" @click="doWithdraw">{{$t('mall6')}}</div>
         <div class="tipbox">
-          <h2>注</h2>
-          <p>1.首次提币限额为价值2 USDT的 IDCT起</p>
-          <p>2.第二次提币限额为价值10 USDT的 IDCT起</p>
-          <p>3.第三次提币限额为价值20 USDT的 IDCT起</p>
+          <h2>{{$t('mall80')}}</h2>
+          <p>1.{{$t('mall81')}}</p>
+          <p>2.{{$t('mall82')}}</p>
+          <p>3.{{$t('mall83')}}</p>
         </div>
         <div class="widthrawList">
           <div class="widthrawBar">
             <van-list
               v-model="loading2"
               :finished="finished2"
-              finished-text="没有更多了"
+              :finished-text="$t('mall63')"
               @load="getWithdrawList"
               class="an11"
             >
@@ -247,19 +247,19 @@
     </alert2>
     <scene :mallList='mallList'>
       <div class="ps_list">
-        <div class="play " @click="checkPlayWay"> <img src="../../assets/play.svg" alt=""> <span class="play_size">玩法</span> </div>
+        <div class="play " @click="checkPlayWay"> <img src="../../assets/play.svg" alt=""> <span class="play_size">{{$t('mall84')}}</span> </div>
         <div class="play play1" @click="getNoticeList"> <img src="../../assets/announcement.svg" alt=""> <span
-                class="play_size p_announcement">公告</span><a class="num" v-show="homeInfo.unReadNoticeCount">{{homeInfo.unReadNoticeCount}}</a> </div>
-        <div class="play play1 " @click="getPalaceOwls"> <img src="../../assets/mall.svg" alt=""> <span class="play_size p_mall">宫殿</span> </div>
-        <div class="play play1 " @click="getIncomeList"> <img src="../../assets/earnings.svg" alt=""> <span class="play_size p_earnings">收益</span>
+                class="play_size p_announcement">{{$t('mall62')}}</span><a class="num" v-show="homeInfo.unReadNoticeCount">{{homeInfo.unReadNoticeCount}}</a> </div>
+        <div class="play play1 " @click="getPalaceOwls"> <img src="../../assets/mall.svg" alt=""> <span class="play_size p_mall">{{$t('mall59')}}</span> </div>
+        <div class="play play1 " @click="getIncomeList"> <img src="../../assets/earnings.svg" alt=""> <span class="play_size p_earnings">{{$t('mall85')}}</span>
         </div>
       </div>
       <div class="ps_nav">
-        <div class="play " @click="getMyFriends"> <img src="../../assets/haoyou.png" alt=""> <span class="play_size">王国</span> </div>
+        <div class="play " @click="getMyFriends"> <img src="../../assets/haoyou.png" alt=""> <span class="play_size">{{$t('mall91')}}</span> </div>
         <div class="play1 " @click="feeGold">
-          <div class="ceter_img"><countTo v-if="homeInfo.goldBalance" ref="goldEl" :startVal='goldBalanceStart' :endVal='goldBalanceEnd' :duration='3000' :autoplay=false></countTo><span v-else>{{homeInfo.goldBalance}}</span></div> <span class="play_size">免费赚金币</span>
+          <div class="ceter_img"><countTo v-if="homeInfo.goldBalance" ref="goldEl" :startVal='goldBalanceStart' :endVal='goldBalanceEnd' :duration='3000' :autoplay=false></countTo><span v-else>{{homeInfo.goldBalance}}</span></div> <span class="play_size">{{$t('mall87')}}</span>
         </div>
-        <div class="play " @click="feedOwls"> <img src="../../assets/weiyang.svg" alt=""> <span class="play_size play_sizec">一键喂养</span> </div>
+        <div class="play " @click="feedOwls"> <img src="../../assets/weiyang.svg" alt=""> <span class="play_size play_sizec">{{$t('mall88')}}</span> </div>
       </div>
     </scene>
     <coinsRolling :show="isAddGold" @close="isAddGold=false" class="coinsroll"></coinsRolling>
@@ -647,7 +647,7 @@ export default {
       namePsd = JSON.parse(namePsd)
       let passwordTrue = namePsd.walletPassword
       if(this.password!==passwordTrue){
-        Toast('密码不正确')
+        Toast(this.$t('mall28'))
         return
       }
       this.paying = true
@@ -665,7 +665,7 @@ export default {
             that.isApproved = false
           }
         }else{
-          Toast('创建订单失败')
+          Toast(that.$t('mall89'))
           that.paying = false
         }
       })
@@ -772,7 +772,7 @@ export default {
         that.show55 = false
         that.show56 = false
         that.paying = false
-        Toast('支付成功！')
+        Toast(that.$t('mall90'))
         // if(res.data.resultCode==999999){
         //   Notify({ type: 'success', message: res.data.resultDesc });
         // }else{

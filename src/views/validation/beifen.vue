@@ -3,10 +3,10 @@
   <div class="container">
     <Title :title="title"></Title>
     <div class="createContainer">
-      <p class="createTitle m_top20">备份钱包</p>
+      <p class="createTitle m_top20">{{$t('mall35')}}</p>
       <div class="create_size">
-        <p>﹒备份私钥或者备份助记词均可用与连接钱包账户。</p>
-        <p>﹒为确保账户安全，建议两种方式都备份。</p>
+        <p>﹒{{$t('mall36')}}</p>
+        <p>﹒{{$t('mall37')}}</p>
       </div>
       <div class="validation_list">
         <div class="list">
@@ -17,7 +17,7 @@
         </div>
       </div>
       <div class="btn_list m_top20">
-        <router-link to="/home"><div class="btn1">备份完成</div></router-link>
+        <router-link to="/home"><div class="btn1">{{$t('mall56')}}</div></router-link>
         <!-- <div class="btn2 m_top20">上一步</div> -->
       </div>
     </div>

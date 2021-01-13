@@ -3,18 +3,18 @@
   <div class="container">
     <Title :title="title"></Title>
     <div class="createContainer">
-      <p class="createTitle">创建钱包<span>(Step2/<span class="title_colr">2</span>)</span></p>
-      <p class="createTitle m_top20">备份钱包</p>
+      <p class="createTitle">{{$t('mall34')}}<span>(Step2/<span class="title_colr">2</span>)</span></p>
+      <p class="createTitle m_top20">{{$t('mall35')}}</p>
       <div class="create_size">
-        <p>﹒备份私钥或者备份助记词均可用与连接钱包账户。</p>
-        <p>﹒为确保账户安全，建议两种方式都备份。</p>
+        <p>﹒{{$t('mall36')}}</p>
+        <p>﹒{{$t('mall37')}}</p>
       </div>
       <div class="key m_top20" @click="show =true">
-        <span>备份私钥</span>
+        <span>{{$t('mall38')}}</span>
         <img src="../../assets/back.svg" alt="">
       </div>
       <div class="key m_top20" @click="toMnemonic">
-          <span>备份助记词</span>
+          <span>{{$t('mall39')}}</span>
           <img src="../../assets/back.svg" alt="">
       </div>
       <div class="reading m_top20">
@@ -22,10 +22,10 @@
           <img src="../../assets/reading_show.svg" alt="" v-show="!reading" @click="reading =!reading">
           <img src="../../assets/reading.svg" alt="" v-show="reading" @click="reading =!reading">
         </span>
-        <span>我已备份助记词并保存好私钥信息，并知晓私钥一旦丢失任 何人都将无法找回。</span>
+        <span>{{$t('mall40')}}</span>
       </div>
       <div class="m_top20">
-        <van-button class="globel_button" :loading="false" :disabled='!reading' type="info" loading-text="下载Keystore文件" @click="show1 = true">确定</van-button>
+        <van-button class="globel_button" :loading="false" :disabled='!reading' type="info" @click="show1 = true">{{$t('mall20')}}</van-button>
       </div>
     </div>
     <modelKey :show="show" @close="show=false" />
@@ -40,7 +40,7 @@ import backup from './backup'
 export default {
   data() {
     return {
-      title: '创建钱包',
+      title: this.$t('mall34'),
       showEye: false,
       from: {
         pwd1: '',

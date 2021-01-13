@@ -1,15 +1,15 @@
 <!-- home -->
 <template>
   <div class="container">
-    <h2 class="title">我的</h2>
+    <h2 class="title">{{$t('mall99')}}</h2>
     <van-cell-group>
-      <van-cell title="昵称" :value="namePsd.walletName" is-link arrow-direction @click="namepop=true" />
+      <van-cell :title="$t('mall72')" :value="namePsd.walletName" is-link arrow-direction @click="namepop=true" />
     </van-cell-group>
     <van-cell-group class="group">
-      <van-cell title="备份助记词" value="" is-link arrow-direction @click="showMemo(1)" />
-      <van-cell title="备份私钥" value="" is-link arrow-direction @click="showMemo(2)"/>
+      <van-cell :title="$t('mall39')" value="" is-link arrow-direction @click="showMemo(1)" />
+      <van-cell :title="$t('mall38')" value="" is-link arrow-direction @click="showMemo(2)"/>
     </van-cell-group>
-    <button class="outbtn" @click="confirmout">退出</button>
+    <button class="outbtn" @click="confirmout">{{$t('mall100')}}</button>
     <van-tabbar v-model="activeNav" active-color="#6362F1">
       <van-tabbar-item @click="toWallet">
         <!-- <template #icon="props"> -->
@@ -18,7 +18,7 @@
             <img :src="activeNav == 0?require('../../assets/zican.svg'):require('../../assets/assetsh.png')" />
           </div>
         </template>
-        <div class="tabbar_zise">资产</div>
+        <div class="tabbar_zise">{{$t('mall8')}}</div>
       </van-tabbar-item>
       <van-tabbar-item  @click="toMall">
         <template>
@@ -26,7 +26,7 @@
             <img :src="activeNav == 1?require('../../assets/liulanqs.png'):require('../../assets/liulanq.svg')" />
           </div>
         </template>
-        <div class="tabbar_zise">发现</div>
+        <div class="tabbar_zise">{{$t('mall9')}}</div>
       </van-tabbar-item>
       <van-tabbar-item>
         <template>
@@ -34,31 +34,31 @@
             <img :src="activeNav == 2?require('../../assets/meIcoActive.png'):require('../../assets/meIco.png')" />
           </div>
         </template>
-        <div class="tabbar_zise">我的</div>
+        <div class="tabbar_zise">{{$t('mall99')}}</div>
       </van-tabbar-item>
     </van-tabbar>
 
 
-    <alert2 :show='psdpop' label="密码" @close="psdpop = false;password=''" @closeback="psdpop = false;password=''">
+    <alert2 :show='psdpop' :label="$t('mall22')" @close="psdpop = false;password=''" @closeback="psdpop = false;password=''">
       <div class="mall2">
         <div class="ditals_bg">
           <div class="dital2" style="padding-top:26px;border-radius:0;box-shadow:none;">
-            <div class="willt_pwd">钱包密码</div>
-            <div class="inputs"><input type="password" v-model="password" placeholder="请输入钱包密码"></div>
+            <div class="willt_pwd">{{$t('mall23')}}</div>
+            <div class="inputs"><input type="password" v-model="password" :placeholder="$t('mall24')"></div>
           </div>
         </div>
-        <van-button class="btns btnst" type="info" @click="confirmShow">确定</van-button>
+        <van-button class="btns btnst" type="info" @click="confirmShow">{{$t('mall20')}}</van-button>
       </div>
     </alert2>
-    <alert2 :show='namepop' label="修改昵称" @close="namepop = false;password=''" @closeback="namepop = false;password=''">
+    <alert2 :show='namepop' :label="$t('mall101')" @close="namepop = false;password=''" @closeback="namepop = false;password=''">
       <div class="mall2">
         <div class="ditals_bg">
           <div class="dital2" style="padding-top:26px;border-radius:0;box-shadow:none;">
-            <div class="willt_pwd">昵称</div>
-            <div class="inputs"><input v-model="username" placeholder="请输入昵称"></div>
+            <div class="willt_pwd">{{$t('mall72')}}</div>
+            <div class="inputs"><input v-model="username" :placeholder="$t('mall102')"></div>
           </div>
         </div>
-        <van-button class="btns btnst" type="info" @click="updatename">确定</van-button>
+        <van-button class="btns btnst" type="info" @click="updatename">{{$t('mall20')}}</van-button>
       </div>
     </alert2>
     <modelKey :show="show" @close="show=false" />
@@ -115,8 +115,8 @@ export default {
     confirmout(){
       let that = this
       Dialog.confirm({
-        title: '温馨提示',
-        message: '请确认您已备份好私钥及助记词。'
+        title: that.$t('mall103'),
+        message: that.$t('mall104')
       }).then(() => {
         localStorage.clear()
         window.tronWeb = null
@@ -130,7 +130,7 @@ export default {
       namePsd = JSON.parse(namePsd)
       let passwordTrue = namePsd.walletPassword
       if(this.password!==passwordTrue){
-        Toast('密码不正确')
+        Toast(this.$t('mall28'))
         return
       }
       if(this.active==1){
@@ -145,7 +145,7 @@ export default {
         if(res.data.resultCode=='999999'){
           that.namePsd.walletName = this.username
           setStore('namepsd',that.namePsd)
-          Toast('昵称修改成功')
+          Toast(that.$t('mall105'))
           this.username = ''
           that.namepop = false
         }

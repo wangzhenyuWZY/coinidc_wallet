@@ -4,10 +4,10 @@
       <div class="backup_img">
         <img src="../../assets/Group.svg" alt="">
       </div>
-      <div class="backup_size">请确认已经备份好助记词？</div>
+      <div class="backup_size">{{$t('mall57')}}</div>
       <div class="popup_buttons">
-        <div @click="close">取消</div>
-        <div @click="chage">确定</div>
+        <div @click="close">{{$t('mall58')}}</div>
+        <div @click="chage">{{$t('mall20')}}</div>
       </div>
     </div>
   </van-popup>

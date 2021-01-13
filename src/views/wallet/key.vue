@@ -3,10 +3,10 @@
     <div class="popup_model">
       <div class="popup_title">
         <span class="title_lt"></span>
-        <span class="title_center">备份私钥</span>
+        <span class="title_center">{{$t('mall38')}}</span>
         <span class="title_rg" @click="close"> <img src="../../assets/colse.svg" alt=""> </span>
       </div>
-      <div class="popup_size m_top20">以下是钱包的私钥，请保存在安全的地方，一旦丢失将无法 找回。</div>
+      <div class="popup_size m_top20">{{$t('mall55')}}</div>
       <div class="popup_key">
         <div style="overflow: hidden;text-overflow: ellipsis;">{{privateKey}}</div>
         <div class="cp tag-read" :data-clipboard-text="privateKey" @click="copyAddress"><img src="../../assets/icon_cp.svg" alt=""></div>
@@ -15,7 +15,7 @@
         <vue-qr :correctLevel="3" :autoColor="false" :text="privateKey" :size="121" :margin="0" :logoMargin="3"></vue-qr>
       </div>
       <div class="popup_buttons">
-        <div @click="close">备份完成</div>
+        <div @click="close">{{$t('mall56')}}</div>
       </div>
     </div>
   </van-popup>
@@ -44,7 +44,7 @@ export default {
     copyAddress(){
       var clipboard = new Clipboard('.tag-read')  
           clipboard.on('success', e => {  
-            Toast('复制成功');
+            Toast(this.$t('mall33'));
           // 释放内存  
           clipboard.destroy()  
         })  

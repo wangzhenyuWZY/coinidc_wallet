@@ -1,6 +1,6 @@
 <template>
     <div>
-        <alert2 :show='show' label="宫殿" @close="closePop" :mall="true" @closeback="closePop">
+        <alert2 :show='show' :label="$t('mall59')" @close="closePop" :mall="true" @closeback="closePop">
       <div class="mall3" @click.stop.prevent>
         <div class="mall_center">
           <div class="imgs">
@@ -28,7 +28,7 @@
           </div>
         </div>
         <div class="mall3btn">
-          <div @click="doDraw">立即抽奖</div>
+          <div @click="doDraw">{{$t('mall60')}}</div>
         </div>
       </div>
     </alert2>
@@ -58,17 +58,18 @@ import {getdraw} from '@/api/user'
 		},
 		props:{
 			show:{
-                type:Boolean,
-                default:false
-            },
-            drawNum:{
-                type:Number,
-                default:1
-            }
-        },
-        created(){
-            // this.start()
-        },
+          type:Boolean,
+          default:false
+      },
+      drawNum:{
+          type:Number,
+          default:1
+      }
+    },
+    created(){
+        // this.start()
+        
+    },
 		// 开奖效果方法
 		methods: {
             doDraw(){

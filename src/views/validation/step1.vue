@@ -3,11 +3,11 @@
   <div class="container">
     <Title :title="title"></Title>
     <div class="createContainer">
-      <p class="createTitle">创建钱包<span>(Step2/<span class="title_colr">2</span>)</span></p>
-      <p class="createTitle m_top20">备份钱包</p>
+      <p class="createTitle">{{$t('mall34')}}<span>(Step2/<span class="title_colr">2</span>)</span></p>
+      <p class="createTitle m_top20">{{$t('mall35')}}</p>
       <div class="create_size">
-        <p>﹒备份私钥或者备份助记词均可用与连接钱包账户。</p>
-        <p>﹒为确保账户安全，建议两种方式都备份。</p>
+        <p>﹒{{$t('mall36')}}</p>
+        <p>﹒{{$t('mall37')}}</p>
       </div>
       <div class="validation_list">
         <div class="list">
@@ -28,7 +28,7 @@
         </div>
       </div>
       <div class="btn_list m_top20">
-        <router-link to="/validation/step2"><div class="btn1">下一步</div></router-link>
+        <router-link to="/validation/step2"><div class="btn1">{{$t('mall106')}}</div></router-link>
         <!-- <div class="btn2 m_top20">上一步</div> -->
       </div>
     </div>

@@ -1,27 +1,27 @@
 <template>
   <div class="container">
     <div class="title_bg">
-      <Title title="钱包" :isback="false" hide></Title>
+      <Title :title="$t('mall1')" :isback="false" hide></Title>
       <div class="assetsDtal">
         <p>{{totalBalance}} IDC</p>
         <p>≈{{convertedBalance}}</p>
       </div>
       <div class="wallet_btn">
-        <router-link tag="div" to="/walletAssets/transfer" class="btn">转账</router-link>
-        <router-link tag="div" to="/walletAssets/collection" class="btn">收款</router-link>
+        <router-link tag="div" to="/walletAssets/transfer" class="btn">{{$t('mall2')}}</router-link>
+        <router-link tag="div" to="/walletAssets/collection" class="btn">{{$t('mall3')}}</router-link>
       </div>
     </div>
     <div class="wallet_scoll">
       <div class="wallet_energy">
         <div class="energy_lt">
-          <div class="dv1">能量</div>
+          <div class="dv1">{{$t('mall4')}}</div>
           <div class="dv2">
             <p :style="'width:'+energyBi+'%'"></p>
           </div>
           <div class="dv3"><span>{{walletInfo.energy}}</span>/{{walletInfo.energyLimit}}</div>
         </div>
         <div class="energy_lt">
-          <div class="dv1">宽带</div>
+          <div class="dv1">{{$t('mall5')}}</div>
           <div class="dv2">
             <p  :style="'width:'+freeNetBi+'%'"></p>
           </div>
@@ -56,7 +56,7 @@
             <img :src="active == 0?require('../../assets/zican.svg'):require('../../assets/assetsh.png')" />
           </div>
         </template>
-        <div class="tabbar_zise">资产</div>
+        <div class="tabbar_zise">{{$t('mall8')}}</div>
       </van-tabbar-item>
       <van-tabbar-item  @click="toMall">
         <template>
@@ -64,7 +64,7 @@
             <img :src="active == 1?require('../../assets/liulanqs.png'):require('../../assets/liulanq.svg')" />
           </div>
         </template>
-        <div class="tabbar_zise">发现</div>
+        <div class="tabbar_zise">{{$t('mall9')}}</div>
       </van-tabbar-item>
       <van-tabbar-item @click="toHome">
         <template>
@@ -72,7 +72,7 @@
             <img :src="active == 2?require('../../assets/meIcoActive.png'):require('../../assets/meIco.png')" />
           </div>
         </template>
-        <div class="tabbar_zise">我的</div>
+        <div class="tabbar_zise">{{$t('mall99')}}</div>
       </van-tabbar-item>
     </van-tabbar>
   </div>
@@ -121,6 +121,10 @@ export default {
     VanPullRefresh:PullRefresh
   },
   created(){
+    let lang = getStore('lang')
+    let token = getStore('token')
+    alert(lang)
+    alert(token)
     if(!window.tronWeb){
       this.createTronWeb()
     }else{
