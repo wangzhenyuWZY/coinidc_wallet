@@ -68,9 +68,9 @@ export default {
         walletItem = JSON.parse(walletItem)
         privateKey = walletItem.wallet.privateKey
       }
-      const fullNode = 'https://api.shasta.trongrid.io';
-      const solidityNode = 'https://api.shasta.trongrid.io';
-      const eventServer = 'https://api.shasta.trongrid.io';
+      const fullNode = 'https://api.trongrid.io';
+      const solidityNode = 'https://api.trongrid.io';
+      const eventServer = 'https://api.trongrid.io';
       window.tronWeb = new TronWeb(fullNode,solidityNode,eventServer,privateKey)
       this.address = window.tronWeb.defaultAddress.base58
       if(window.tronWeb){

@@ -88,6 +88,7 @@ export default {
                       walletPassword: this.password
                   }
               setStore('namepsd', data)
+              setStore('inviteCode',this.inviteCode)
               this.$router.push({
                   path: "/wallet/step2",
                   query: {

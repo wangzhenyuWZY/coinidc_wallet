@@ -56,12 +56,7 @@
     <alert1 :show='show4' label="我的好友" @close="show4 = false">
       <div class="announcement friend">
         <div class="totalinfo">
-          <p><span>国王：</span><a>{{totalInfo.level6val}}</a></p>
-          <p><span>大臣：</span><a>{{totalInfo.level5val}}</a></p>
-          <p><span>将军：</span><a>{{totalInfo.level4val}}</a></p>
-          <p><span>千夫长：</span><a>{{totalInfo.level3val}}</a></p>
-          <p><span>百夫长：</span><a>{{totalInfo.level2val}}</a></p>
-          <p><span>卫兵：</span><a>{{totalInfo.level1val}}</a></p>
+          <p v-for="(item,index) in totalInfo" :key="index"><span>{{item.name}}：</span><a>{{item.owlCount}}</a></p>
         </div>
         <van-list
           v-model="loading3"
@@ -269,6 +264,10 @@
     </scene>
     <coinsRolling :show="isAddGold" @close="isAddGold=false" class="coinsroll"></coinsRolling>
     <chouJing :show='show77' @closepop='show77=false;show5=true' @notGold='show7=true;show77=false' @drawcode='getDrawCode' :drawNum='mallDetail.level'></chouJing>
+    <van-overlay :show="overlayLoading" @click="overlayLoading = false">
+      <van-loading />
+    </van-overlay>
+    
   </div>
 </template>
 
@@ -291,8 +290,7 @@ import captain from '@/components/captain.vue'
 import guard from '@/components/guard.vue'
 import king from '@/components/king.vue'
 import coinsRolling from '@/components/coinsRolling'
-import { Toast } from 'vant';
-import { List } from 'vant'
+import { List,Toast,Loading,Overlay } from 'vant'
 import chouJing from './shouJing'
 import countTo from 'vue-count-to';
 import {getConfirmedTransaction} from '@/utils/index'
@@ -311,7 +309,9 @@ export default {
     king,
     coinsRolling,
     chouJing,
-    countTo
+    countTo,
+    vanLoading:Loading,
+    vanOverlay:Overlay
   },
   data() {
     return {
@@ -327,6 +327,7 @@ export default {
       show7: false,
       show77: false,
       show8:false,
+      overlayLoading:false,
       mallList:[],
       friendList:[],
       homeInfo:{},
@@ -415,15 +416,16 @@ export default {
       }
     },
     feeGold(){
+      this.overlayLoading = true
       var u = navigator.userAgent;
       var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
       var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
       if(isAndroid){
+        // alert('点击赚金币')
         ZjJSAdSdk.loadAd('zjad_241253',getStore('token'),'videoReward', 1,'rewardVideo');
       }else if(isiOS){
-        alert('isiOS')
+        // alert('isiOS')
         window.webkit.messageHandlers.loadAd.postMessage({'adid':'33011066','type':'rewardVideo', "userId":getStore('token'),"rewardCount":"1"});
-        // window.webkit.messageHandlers.loadAd.postMessage({'adid':'33011066','type':'rewardVideo'});
       }
     },
     getMyOwlList(){
@@ -434,7 +436,6 @@ export default {
           that.mallList.sort(that.compare('level'));
           console.log(that.mallList)
         }
-        
       })
     },
     compare(key){
@@ -454,6 +455,7 @@ export default {
             if(res.data.resultCode==999999){
               that.goldBalanceEnd = res.data.resultData.goldBalance
               that.$refs.goldEl.start()
+              that.getHomeInfo()
             }
           })
         }else if(res.data.resultCode==100006){
@@ -496,23 +498,24 @@ export default {
       })
       queryMyTeamOwl().then(res=>{
         if(res.data.resultCode==999999){
-          res.data.resultData.forEach((item,index)=>{
-            if(item.level==0){
-              that.totalInfo.level0val = item.owlCount
-            }else if(item.level==1){
-              that.totalInfo.level1val = item.owlCount
-            }else if(item.level==2){
-              that.totalInfo.level2val = item.owlCount
-            }else if(item.level==3){
-              that.totalInfo.level3val = item.owlCount
-            }else if(item.level==4){
-              that.totalInfo.level4val = item.owlCount
-            }else if(item.level==5){
-              that.totalInfo.level5val = item.owlCount
-            }else if(item.level==6){
-              that.totalInfo.level6val = item.owlCount
-            }
-          })
+          that.totalInfo = res.data.resultData
+          // res.data.resultData.forEach((item,index)=>{
+          //   if(item.level==0){
+          //     that.totalInfo.level0val = item.owlCount
+          //   }else if(item.level==1){
+          //     that.totalInfo.level1val = item.owlCount
+          //   }else if(item.level==2){
+          //     that.totalInfo.level2val = item.owlCount
+          //   }else if(item.level==3){
+          //     that.totalInfo.level3val = item.owlCount
+          //   }else if(item.level==4){
+          //     that.totalInfo.level4val = item.owlCount
+          //   }else if(item.level==5){
+          //     that.totalInfo.level5val = item.owlCount
+          //   }else if(item.level==6){
+          //     that.totalInfo.level6val = item.owlCount
+          //   }
+          // })
         }
       })
     },
@@ -788,7 +791,8 @@ export default {
       })
     },
     zjJSAdSdkCallBack(type,msg) {
-      alert('进入了回调')
+      // alert('进入了回调')
+      this.overlayLoading = false
         switch (type) {
             case 'onZjAdLoaded':
                 // alert(1);
@@ -822,7 +826,7 @@ export default {
                 // alert(10);
                 break;
             case 'onZjAdReward':
-                alert("获取奖励");
+                // alert("获取奖励");
                 this.verifyAdReward(msg);
                 break;
         }
@@ -839,9 +843,9 @@ export default {
         device = 'ios'
       }
       verifyZjadReward({"device":device,"transId": transId}).then(res=>{
-        // alert('调用了金币方法')
         if(res.data.resultCode==999999){
           that.isAddGold = true
+          that.getHomeInfo()
           Toast(res.data.resultDesc)
         }else{
           Toast(res.data.resultDesc)
@@ -870,7 +874,7 @@ ul {
   overflow: auto;
   .totalinfo{
     width: 295px;
-    height: 110px;
+    height: 140px;
     background: #F9FBFF;
     box-shadow: 2px 2px 2px 0px #BFC2D8;
     border-radius: 5px;
@@ -890,7 +894,7 @@ ul {
       span{
         display:inline-block;
         vertical-align: middle;
-        width:50%;
+        width:75%;
         text-align:right;
       }
     }
@@ -1537,5 +1541,13 @@ ul {
   left:45%;
   width:50px;
   height:50px;
+}
+.van-overlay{
+  z-index:999;
+}
+.van-loading{
+  position: absolute;
+  top: 40%;
+  left: 45%;
 }
 </style>

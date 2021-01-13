@@ -10,6 +10,34 @@
       <van-cell title="备份私钥" value="" is-link arrow-direction @click="showMemo(2)"/>
     </van-cell-group>
     <button class="outbtn" @click="confirmout">退出</button>
+    <van-tabbar v-model="activeNav" active-color="#6362F1">
+      <van-tabbar-item @click="toWallet">
+        <!-- <template #icon="props"> -->
+        <template>
+          <div class="tabbar_img">
+            <img :src="activeNav == 0?require('../../assets/zican.svg'):require('../../assets/assetsh.png')" />
+          </div>
+        </template>
+        <div class="tabbar_zise">资产</div>
+      </van-tabbar-item>
+      <van-tabbar-item  @click="toMall">
+        <template>
+          <div class="tabbar_img">
+            <img :src="activeNav == 1?require('../../assets/liulanqs.png'):require('../../assets/liulanq.svg')" />
+          </div>
+        </template>
+        <div class="tabbar_zise">发现</div>
+      </van-tabbar-item>
+      <van-tabbar-item>
+        <template>
+          <div class="tabbar_img">
+            <img :src="activeNav == 2?require('../../assets/meIcoActive.png'):require('../../assets/meIco.png')" />
+          </div>
+        </template>
+        <div class="tabbar_zise">我的</div>
+      </van-tabbar-item>
+    </van-tabbar>
+
 
     <alert2 :show='psdpop' label="密码" @close="psdpop = false;password=''" @closeback="psdpop = false;password=''">
       <div class="mall2">
@@ -50,6 +78,7 @@ export default {
       psdpop:false,
       password:'',
       active:0,
+      activeNav:2,
       username:'',
       namepop:false,
       namePsd:{}
@@ -69,6 +98,16 @@ export default {
      
   },
   methods: {
+    toMall(){
+      this.$router.push({
+                  path: "/mall"
+              });
+    },
+    toWallet(){
+      this.$router.push({
+                  path: "/walletAssets/wallet"
+              });
+    },
     showMemo(type){
       this.active = type
       this.psdpop = true
@@ -80,6 +119,7 @@ export default {
         message: '请确认您已备份好私钥及助记词。'
       }).then(() => {
         localStorage.clear()
+        window.tronWeb = null
         that.$router.push('/wallet/step1')
       }).catch(() => {
         // on cancel
@@ -122,12 +162,14 @@ export default {
   bottom:0;
   left:0;
   background:#F4F6FA;
+  padding-bottom:0;
   .title{
     text-align:center;
     line-height:40px;
     color:#131F30;
     font-size:17px;
     padding-bottom:22px;
+    padding-top:10px;
   }
   .outbtn{
     width:90%;
@@ -249,5 +291,11 @@ export default {
 .group{
   position:relative;
   top:22px;
+}
+.tabbar_img {
+  text-align: center;
+  img {
+    width: 20px;
+  }
 }
 </style>

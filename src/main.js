@@ -47,6 +47,10 @@ router.beforeEach((to, from ,next) => {
 function getUrlKey(name,url){
   　return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(url) || [, ""])[1].replace(/\+/g, '%20')) || null
 }
+let idctUserId = getUrlKey('idctUserId',window.location.href)
+if(idctUserId){
+  setStore('idctUserId',idctUserId)
+}
 var lang = getStore('lang')
 var hreflang = getUrlKey('lang',window.location.href)
 if(!lang){

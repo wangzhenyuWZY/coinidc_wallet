@@ -126,7 +126,10 @@ export default {
     }else{
       this.userLogin()
     }
-    
+    let idctUserId = this.getUrlKey('idctUserId',window.location.href)
+    if(idctUserId){
+      setStore('idctUserId',idctUserId)
+    }
   },
   methods: {
     toDetail(item){
@@ -224,6 +227,9 @@ export default {
         }
       })
     },
+    getUrlKey(name,url){
+      　return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(url) || [, ""])[1].replace(/\+/g, '%20')) || null
+    },
     userLogin(){
       let that = this
       let namePsd = getStore('namepsd')
@@ -231,8 +237,8 @@ export default {
       let walletName = namePsd.walletName
         let data = {
           name:walletName,
-          idctUserId:'760732255497768192',
-          // inviteCode:'',
+          idctUserId:getStore('idctUserId'),
+          inviteCode:getStore('inviteCode'),
           trxAddress:window.tronWeb.defaultAddress.base58
         }
         login(data).then((res)=>{
