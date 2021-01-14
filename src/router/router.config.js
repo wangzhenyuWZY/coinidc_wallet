@@ -5,7 +5,7 @@
 export const constantRouterMap = [
   {
     path: '/',
-    redirect: '/wallet/step1',
+    redirect: '/walletAssets/index',
     meta: {
       title: '首页',
       keepAlive: false
@@ -24,4 +24,6 @@ export const constantRouterMap = [
   { path: '/walletAssets/collection', name: 'collection', component: () => import('@/views/walletAssets/collection') }, // 收款
   { path: '/mall', name: 'mall', component: () => import('@/views/mall/index'),meta: {title: 'Owl World'} }, // 玩法说明
   { path: '/validation/beifen', name: 'beifen', component: () => import('@/views/validation/beifen') },
+  { path: '/walletAssets/index', name: 'walletHome', component: () => import('@/views/walletAssets/index') },
+  { path: '/wallet/priKey', name: 'priKey', component: () => import('@/views/wallet/priKey') }
 ]

@@ -31,12 +31,12 @@ Vue.use(VueWechatTitle)
 
 
 router.beforeEach((to, from ,next) => {
-  if(to.path === '/wallet/step1'){
-    let walletItem = getStore("walletItem");
-    if (!objIsNull(walletItem)) {
-      next({path:'/walletAssets/wallet'})
-    }else{
+  if(to.path === '/walletAssets/index'){
+    let token = getStore("token");
+    if (!token) {
       next()
+    }else{
+      next({path:'/walletAssets/wallet'})
     }
   }else{
     next()

@@ -120,7 +120,7 @@ export default {
       }).then(() => {
         localStorage.clear()
         window.tronWeb = null
-        that.$router.push('/wallet/step1')
+        that.$router.push('/walletAssets/index')
       }).catch(() => {
         // on cancel
       });

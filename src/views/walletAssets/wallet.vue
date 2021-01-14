@@ -121,10 +121,6 @@ export default {
     VanPullRefresh:PullRefresh
   },
   created(){
-    let lang = getStore('lang')
-    let token = getStore('token')
-    alert(lang)
-    alert(token)
     if(!window.tronWeb){
       this.createTronWeb()
     }else{
