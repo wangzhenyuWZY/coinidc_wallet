@@ -57,14 +57,15 @@ function beforeCheck(){
         setStore('lang','zh_CN')
       }
     }else{
-      if(hreflang && hreflang!==lang){
+      if(hreflang){
         setStore('lang',hreflang)
       }
     }
     let idctUserId = getUrlKey('user_id',window.location.href)
     setStore('idctUserId',idctUserId)
-    alert(idctUserId)
-    alert(lang)
+    // alert(idctUserId)
+    // alert(lang)
+    alert('链接上的参数lang'+hreflang)
 }
 
 new Vue({

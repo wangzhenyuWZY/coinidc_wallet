@@ -1,22 +1,22 @@
 <!-- home -->
 <template>
   <div class="container">
-    <Title title="导入助记词"></Title>
+    <Title :title="$t('mall53')"></Title>
     <div class="createContainer">
-      <p class="createTitle">助记词</p>
+      <p class="createTitle">{{$t('mall53')}}助记词</p>
       <div class="mnem">
-        <textarea class="input_text" v-model="mnemonic" placeholder="输入助记词单词，并使用空格分隔" />
+        <textarea class="input_text" v-model="mnemonic" :placeholder="$t('mall54')" />
       </div>
       <div class="set_input">
-        <Input label="密码" :showEye='false' placeholder="钱包密码" v-model="password" />
+        <Input :label="$t('mall22')" :showEye='false' :placeholder="$t('mall23')" v-model="password" />
       </div>
       <div class="set_input">
-        <Input placeholder="确认密码" :showEye='false' v-model="passwordAgen" />
+        <Input :placeholder="$t('mall45')" :showEye='false' v-model="passwordAgen" />
       </div>
       <div class="btn">
         <!-- <van-button class="globel_button" style="margin-bottom:15px;"  @click="toKey">导入密钥
         </van-button> -->
-        <van-button class="globel_button" :loading="isConfirm" :disabled='isConfirm' type="info"  @click="handelClick">确定
+        <van-button class="globel_button" :loading="isConfirm" :disabled='isConfirm' type="info"  @click="handelClick">{{$t('mall20')}}
         </van-button>
       </div>
     </div>
@@ -57,7 +57,7 @@ export default {
     handelClick() {
       let that = this
       if(this.password!==this.passwordAgen){
-        Toast('密码不一致')
+        Toast(this.$t('mall110'))
         return
       }
       var secretSeed = this.mnemonic//注记词
@@ -67,7 +67,7 @@ export default {
       let addresses = null
       let flag = lightwallet.keystore.isSeedValid(secretSeed)
       if(!flag){
-        Toast('助记词有误')
+        Toast(this.$t('mall111'))
         return
       }
       this.isConfirm = true

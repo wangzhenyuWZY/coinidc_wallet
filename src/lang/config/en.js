@@ -103,5 +103,12 @@ module.exports = {
   mall102:'Please enter a nickname',
   mall103:'Tips',
   mall104:'Please make sure you have backed up your private key and mnemonic phrase.',
-  mall105:'Nickname modified successfully'
+  mall105:'Nickname modified successfully',
+  mall106:'next',
+  mall107:'Last step',
+  mall108:'balance',
+  mall109:'Import Wallet',
+  mall110:'Mnemonic words',
+  mall110:'The password is inconsistent',
+  mall111:'Incorrect mnemonics',
 }
