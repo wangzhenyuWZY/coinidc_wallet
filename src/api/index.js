@@ -19,6 +19,7 @@ const api = {
   updateName:'/user/updateName',
   queryTransaction:'/wallet/queryTransaction',
   queryMyTeamOwl:'/owl/queryMyTeamOwl',
+  checkIdct:'/user/check',
 }
 
 export default api

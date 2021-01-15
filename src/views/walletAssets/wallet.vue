@@ -123,12 +123,16 @@ export default {
   created(){
     let lang = getStore('lang')
     let token = getStore('token')
-    alert(lang)
-    alert(token)
+    console.log(lang)
+    console.log(token)
     if(!window.tronWeb){
       this.createTronWeb()
     }else{
-      this.userLogin()
+      if(!token){
+        this.userLogin()
+      }else{
+        this.getMyToken()
+      }
     }
     let idctUserId = this.getUrlKey('idctUserId',window.location.href)
     if(idctUserId){
@@ -185,8 +189,12 @@ export default {
       window.tronWeb = new TronWeb(fullNode,solidityNode,eventServer,privateKey)
       if(window.tronWeb){
         window.tronWeb.setAddress(window.tronWeb.defaultAddress.base58)
-        this.userLogin()
-        
+        let token = getStore('token')
+        if(!token){
+          this.userLogin()
+        }else{
+          this.getMyToken()
+        }
       }
       // this.tronWeb.trx.getBalance(this.tronWeb.defaultAddress.base58).then(res => {
       //   that.coinList[0].balance = that.tronWeb.fromSun(res)   
@@ -248,6 +256,7 @@ export default {
         login(data).then((res)=>{
           if(res.data.resultCode==999999){
             setStore('token', res.data.resultData)
+            console.log('登录后==='+res.data.resultData)
             that.getMyToken()
           }
         })

@@ -29,15 +29,17 @@ Vue.config.productionTip = false
 import VueWechatTitle from 'vue-wechat-title'//动态修改title
 Vue.use(VueWechatTitle)
 
-
+import {checkIdct} from '@/api/user'
 router.beforeEach((to, from ,next) => {
   if(to.path === '/wallet/step1'){
-    let walletItem = getStore("walletItem");
-    if (!objIsNull(walletItem)) {
-      next({path:'/walletAssets/wallet'})
-    }else{
-      next()
-    }
+    // let walletItem = getStore("walletItem");
+    beforeCheck().then(res=>{
+      if (res) {
+        next({path:'/walletAssets/wallet'})
+      }else{
+        next()
+      }
+    })
   }else{
     next()
   }
@@ -47,23 +49,45 @@ router.beforeEach((to, from ,next) => {
 function getUrlKey(name,url){
   　return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(url) || [, ""])[1].replace(/\+/g, '%20')) || null
 }
-let idctUserId = getUrlKey('idctUserId',window.location.href)
-if(idctUserId){
-  setStore('idctUserId',idctUserId)
+function beforeCheck(){
+  return new Promise(function(resolve, reject) {
+    var lang = getStore('lang')
+    var hreflang = getUrlKey('lang',window.location.href)
+    if(!lang){
+      if(hreflang){
+        setStore('lang',hreflang)
+      }else{
+        setStore('lang','zh_CN')
+      }
+    }else{
+      if(hreflang && hreflang!==lang){
+        setStore('lang',hreflang)
+      }
+    }
+    let flag = false
+    let token = getStore('token')
+    if(!token){
+      let idctUserId = getUrlKey('user_id',window.location.href)
+      if(idctUserId){
+        setStore('idctUserId',idctUserId)
+        checkIdct({idctUserId:idctUserId}).then(res=>{
+          debugger
+          if(res.data.resultCode){
+            setStore('token',res.data.resultData)
+            flag = true
+          }else{
+            flag = false
+          }
+          resolve(flag)
+        })
+      }
+    }else{
+      flag = true
+      resolve(flag)
+    }
+  })
 }
-var lang = getStore('lang')
-var hreflang = getUrlKey('lang',window.location.href)
-if(!lang){
-  if(hreflang){
-    setStore('lang',hreflang)
-  }else{
-    setStore('lang','zh_CN')
-  }
-}else{
-  if(hreflang && hreflang!==lang){
-    setStore('lang',hreflang)
-  }
-}
+
 new Vue({
   el: '#app',
   router,

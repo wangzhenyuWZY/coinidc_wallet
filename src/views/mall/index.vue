@@ -34,8 +34,20 @@
     <alert1 :show='show3' label="收益" @close="show3 = false">
       <div class="announcement announcement2">
         <div class="accets">
-          <p>{{homeInfo.idctBalance}} <span>IDCT</span></p>
-          <p>≈ {{homeInfo.convertUsdtBalance}} USDT</p>
+          <div class="accetstop">
+            <p>{{homeInfo.idctBalance}} <span>IDCT</span></p>
+            <p>≈ {{homeInfo.convertUsdtBalance}} USDT</p>
+          </div>
+          <div class="incomeTotal clearfix">
+            <div class="fl">
+              <p class="title">累计收益</p>
+              <p class="val">{{homeInfo.usdtMaxIncome}} USDT</p>
+            </div>
+            <div class="fr">
+              <p class="title">待发放收益</p>
+              <p class="val">{{homeInfo.unReceivedUsdtIncome}} USDT</p>
+            </div>
+          </div>
         </div>
         <div class="btns m_top20" @click="getWithdrawList">{{$t('mall6')}}</div>
         <van-list
@@ -56,6 +68,10 @@
     <alert1 :show='show4' :label="$t('mall67')" @close="show4 = false">
       <div class="announcement friend">
         <div class="totalinfo">
+          <div class="myLevel">
+            <div class="level">LV{{homeInfo.level}}</div>
+            <p>我的等级</p>
+          </div>
           <p v-for="(item,index) in totalInfo" :key="index"><span>{{item.name}}：</span><a>{{item.owlCount}}</a></p>
         </div>
         <van-list
@@ -212,8 +228,20 @@
     <alert2 :show='show8' :label="$t('mall6')" @close="show8= false" :mall="false" :hideback="true">
       <div class="announcement announcement2">
         <div class="accets">
-          <p>{{homeInfo.idctBalance}} <span>IDCT</span></p>
-          <p>≈ {{homeInfo.convertUsdtBalance}} USDT</p>
+          <div class="accetstop">
+            <p>{{homeInfo.idctBalance}} <span>IDCT</span></p>
+            <p>≈ {{homeInfo.convertUsdtBalance}} USDT</p>
+          </div>
+          <div class="incomeTotal clearfix">
+            <div class="fl">
+              <p class="title">累计收益</p>
+              <p class="val">{{homeInfo.usdtMaxIncome}} USDT</p>
+            </div>
+            <div class="fr">
+              <p class="title">待发放收益</p>
+              <p class="val">{{homeInfo.unReceivedUsdtIncome}} USDT</p>
+            </div>
+          </div>
         </div>
         <div class="ditals_bg">
           <div class="dital2">
@@ -255,6 +283,7 @@
         </div>
       </div>
       <div class="ps_nav">
+        <div class="totalprice">累计收益<span>{{homeInfo.usdtIncome}} USDT</span></div>
         <div class="play " @click="getMyFriends"> <img src="../../assets/haoyou.png" alt=""> <span class="play_size">{{$t('mall91')}}</span> </div>
         <div class="play1 " @click="feeGold">
           <div class="ceter_img"><countTo v-if="homeInfo.goldBalance" ref="goldEl" :startVal='goldBalanceStart' :endVal='goldBalanceEnd' :duration='3000' :autoplay=false></countTo><span v-else>{{homeInfo.goldBalance}}</span></div> <span class="play_size">{{$t('mall87')}}</span>
@@ -857,6 +886,25 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.totalprice{
+  position:absolute;
+  bottom:80px;
+  width: 168px;
+  height: 24px;
+  background: rgba(0,0,0,0.5);
+  border-radius: 15px;
+  font-size:10px;
+  color:#8997B3;
+  line-height:24px;
+  padding-left:15px;
+  box-sizing: border-box;
+  span{
+    font-size:12px;
+    color:#F4F6FA;
+    line-height:24px;
+    padding-left:10px;
+  }
+}
 .scene{height:100%;}
 ul {
   li {
@@ -874,11 +922,39 @@ ul {
   overflow: auto;
   .totalinfo{
     width: 295px;
-    height: 140px;
+    overflow: hidden;
     background: #F9FBFF;
     box-shadow: 2px 2px 2px 0px #BFC2D8;
     border-radius: 5px;
     margin-bottom:10px;
+    padding-bottom:10px;
+    .myLevel{
+      width:275px;
+      height: 80px;
+      background: #F4F6FA;
+      border-radius: 6px;
+      text-align:center;
+      margin:10px auto;
+      padding-top:12px;
+      .level{
+        width:36px;
+        height:40px;
+        padding-bottom:5px;
+        margin:0 auto 0;
+        text-align:center;
+        line-height:45px;
+        font-size:10px;
+        color:#FFFFFF;
+        background: url(../../assets/level.png) no-repeat center;
+        background-size:100% 100%;
+      }
+      p{
+        font-size:10px;
+        color:#8997B3;
+        line-height: 100%;
+        width: 100%;
+      }
+    }
     a{
       color:#8997B3;
       vertical-align: middle;
@@ -933,26 +1009,60 @@ ul {
 }
 .announcement2 {
   max-height: 430px;
+  .incomeTotal{
+    padding:15px 10px 0;
+    overflow:hidden;
+    .fl{float:left;width:50%;}
+    .fr{
+      position:relative;
+      float:right;
+      width:50%;
+      &:after{
+        content:'';
+        position:absolute;
+        left:0;
+        top:6px;
+        width:1px;
+        height:20px;
+        background:#DADEEC;
+      }
+    }
+    .title{
+      font-size:12px;
+      color:#8D91AB;
+      line-height:100%;
+      text-align:center;
+      padding-bottom:6px;
+    }
+    .val{
+      font-size:12px;
+      color:#303030;
+      line-height:100%;
+      text-align: center;
+    }
+  }
   .accets {
     background: linear-gradient(180deg, #ebedf6 0%, #ffffff 100%);
     border-radius: 5px;
-    padding: 25px 0;
-    p {
-      text-align: center;
-    }
-    p:nth-child(1) {
-      font-size: 30px;
-      font-weight: 600;
-      color: #303030;
-      span {
-        font-size: 14px;
-        color: #494c61;
+    padding: 15px 0 12px;
+    .accetstop{
+      p {
+        text-align: center;
       }
-    }
-    p:nth-child(2) {
-      font-size: 12px;
-      font-weight: 600;
-      color: #8d91ab;
+      p:nth-child(1) {
+        font-size: 30px;
+        font-weight: 600;
+        color: #303030;
+        span {
+          font-size: 14px;
+          color: #494c61;
+        }
+      }
+      p:nth-child(2) {
+        font-size: 12px;
+        font-weight: 600;
+        color: #8d91ab;
+      }
     }
   }
   .an2 {

@@ -181,3 +181,12 @@ export function queryMyTeamOwl(params) {
     params
   )
 }
+
+// 检查idct用户是否注册
+export function checkIdct(params) {
+  return request(
+    api.checkIdct,
+    'post',
+    params
+  )
+}
