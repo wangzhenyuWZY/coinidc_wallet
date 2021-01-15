@@ -58,6 +58,7 @@ export const objIsNull = data => {
 export const createWallet = (userpassword) => {
   return new Promise((resolve, reject) => {
     var secretSeed = lightwallet.keystore.generateRandomSeed();//注记词
+    debugger
     var password = userpassword;//密码
     var global_keystore = null
     let privateKey = null

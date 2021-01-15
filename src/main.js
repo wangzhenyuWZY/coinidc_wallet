@@ -29,17 +29,15 @@ Vue.config.productionTip = false
 import VueWechatTitle from 'vue-wechat-title'//动态修改title
 Vue.use(VueWechatTitle)
 
-import {checkIdct} from '@/api/user'
 router.beforeEach((to, from ,next) => {
-  if(to.path === '/wallet/step1'){
-    // let walletItem = getStore("walletItem");
-    beforeCheck().then(res=>{
-      if (res) {
-        next({path:'/walletAssets/wallet'})
-      }else{
-        next()
-      }
-    })
+  beforeCheck()
+  if(to.path === '/walletAssets/index'){
+    let token = getStore("token");
+    if (!token) {
+      next()
+    }else{
+      next({path:'/walletAssets/wallet'})
+    }
   }else{
     next()
   }
@@ -50,7 +48,6 @@ function getUrlKey(name,url){
   　return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(url) || [, ""])[1].replace(/\+/g, '%20')) || null
 }
 function beforeCheck(){
-  return new Promise(function(resolve, reject) {
     var lang = getStore('lang')
     var hreflang = getUrlKey('lang',window.location.href)
     if(!lang){
@@ -64,28 +61,10 @@ function beforeCheck(){
         setStore('lang',hreflang)
       }
     }
-    let flag = false
-    let token = getStore('token')
-    if(!token){
-      let idctUserId = getUrlKey('user_id',window.location.href)
-      if(idctUserId){
-        setStore('idctUserId',idctUserId)
-        checkIdct({idctUserId:idctUserId}).then(res=>{
-          debugger
-          if(res.data.resultCode){
-            setStore('token',res.data.resultData)
-            flag = true
-          }else{
-            flag = false
-          }
-          resolve(flag)
-        })
-      }
-    }else{
-      flag = true
-      resolve(flag)
-    }
-  })
+    let idctUserId = getUrlKey('user_id',window.location.href)
+    setStore('idctUserId',idctUserId)
+    alert(idctUserId)
+    alert(lang)
 }
 
 new Vue({
