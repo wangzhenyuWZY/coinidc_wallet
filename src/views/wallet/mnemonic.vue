@@ -11,7 +11,7 @@
         <Input :label="$t('mall22')" :showEye='false' :placeholder="$t('mall23')" v-model="password" />
       </div>
       <div class="set_input">
-        <Input :placeholder="$t('mall45')" :showEye='false' v-model="passwordAgen" />
+        <Input  :label="$t('mall45')" :placeholder="$t('mall45')" :showEye='false' v-model="passwordAgen" />
       </div>
       <div class="btn">
         <!-- <van-button class="globel_button" style="margin-bottom:15px;"  @click="toKey">导入密钥

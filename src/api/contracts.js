@@ -1,6 +1,6 @@
 const contracts = {
-    OWL:'TFVCeTnncfp8i3JJAo8LWr9Rs6vTq2dNY1',
-    IDC:'TE62bF3Se4ZhzwAYVeE1TGDdGpqGTpWtSz'
+    OWL:'TJeqqJTVFkuAT6aphU6hRCfha1TiKEkDGM',
+    IDC:'TRw7N4Nzs8bbdfcnrfoQT6qLUM2h34xo58'
 }
 
 export default contracts

@@ -65,7 +65,7 @@ function beforeCheck(){
     setStore('idctUserId',idctUserId)
     // alert(idctUserId)
     // alert(lang)
-    alert('链接上的参数lang'+hreflang)
+    // alert('链接上的参数lang'+hreflang)
 }
 
 new Vue({
