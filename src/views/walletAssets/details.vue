@@ -8,9 +8,9 @@
       </div>
     </div>
     <div class="detals_nav">
-      <div :class="navIndex=='all'?'nav_item':''" @click="nav('all')">全部</div>
-      <div :class="navIndex==1?'nav_item':''" @click="nav(1)">转账</div>
-      <div :class="navIndex==2?'nav_item':''" @click="nav(2)">收款</div>
+      <div :class="navIndex=='all'?'nav_item':''" @click="nav('all')">{{$t('mall18')}}</div>
+      <div :class="navIndex==1?'nav_item':''" @click="nav(1)">{{$t('mall2')}}</div>
+      <div :class="navIndex==2?'nav_item':''" @click="nav(2)">{{$t('mall3')}}</div>
     </div>
     <div class="wallet_scoll">
       <!-- <div class="currency__list">
@@ -27,7 +27,7 @@
       <van-list
         v-model="loading"
         :finished="finished"
-        finished-text="没有更多了"
+        :finished-text="$t('mall63')"
         @load="getTransation"
           class="currency__list"
       >
@@ -48,10 +48,10 @@
         <router-link class="tabbar_ls tabbar_ls1" tag="div" to="/walletAssets/transfer">
           <template>
             <span class="tabbar_img">
-              <img src="../../assets/assets.svg" />
+              <img width="18px" src="../../assets/assets.png" />
             </span>
           </template>
-          <span class="tabbar_zise">转账</span>
+          <span class="tabbar_zise">{{$t('mall2')}}</span>
         </router-link>
 
       </van-tabbar-item>
@@ -62,7 +62,7 @@
               <img src="../../assets/asstes1.svg" />
             </span>
           </template>
-          <span class="tabbar_zise">收款</span>
+          <span class="tabbar_zise">{{$t('mall3')}}</span>
         </router-link>
       </van-tabbar-item>
     </van-tabbar>
@@ -73,12 +73,13 @@
 import {queryTransaction} from '@/api/user'
 import Title from '@/components/Title'
 import { List } from 'vant'
+import { getStore} from "@/config/utils";
 export default {
   data() {
     return {
       active: 0,
       navIndex: 'all',
-      coin:this.$route.query.coin,
+      coin:JSON.parse(getStore('coin')),
       transactionList:[],
       pageNum:1,
       show:false,

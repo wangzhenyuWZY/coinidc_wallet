@@ -1,8 +1,8 @@
 <template>
   <div class="container">
     <div class="title_bg">
-      <Title title="收款" hide></Title>
-      <div class="title">扫描二维码向我付款</div>
+      <Title :title="$t('mall3')" hide></Title>
+      <div class="title">{{$t('mall31')}}</div>
       <div class="qrcode">
         <div class="padds">
           <vue-qr :correctLevel="3" :autoColor="false" :text="address" :size="121" :margin="0" :logoMargin="3"></vue-qr>
@@ -11,8 +11,7 @@
       <div class="ids m_top20">{{walletName}}</div>
       <div class="ids2">{{address}}</div>
       <div class="btns">
-        <van-button class="globel_button tag-read" type="info" @click="copyAddress" :data-clipboard-text="address">复制收款账户</van-button>
-        <div class="sive_qrcode m_top20" v-show="false">保存二维码</div>
+        <van-button class="globel_button tag-read" type="info" @click="copyAddress" :data-clipboard-text="address">{{$t('mall32')}}</van-button>
       </div>
     </div>
 
@@ -41,12 +40,13 @@ export default {
     VueQr
   },
   created(){
-    if(window.tronWeb){
-      this.address = window.tronWeb.defaultAddress.base58
+    this.address = getStore('trxAddress')
+    // if(window.tronWeb){
+    //   this.address = window.tronWeb.defaultAddress.base58
 
-    }else{
-      this.createTronWeb()
-    }
+    // }else{
+    //   this.createTronWeb()
+    // }
     
     let namePsd = getStore('namepsd')
     namePsd = JSON.parse(namePsd)
@@ -68,9 +68,9 @@ export default {
         walletItem = JSON.parse(walletItem)
         privateKey = walletItem.wallet.privateKey
       }
-      const fullNode = 'https://api.shasta.trongrid.io';
-      const solidityNode = 'https://api.shasta.trongrid.io';
-      const eventServer = 'https://api.shasta.trongrid.io';
+      const fullNode = 'https://api.trongrid.io';
+      const solidityNode = 'https://api.trongrid.io';
+      const eventServer = 'https://api.trongrid.io';
       window.tronWeb = new TronWeb(fullNode,solidityNode,eventServer,privateKey)
       this.address = window.tronWeb.defaultAddress.base58
       if(window.tronWeb){
@@ -80,7 +80,7 @@ export default {
     copyAddress(){
       var clipboard = new Clipboard('.tag-read')  
           clipboard.on('success', e => {  
-            Toast('复制成功');
+            Toast(this.$t('mall33'));
           // 释放内存  
           clipboard.destroy()  
         })  

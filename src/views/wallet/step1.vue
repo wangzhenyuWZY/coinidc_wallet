@@ -3,18 +3,18 @@
   <div class="container">
     <Title :title="title"></Title>
     <div class="createContainer">
-      <p class="createTitle">创建钱包<span>(Step1/<span class="title_colr">2</span>)</span></p>
+      <p class="createTitle">{{$t('mall34')}}<span>(Step1/<span class="title_colr">2</span>)</span></p>
       <div class="set_input">
-        <Input label="昵称" :icon='false' placeholder="请输入昵称" v-model="name" />
+        <Input :label="$t('mall72')" :icon='false' :placeholder="$t('mall102')" v-model="name" />
       </div>
       <div class="set_input">
-        <Input :showEye="false" label="设置密码" placeholder="请输入密码" v-model="password" />
+        <Input :showEye="false" :label="$t('mall43')" :placeholder="$t('mall44')" v-model="password" />
       </div>
       <div class="set_input">
-        <Input :showEye="false" label="确认密码" placeholder="请再次输入密码" v-model="passwordAgain" />
+        <Input :showEye="false" :label="$t('mall45')" :placeholder="$t('mall46')" v-model="passwordAgain" />
       </div>
-      <div class="set_input">
-        <Input label="邀请码" :icon='false' placeholder="请输入邀请码" v-model="inviteCode" />
+      <div class="set_input" v-show="hasUserid">
+        <Input :label="$t('mall47')" :icon='false' :placeholder="$t('mall48')" v-model="inviteCode" />
       </div>
       <div class="btn">
         <!-- <van-button class="globel_button" :loading="false" :disabled='disableds' type="info" loading-text="下载Keystore文件">下载Keystore文件</van-button> -->
@@ -33,12 +33,13 @@ import { objIsNull, removeStore, getStore,setStore, createWallet } from "@/confi
 export default {
   data() {
     return {
-      title: '创建钱包',
+      title: this.$t('mall41'),
       showEye: false,
       password:'',
       passwordAgain:'',
       name:'',
-      inviteCode:''
+      inviteCode:'',
+      hasUserid:false
     }
   },
   components: {
@@ -57,26 +58,32 @@ export default {
   mounted() {
     removeStore("mnemonic");
     removeStore("walletItem");
+    let userId = getStore('idctUserId')
+    if(userId){
+      this.hasUserid = false
+    }else{
+      this.hasUserid = true
+    }
   },
   methods: {
     handelClick() {
       if (objIsNull(this.name) || objIsNull(this.name)) {
-        this.text = "钱包名称不能为空";
+        this.text = this.$t('mall49');
         this.toast = true;
         return;
       }
       if (objIsNull(this.password) || objIsNull(this.passwordAgain)) {
-        this.text = "钱包密码不能为空";
+        this.text = this.$t('mall50');
         this.toast = true;
         return;
       }
       if (this.password.length > 15 || this.passwordAgain.length > 15) {
-        this.text = "钱包密码长度超出限制";
+        this.text = this.$t('mall51');
         this.toast = true;
         return;
       }
       if (this.password !== this.passwordAgain) {
-        this.text = "输入密码不相同,请检查密码";
+        this.text = this.$t('mall52');
         this.toast = true;
         return;
       }
@@ -88,6 +95,7 @@ export default {
                       walletPassword: this.password
                   }
               setStore('namepsd', data)
+              setStore('inviteCode',this.inviteCode)
               this.$router.push({
                   path: "/wallet/step2",
                   query: {

@@ -1,12 +1,12 @@
 <template>
   <div class="container">
     <div class="title_bg">
-      <Title title="转账" hide></Title>
+      <Title :title="$t('mall2')" hide></Title>
 
       <div class="padding">
         <div class="from_input">
           <div class="account_title">
-            <div class="title">转出账户</div>
+            <div class="title">{{$t('mall11')}}</div>
             <div class="borders">
               <div class="bordrs_lt">
 
@@ -18,17 +18,17 @@
 
           </div>
           <div class="account_title">
-            <div class="title">接收账户</div>
+            <div class="title">{{$t('mall12')}}</div>
             <div class="borders">
               <div class="bordrs_lt">
                 <div class="inputs">
-                  <input type="text" placeholder="请输入账户" @input="checkAddress" v-model="toAccount">
+                  <input type="text" :placeholder="$t('mall13')" @input="checkAddress" v-model="toAccount">
                 </div>
               </div>
             </div>
           </div>
           <div class="account_title" @click="showPicker = true">
-            <div class="title ">选择通行证</div>
+            <div class="title ">{{$t('mall14')}}</div>
             <div class="borders">
               <div class="bordrs_lt">
 
@@ -41,16 +41,16 @@
           </div>
           <div class="account_title">
             <div class="title ">
-              <div class="title2"> <span>转账数量</span><span>可转账数量 {{transferCoin.balance}}</span></div>
+              <div class="title2"> <span>{{$t('mall15')}}</span><span>{{$t('mall16')}} {{transferCoin.balance}}</span></div>
             </div>
             <div class="borders">
               <div class="bordrs_lt">
                 <div class="inputs">
-                  <input type="text" placeholder="请输入数量" v-model="transNum">
-                  <span class="input_rg" @click="transNum=transferCoin.balance">全部</span>
+                  <input type="text" :placeholder="$t('mall17')" v-model="transNum">
+                  <span class="input_rg" @click="transNum=transferCoin.balance">{{$t('mall18')}}</span>
                 </div>
                 <div class="poundage">
-                  <span>手续费</span>
+                  <span>{{$t('mall19')}}</span>
                   <span>0.00</span>
                 </div>
               </div>
@@ -60,23 +60,23 @@
         </div>
       </div>
       <div class="btns">
-        <van-button class="globel_button" :loading="false" :disabled='false' type="info" @click="transfer" loading-text="确定">发送</van-button>
+        <van-button class="globel_button" :loading="false" :disabled='false' type="info" @click="transfer">{{$t('mall21')}}</van-button>
       </div>
     </div>
     <van-popup v-model="showPicker" round position="bottom">
       <van-picker show-toolbar title="" :columns="columns" @cancel="showPicker = false" item-height="40" @confirm="onConfirm"
-                  confirm-button-text="确定" />
+                  :confirm-button-text="$t('mall20')" />
     </van-popup>
-    <alert2 :show='show56' label="密码" @close="show56 = false" @closeback="show56 = false;">
+    <alert2 :show='show56' :label="$t('mall22')" @close="show56 = false" @closeback="show56 = false;">
       <div class="mall2">
         <div class="ditals_bg">
           <div class="dital2">
-            <div class="willt_pwd">钱包密码</div>
-            <div class="inputs"><input type="password" v-model="password" placeholder="请输入钱包密码"></div>
+            <div class="willt_pwd">{{$t('mall23')}}</div>
+            <div class="inputs"><input type="password" v-model="password" :placeholder="$t('mall24')"></div>
 
           </div>
         </div>
-        <div class="btns btnst" @click="doTransfer">确定</div>
+        <div class="btns btnst" @click="doTransfer">{{$t('mall20')}}</div>
       </div>
     </alert2>
   </div>
@@ -156,15 +156,15 @@ export default {
     transfer(){
       let isAddress = window.tronWeb.isAddress(this.toAccount)
       if(!isAddress){
-        Notify({ type: 'warning', message: '请输入正确的地址' });
+        Notify({ type: 'warning', message: this.$t('mall25') });
         return
       }
       if(this.transNum==0){
-        Notify({ type: 'warning', message: '请输入转账数量' });
+        Notify({ type: 'warning', message: this.$t('mall26') });
         return
       }
       if(this.transNum>this.transferCoin.balance){
-        Notify({ type: 'warning', message: '余额不足' });
+        Notify({ type: 'warning', message: this.$t('mall27')  });
         return
       }
       this.show56 = true
@@ -176,7 +176,7 @@ export default {
       namePsd = JSON.parse(namePsd)
       let passwordTrue = namePsd.walletPassword
       if(this.password!==passwordTrue){
-        Notify({ type: 'warning', message: '密码不正确' });
+        Notify({ type: 'warning', message: this.$t('mall28')  });
         return
       }
       let transNum = new bigNumber(this.transNum)
@@ -190,7 +190,8 @@ export default {
                 that.password = ''
                 that.transNum = ''
                 that.toAccount = ''
-                Notify({ type: 'success', message: '等待区块确认' });
+                Notify({ type: 'success', message: that.$t('mall29') });
+                that.$router.push('/walletAssets/wallet')
               })
           })
 
@@ -207,7 +208,8 @@ export default {
             window.tronWeb.trx
               .sendRawTransaction(signedTransaction)
               .then(function(res) {
-                Notify({ type: 'success', message: '等待区块确认' });
+                Notify({ type: 'success', message: that.$t('mall29') });
+                that.$router.push('/walletAssets/wallet')
               })
           })
       }
@@ -215,7 +217,7 @@ export default {
     checkAddress(){
       let isAddress = window.tronWeb.isAddress(this.toAccount)
       if(!isAddress){
-        Notify({ type: 'warning', message: '请输入正确的地址' });
+        Notify({ type: 'warning', message: this.$t('mall25') });
       }
     },
     createTronWeb(){

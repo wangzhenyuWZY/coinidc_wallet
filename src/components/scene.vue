@@ -20,10 +20,10 @@
       <people v-if="item.level==0" :preventTouch="thumbnail.preventTouch" :defaultBranch="thumbnail.defaultBranch" :showHealth="thumbnail.showHealth" :name="item.nickName" :health="item.hunger">
         <!-- <div class="scene-branch-4"></div> -->
       </people>
-      <general v-if="item.level==3" :preventTouch="thumbnail.preventTouch" :defaultBranch="thumbnail.defaultBranch" :showHealth="thumbnail.showHealth" :name="item.nickName" :health="item.hunger">
+      <general v-if="item.level==1" :preventTouch="thumbnail.preventTouch" :defaultBranch="thumbnail.defaultBranch" :showHealth="thumbnail.showHealth" :name="item.nickName" :health="item.hunger">
         <!-- <div class="scene-branch-6"></div> -->
       </general>
-      <captain v-if="item.level==1" :preventTouch="thumbnail.preventTouch" :defaultBranch="thumbnail.defaultBranch" :showHealth="thumbnail.showHealth" :name="item.nickName" :health="item.hunger">
+      <captain v-if="item.level==3" :preventTouch="thumbnail.preventTouch" :defaultBranch="thumbnail.defaultBranch" :showHealth="thumbnail.showHealth" :name="item.nickName" :health="item.hunger">
         <!-- <div class="scene-branch-3"></div> -->
       </captain>
       <commander v-if="item.level==4" :preventTouch="thumbnail.preventTouch" :defaultBranch="thumbnail.defaultBranch" :showHealth="thumbnail.showHealth" :name="item.nickName" :health="item.hunger">
@@ -48,10 +48,10 @@
           <people v-if="item.level==0" ref="index" :preventTouch="detail.preventTouch" :defaultBranch="detail.defaultBranch" :showHealth="detail.showHealth" :name="item.nickName" :health="item.hunger">
             <!-- <div class="scene-branch-4"></div> -->
           </people>
-          <general v-if="item.level==3" ref="index" :preventTouch="detail.preventTouch" :defaultBranch="detail.defaultBranch" :showHealth="detail.showHealth" :name="item.nickName" :health="item.hunger">
+          <general v-if="item.level==1" ref="index" :preventTouch="detail.preventTouch" :defaultBranch="detail.defaultBranch" :showHealth="detail.showHealth" :name="item.nickName" :health="item.hunger">
             <!-- <div class="scene-branch-6"></div> -->
           </general>
-          <captain v-if="item.level==1" ref="index" :preventTouch="detail.preventTouch" :defaultBranch="detail.defaultBranch" :showHealth="detail.showHealth" :name="item.nickName" :health="item.hunger">
+          <captain v-if="item.level==3" ref="index" :preventTouch="detail.preventTouch" :defaultBranch="detail.defaultBranch" :showHealth="detail.showHealth" :name="item.nickName" :health="item.hunger">
             <!-- <div class="scene-branch-3"></div> -->
           </captain>
           <commander v-if="item.level==4" ref="index" :preventTouch="detail.preventTouch" :defaultBranch="detail.defaultBranch" :showHealth="detail.showHealth" :name="item.nickName" :health="item.hunger">
@@ -134,6 +134,9 @@
       guard,
       king,
       coinsRolling
+    },
+    created(){
+      console.log('activeRole===='+this.activeRole)
     },
     methods: {
       randomCoordinates() {

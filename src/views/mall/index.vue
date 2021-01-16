@@ -1,15 +1,15 @@
 <template>
   <div class="container">
-    <alert1 :show='show' label="玩法说明" @close="show = false">
+    <alert1 :show='show' :label="$t('mall61')" @close="show = false">
       <div class="ct_cneter" v-html="playWayDetail">
       </div>
     </alert1>
-    <alert1 :show='show2' label="公告" @close="show2 = false">
+    <alert1 :show='show2' :label="$t('mall62')" @close="show2 = false">
       <div class="announcement" @click.stop.prevent>
         <van-list
           v-model="loading1"
           :finished="finished1"
-          finished-text="没有更多了"
+          :finished-text="$t('mall63')"
           @load="getNoticeList"
            class="an1"
         >
@@ -20,7 +20,7 @@
         </van-list>
       </div>
     </alert1>
-    <alert2 :show='show6' label="公告详情" @close="show6 = false" :mall="true" @closeback="show6 = false; show2= true;">
+    <alert2 :show='show6' :label="$t('mall64')" @close="show6 = false" :mall="true" @closeback="show6 = false; show2= true;">
       <div class="ct_ditile">
         <div>{{noticeDetail.titleHk}}</div>
         <p>
@@ -34,45 +34,68 @@
     <alert1 :show='show3' label="收益" @close="show3 = false">
       <div class="announcement announcement2">
         <div class="accets">
-          <p>{{homeInfo.idctBalance}} <span>IDCT</span></p>
-          <p>≈ {{homeInfo.convertUsdtBalance}} USDT</p>
+          <div class="accetstop">
+            <p>{{homeInfo.idctBalance}} <span>IDCT</span></p>
+            <p>≈ {{homeInfo.convertUsdtBalance}} USDT</p>
+          </div>
+          <div class="incomeTotal clearfix">
+            <div class="fl">
+              <p class="title">累计收益</p>
+              <p class="val">{{homeInfo.usdtMaxIncome}} USDT</p>
+            </div>
+            <div class="fr">
+              <p class="title">待发放收益</p>
+              <p class="val">{{homeInfo.unReceivedUsdtIncome}} USDT</p>
+            </div>
+          </div>
         </div>
-        <div class="btns m_top20" @click="getWithdrawList">提币</div>
+        <div class="btns m_top20" @click="getWithdrawList">{{$t('mall6')}}</div>
         <van-list
           v-model="loading"
           :finished="finished"
-          finished-text="没有更多了"
+          :finished-text="$t('mall63')"
           @load="getIncomeList"
            class="an2 m_top20"
         >
           <van-cell v-for="(item,index) in incomeList" :key="index" class="an2li">
             <p>{{item.createTime}}</p>
-            <p>1.您的猫头鹰共创{{item.owlIncome}} IDCT收益</p>
-            <p>2.您的猫头鹰子民共纳税 {{item.taxIncome}} IDCT</p>
+            <p>1.{{$t('mall65')}}{{item.owlIncome}} IDCT</p>
+            <p>2.{{$t('mall66')}}{{item.taxIncome}} IDCT</p>
           </van-cell>
         </van-list>
       </div>
     </alert1>
-    <alert1 :show='show4' label="我的好友" @close="show4 = false">
+    <alert1 :show='show4' :label="$t('mall91')" @close="show4 = false">
       <div class="announcement friend">
+        <div class="totalinfo">
+          <div class="myLevel">
+            <div class="level">LV{{homeInfo.level}}</div>
+            <p>{{$t('mall116')}}</p>
+            <div class="timeAndMan">
+              <p class="time">{{$t('mall117')}}<span>{{homeInfo.runHours}} {{$t('mall115')}}</span></p>
+              <p class="man">{{$t('mall118')}}<span>{{homeInfo.idctHoldersCount}}</span></p>
+            </div>
+          </div>
+          <p v-for="(item,index) in totalInfo" :key="index"><span>{{item.name}}：</span><a>{{item.owlCount}}</a></p>
+        </div>
         <van-list
           v-model="loading3"
           :finished="finished3"
-          finished-text="没有更多了"
+          :finished-text="$t('mall63')"
           @load="getMyFriends"
            class="friendul"
         >
           <van-cell v-for="(item,index) in friendList" :key="index" class="friendli">
             <div> <img :src="item.portrait" alt=""></div>
             <div>
-              <p>{{item.name}}</p>
+              <p>{{item.name?item.name:'--'}}</p>
               <p>{{item.highestTitle}}</p>
             </div>
           </van-cell>
         </van-list>
       </div>
     </alert1>
-    <mallmodel :show='show5' label="宫殿" @close="show5 = false" :mall="true" :hide="true">
+    <mallmodel :show='show5' :label="$t('mall59')" @close="closeMall" :mall="true" :hide="true">
       <div class="malltop">
         <div class="people-container" v-show="mallDetail.level==0">
           <people  :defaultBranch="false" :showShining='true' :showHealth="false">
@@ -126,13 +149,13 @@
           </div>
           <div class="dt_rg" v-show="mallDetail.buyType!=='none'">
             <div class="btns">
-              <div @click="mallDetail.buyType=='buy'?show55=true:show77=true;show5=false">{{mallDetail.buyType=='buy'?'领养':'抽奖'}}</div>
+              <div @click="mallDetail.buyType=='buy'?show55=true:show77=true;show5=false">{{mallDetail.buyType=='buy'?$t('mall68'):$t('mall69')}}</div>
             </div>
           </div>
         </div>
       </div>
     </mallmodel>
-    <alert2 :show='show55' label="宫殿" @close="show55 = false" @closeback="show55 = false; show5= true;">
+    <alert2 :show='show55' :label="$t('mall59')" @close="show55 = false" @closeback="show55 = false; show5= true;">
 
       <div class="mall2">
         <div class="ditals_bg">
@@ -143,24 +166,24 @@
           </div>
         </div>
 
-        <div class="btn_slet"><img src="../../assets/btn_unselect.svg" alt=""><span class="seta">{{mallDetail.usdtPrice}} IDCT</span><span class="seta1">(余额：{{usdtBalance}}
+        <div class="btn_slet"><img src="../../assets/btn_unselect.svg" alt=""><span class="seta">{{mallDetail.usdtPrice}} IDCT</span><span class="seta1">({{$t('mall108')}}：{{usdtBalance}}
             IDCT)</span> </div>
-        <van-button class="btns" :loading="approveding" :disabled='approveding' type="info" :loading-text="isApproved?'确定支付':'授权'" @click="checkAppreve">{{isApproved?'确定支付':'授权'}}</van-button>
+        <van-button class="btns" :loading="approveding" :disabled='approveding' type="info" :loading-text="isApproved?$t('mall70'):$t('mall71')" @click="checkAppreve">{{isApproved?$t('mall70'):$t('mall71')}}</van-button>
       </div>
     </alert2>
-    <alert2 :show='show56' label="密码" @close="show56 = false" @closeback="show56 = false;">
+    <alert2 :show='show56' :label="$t('mall22')" @close="show56 = false" @closeback="show56 = false;">
       <div class="mall2">
         <div class="ditals_bg">
           <div class="dital2" style="border-radius:0;box-shadow:none;">
-            <div class="willt_pwd">昵称</div>
-            <div class="inputs"><input v-model="mallName" :disabled="paying" placeholder="请为爱宠取个名字"></div>
+            <div class="willt_pwd">{{$t('mall72')}}</div>
+            <div class="inputs"><input v-model="mallName" :disabled="paying" :placeholder="$t('mall73')"></div>
           </div>
           <div class="dital2" style="padding-top:0;border-radius:0;box-shadow:none;">
-            <div class="willt_pwd">钱包密码</div>
-            <div class="inputs"><input type="password" v-model="password" :disabled="paying" placeholder="请输入钱包密码"></div>
+            <div class="willt_pwd">{{$t('mall23')}}</div>
+            <div class="inputs"><input type="password" v-model="password" :disabled="paying" :placeholder="$t('mall24')"></div>
           </div>
         </div>
-        <van-button class="btns btnst" :loading="paying" :disabled='paying' type="info" loading-text="正在支付" @click="createOrder">确定支付</van-button>
+        <van-button class="btns btnst" :loading="paying" :disabled='paying' type="info" :loading-text="$t('mall74')" @click="createOrder">{{$t('mall70')}}</van-button>
       </div>
     </alert2>
 
@@ -194,43 +217,55 @@
         </div>
       </div>
     </alert2> -->
-    <alert2 :show='show7' label="系统提示" @close="show7= false" :mall="false" :hideback="true">
+    <alert2 :show='show7' :label="$t('mall75')" @close="show7= false" :mall="false" :hideback="true">
       <div class="styme_model" @click.stop.prevent>
         <div class="stemes">
           <div class="img">
             <img src="../../assets/acctove.svg" alt="">
           </div>
-          <p>金币不足</p>
-          <p>可以看广告获取更多金币哦！</p>
+          <p>{{$t('mall76')}}</p>
+          <p>{{$t('mall77')}}</p>
         </div>
-        <div class="btns btnst" @click="getFeecoin">确定</div>
+        <div class="btns btnst" @click="getFeecoin">{{$t('mall20')}}</div>
       </div>
     </alert2>
-    <alert2 :show='show8' label="提币" @close="show8= false" :mall="false" :hideback="true">
+    <alert2 :show='show8' :label="$t('mall6')" @close="show8= false" :mall="false" :hideback="true">
       <div class="announcement announcement2">
         <div class="accets">
-          <p>{{homeInfo.idctBalance}} <span>IDCT</span></p>
-          <p>≈ {{homeInfo.convertUsdtBalance}} USDT</p>
+          <div class="accetstop">
+            <p>{{homeInfo.idctBalance}} <span>IDCT</span></p>
+            <p>≈ {{homeInfo.convertUsdtBalance}} USDT</p>
+          </div>
+          <div class="incomeTotal clearfix">
+            <div class="fl">
+              <p class="title">{{$t('mall112')}}</p>
+              <p class="val">{{homeInfo.usdtMaxIncome}} USDT</p>
+            </div>
+            <div class="fr">
+              <p class="title">{{$t('mall113')}}</p>
+              <p class="val">{{homeInfo.unReceivedUsdtIncome}} USDT</p>
+            </div>
+          </div>
         </div>
         <div class="ditals_bg">
           <div class="dital2">
-            <div class="willt_pwd" style="padding-top:10px;">提币数量</div>
-            <div class="inputs" style="padding-bottom:10px;"><input type="number" v-model="withdrawNum" placeholder="最低提202 IDCT"></div>
+            <div class="willt_pwd" style="padding-top:10px;">{{$t('mall78')}}</div>
+            <div class="inputs" style="padding-bottom:10px;"><input type="number" v-model="withdrawNum" :placeholder="$t('mall79')"></div>
           </div>
         </div>
-        <div class="btns btnst" @click="doWithdraw">提币</div>
+        <div class="btns btnst" @click="doWithdraw">{{$t('mall6')}}</div>
         <div class="tipbox">
-          <h2>注</h2>
-          <p>1.首次提币限额为价值2 USDT的 IDCT起</p>
-          <p>2.第二次提币限额为价值10 USDT的 IDCT起</p>
-          <p>3.第三次提币限额为价值20 USDT的 IDCT起</p>
+          <h2>{{$t('mall80')}}</h2>
+          <p>1.{{$t('mall81')}}</p>
+          <p>2.{{$t('mall82')}}</p>
+          <p>3.{{$t('mall83')}}</p>
         </div>
         <div class="widthrawList">
           <div class="widthrawBar">
             <van-list
               v-model="loading2"
               :finished="finished2"
-              finished-text="没有更多了"
+              :finished-text="$t('mall63')"
               @load="getWithdrawList"
               class="an11"
             >
@@ -244,23 +279,28 @@
     </alert2>
     <scene :mallList='mallList'>
       <div class="ps_list">
-        <div class="play " @click="checkPlayWay"> <img src="../../assets/play.svg" alt=""> <span class="play_size">玩法</span> </div>
+        <div class="play " @click="checkPlayWay"> <img src="../../assets/play.svg" alt=""> <span class="play_size">{{$t('mall84')}}</span> </div>
         <div class="play play1" @click="getNoticeList"> <img src="../../assets/announcement.svg" alt=""> <span
-                class="play_size p_announcement">公告</span><a class="num" v-show="homeInfo.unReadNoticeCount">{{homeInfo.unReadNoticeCount}}</a> </div>
-        <div class="play play1 " @click="getPalaceOwls"> <img src="../../assets/mall.svg" alt=""> <span class="play_size p_mall">宫殿</span> </div>
-        <div class="play play1 " @click="getIncomeList"> <img src="../../assets/earnings.svg" alt=""> <span class="play_size p_earnings">收益</span>
+                class="play_size p_announcement">{{$t('mall62')}}</span><a class="num" v-show="homeInfo.unReadNoticeCount">{{homeInfo.unReadNoticeCount}}</a> </div>
+        <div class="play play1 " @click="getPalaceOwls"> <img src="../../assets/mall.svg" alt=""> <span class="play_size p_mall">{{$t('mall59')}}</span> </div>
+        <div class="play play1 " @click="showIncomme"> <img src="../../assets/earnings.svg" alt=""> <span class="play_size p_earnings">{{$t('mall85')}}</span>
         </div>
       </div>
       <div class="ps_nav">
-        <div class="play " @click="getMyFriends"> <img src="../../assets/haoyou.svg" alt=""> <span class="play_size">好友</span> </div>
+        <div class="totalprice">{{$t('mall112')}}<span>{{homeInfo.usdtIncome}} USDT</span></div>
+        <div class="play " @click="getMyFriends"> <img src="../../assets/haoyou.png" alt=""> <span class="play_size">{{$t('mall91')}}</span> </div>
         <div class="play1 " @click="feeGold">
-          <div class="ceter_img"><countTo v-if="homeInfo.goldBalance" ref="goldEl" :startVal='goldBalanceStart' :endVal='goldBalanceEnd' :duration='3000' :autoplay=false></countTo><span v-else>{{homeInfo.goldBalance}}</span></div> <span class="play_size">免费赚金币</span>
+          <div class="ceter_img"><countTo v-if="homeInfo.goldBalance" ref="goldEl" :startVal='goldBalanceStart' :endVal='goldBalanceEnd' :duration='3000' :autoplay=false></countTo><span v-else>{{homeInfo.goldBalance}}</span></div> <span class="play_size">{{$t('mall87')}}</span>
         </div>
-        <div class="play " @click="feedOwls"> <img src="../../assets/weiyang.svg" alt=""> <span class="play_size play_sizec">一键喂养</span> </div>
+        <div class="play " @click="feedOwls"> <img src="../../assets/weiyang.svg" alt=""> <span class="play_size play_sizec">{{$t('mall88')}}</span> </div>
       </div>
     </scene>
     <coinsRolling :show="isAddGold" @close="isAddGold=false" class="coinsroll"></coinsRolling>
-    <chouJing :show='show77' @closepop='show77=false;show5=true' @notGold='show7=true;show77=false' @drawcode='getDrawCode' :drawNum='mallDetail.level'></chouJing>
+    <chouJing :show='show77' @closepop='show77=false;show5=true' @notDraw='notDraw' @notGold='show7=true;show77=false' @drawcode='getDrawCode' :drawNum='mallDetail.level'></chouJing>
+    <van-overlay :show="overlayLoading" @click="overlayLoading = false">
+      <van-loading />
+    </van-overlay>
+    
   </div>
 </template>
 
@@ -274,7 +314,7 @@ import alert2 from './globelModel2'
 import scene from '@/components/scene'
 import mallmodel from './mallModel'
 import contracts from '@/api/contracts'
-import {verifyZjadReward,withdrawIncome,getdraw,payOwlOrder,queryMyOwlList,feedMyOwls,getIndexInfo,queryMyFriends,queryPalaceOwls,queryIncomeList,queryNoticeList,readNoticeContent,createBuyOwlOrder,getPlayWay,queryWithdrawList,queryWalletList} from '@/api/user'
+import {queryMyTeamOwl,verifyZjadReward,withdrawIncome,getdraw,payOwlOrder,queryMyOwlList,feedMyOwls,getIndexInfo,queryMyFriends,queryPalaceOwls,queryIncomeList,queryNoticeList,readNoticeContent,createBuyOwlOrder,getPlayWay,queryWithdrawList,queryWalletList} from '@/api/user'
 import people from '@/components/people.vue'
 import wizard from '@/components/wizard.vue'
 import general from '@/components/general.vue'
@@ -283,8 +323,7 @@ import captain from '@/components/captain.vue'
 import guard from '@/components/guard.vue'
 import king from '@/components/king.vue'
 import coinsRolling from '@/components/coinsRolling'
-import { Toast } from 'vant';
-import { List } from 'vant'
+import { List,Toast,Loading,Overlay } from 'vant'
 import chouJing from './shouJing'
 import countTo from 'vue-count-to';
 import {getConfirmedTransaction} from '@/utils/index'
@@ -303,7 +342,9 @@ export default {
     king,
     coinsRolling,
     chouJing,
-    countTo
+    countTo,
+    vanLoading:Loading,
+    vanOverlay:Overlay
   },
   data() {
     return {
@@ -319,6 +360,7 @@ export default {
       show7: false,
       show77: false,
       show8:false,
+      overlayLoading:false,
       mallList:[],
       friendList:[],
       homeInfo:{},
@@ -354,16 +396,22 @@ export default {
       goldBalanceStart:0,
       goldBalanceEnd:0,
       approveding:false,
-      paying:false
+      paying:false,
+      totalInfo:{},
+      trxBalance:0,
+      transfer:null
     }
   },
   created(){
-    
+    let that  = this
     if(!window.tronWeb){
       this.getTronWeb()
     }else{
       this.allowance()
       this.getUsdtBalance()
+      window.tronWeb.trx.getBalance(window.tronWeb.defaultAddress.base58).then(res=>{
+          that.trxBalance = res/Math.pow(10,6)
+        })
     }
     this.getHomeInfo()
     this.getMyOwlList()
@@ -388,7 +436,19 @@ export default {
         window.tronWeb.setAddress(window.tronWeb.defaultAddress.base58)
         that.allowance()
         that.getUsdtBalance()
+        window.tronWeb.trx.getBalance(window.tronWeb.defaultAddress.base58).then(res=>{
+          that.trxBalance = res/Math.pow(10,6)
+        })
       }
+    },
+    notDraw(){
+      this.show77 = false
+      Toast('未中奖')
+      this.show5 = true
+    },
+    showIncomme(){
+      this.incomeList = []
+      this.getIncomeList()
     },
     getDrawCode(code){
       this.show77 = false
@@ -405,16 +465,22 @@ export default {
         this.isApproved = false
       }
     },
+    closeMall(){
+      this.show5 = false
+      this.toindex = 0
+      this.mallDetail = []
+    },
     feeGold(){
+      this.overlayLoading = true
       var u = navigator.userAgent;
       var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
       var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
       if(isAndroid){
+        // alert('点击赚金币')
         ZjJSAdSdk.loadAd('zjad_241253',getStore('token'),'videoReward', 1,'rewardVideo');
       }else if(isiOS){
-        alert('isiOS')
+        // alert('isiOS')
         window.webkit.messageHandlers.loadAd.postMessage({'adid':'33011066','type':'rewardVideo', "userId":getStore('token'),"rewardCount":"1"});
-        // window.webkit.messageHandlers.loadAd.postMessage({'adid':'33011066','type':'rewardVideo'});
       }
     },
     getMyOwlList(){
@@ -425,7 +491,6 @@ export default {
           that.mallList.sort(that.compare('level'));
           console.log(that.mallList)
         }
-        
       })
     },
     compare(key){
@@ -445,6 +510,9 @@ export default {
             if(res.data.resultCode==999999){
               that.goldBalanceEnd = res.data.resultData.goldBalance
               that.$refs.goldEl.start()
+              // setTimeout(function(){
+              //   that.getHomeInfo()
+              // },3000)
             }
           })
         }else if(res.data.resultCode==100006){
@@ -474,7 +542,7 @@ export default {
       that.loading3 = true
       queryMyFriends({pageNum:this.pageNum3}).then(res=>{
         that.loading3 = true
-        if(that.pageNum3<res.data.pages){
+        if(that.pageNum3+1<res.data.pages){
           that.pageNum3++
         }else{
           that.finished3 = true;
@@ -483,6 +551,28 @@ export default {
           res.data.resultData.forEach((item,index)=>{
             that.friendList.push(item)  
           })
+        }
+      })
+      queryMyTeamOwl().then(res=>{
+        if(res.data.resultCode==999999){
+          that.totalInfo = res.data.resultData
+          // res.data.resultData.forEach((item,index)=>{
+          //   if(item.level==0){
+          //     that.totalInfo.level0val = item.owlCount
+          //   }else if(item.level==1){
+          //     that.totalInfo.level1val = item.owlCount
+          //   }else if(item.level==2){
+          //     that.totalInfo.level2val = item.owlCount
+          //   }else if(item.level==3){
+          //     that.totalInfo.level3val = item.owlCount
+          //   }else if(item.level==4){
+          //     that.totalInfo.level4val = item.owlCount
+          //   }else if(item.level==5){
+          //     that.totalInfo.level5val = item.owlCount
+          //   }else if(item.level==6){
+          //     that.totalInfo.level6val = item.owlCount
+          //   }
+          // })
         }
       })
     },
@@ -522,7 +612,7 @@ export default {
           res.data.resultData.forEach((item,index)=>{
             that.incomeList.push(item)  
           })
-          if(that.pageNum<res.data.pages){
+          if(that.pageNum+1<res.data.pages){
             that.pageNum++
           }else{
             that.finished = true;
@@ -537,7 +627,7 @@ export default {
       that.loading1 = true
       queryNoticeList({pageNum:this.pageNum1}).then(res=>{
         that.loading1 = false;
-        if(that.pageNum1<res.data.pages){
+        if(that.pageNum1+1<res.data.pages){
           that.pageNum1++
         }else{
           that.finished1 = true;
@@ -574,7 +664,7 @@ export default {
       that.loading2 = true
       queryWithdrawList({pageNum:this.pageNum2}).then(res=>{
         that.loading2 = false
-        if(that.pageNum2<res.data.pages){
+        if(that.pageNum2+1<res.data.pages){
           that.pageNum2++
         }else{
           that.finished2 = true;
@@ -604,17 +694,32 @@ export default {
         this.show56 = true
         // this.createOrder()
       }else{
-        this.approveding = true
-        this.approved()
+        if(this.trxBalance){
+          if(this.trxBalance>2){
+            Toast('授权需要1~2分钟，请耐心等待')
+            this.approveding = true
+            this.approved()
+          }else{
+            Toast('TRX余额不足')
+          }
+        }else{
+          Toast('未获取到TRX余额')
+        }
+        
+        
       }
     },
     createOrder(){
       let that = this
+      if(that.mallDetail.usdtPrice>that.usdtBalance){
+        Toast('IDCT余额不足')
+        return
+      }
       let namePsd = getStore('namepsd')
       namePsd = JSON.parse(namePsd)
       let passwordTrue = namePsd.walletPassword
       if(this.password!==passwordTrue){
-        Toast('密码不正确')
+        Toast(this.$t('mall28'))
         return
       }
       this.paying = true
@@ -623,16 +728,27 @@ export default {
         owlLevel:this.mallDetail.level,
         drawCode:this.mallDetail.level>2?this.drawCode:''
       }
+      
       createBuyOwlOrder(data).then(res=>{
         if(res.data.resultCode==999999){
           that.orderDetail = res.data.resultData
           if(that.approvedBalance && that.approvedBalance>that.mallDetail.usdtPrice){
-            that.sendToken()
+            if(that.trxBalance){
+              if(that.trxBalance>2){    
+                that.sendToken()
+              }else{
+                Toast('TRX余额不足')
+              }
+            }else{
+              Toast('未获取到TRX余额')
+            }
+            
+            
           }else{
             that.isApproved = false
           }
         }else{
-          Toast('创建订单失败')
+          Toast(that.$t('mall89'))
           that.paying = false
         }
       })
@@ -686,7 +802,7 @@ export default {
     async sendToken(){
       let that = this
       let func = 'buy(uint256,string)'
-      let idcnum = new bigNumber(this.mallDetail.usdtPrice)
+      let idcnum = new bigNumber(that.orderDetail.idctPrice)
       // idcnum = idcnum.div(that.orderDetail.idctPrice)
       idcnum = idcnum.times(Math.pow(10,6))
       let params = [
@@ -694,7 +810,13 @@ export default {
         {'type':'string','value':'aaa'}
       ]
       let transfer = await window.tronWeb.transactionBuilder.triggerSmartContract(contracts.OWL,func, {},params)
-      window.tronWeb.trx.sign(transfer.transaction).then(function(signedTransaction) {
+      console.log(transfer.transaction.txID)
+      that.transfer = transfer
+      that.payOrder(transfer.transaction.txID)
+    },
+    sendTransfer(){
+      let that = this
+      window.tronWeb.trx.sign(this.transfer.transaction).then(function(signedTransaction) {
           window.tronWeb.trx
             .sendRawTransaction(signedTransaction)
             .then(function(res) {
@@ -705,7 +827,7 @@ export default {
                   that.mallName = ''
                   Toast(window.tronWeb.toAscii(e.contractResult[0]))
                 }else{
-                  that.payOrder(res.txid)
+                  
                 }
               })
             })
@@ -736,10 +858,16 @@ export default {
         txHash:txid
       }
       payOwlOrder(data).then((res)=>{
-        that.show55 = false
-        that.show56 = false
-        that.paying = false
-        Toast('支付成功！')
+        if(res.data.resultCode==999999){
+          that.show55 = false
+          that.show56 = false
+          that.paying = false
+          that.closeMall()
+          Toast(that.$t('mall119'))
+          that.sendTransfer()
+        }else{
+          Toast('支付失败')
+        }
         // if(res.data.resultCode==999999){
         //   Notify({ type: 'success', message: res.data.resultDesc });
         // }else{
@@ -758,7 +886,8 @@ export default {
       })
     },
     zjJSAdSdkCallBack(type,msg) {
-      alert('进入了回调')
+      // alert('进入了回调')
+      this.overlayLoading = false
         switch (type) {
             case 'onZjAdLoaded':
                 // alert(1);
@@ -792,7 +921,7 @@ export default {
                 // alert(10);
                 break;
             case 'onZjAdReward':
-                alert("获取奖励");
+                // alert("获取奖励");
                 this.verifyAdReward(msg);
                 break;
         }
@@ -809,9 +938,10 @@ export default {
         device = 'ios'
       }
       verifyZjadReward({"device":device,"transId": transId}).then(res=>{
-        // alert('调用了金币方法')
         if(res.data.resultCode==999999){
           that.isAddGold = true
+          // that.getHomeInfo()
+          window.location.reload()
           Toast(res.data.resultDesc)
         }else{
           Toast(res.data.resultDesc)
@@ -823,6 +953,25 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.totalprice{
+  position:absolute;
+  bottom:80px;
+  width: 168px;
+  height: 24px;
+  background: rgba(0,0,0,0.5);
+  border-radius: 15px;
+  font-size:10px;
+  color:#8997B3;
+  line-height:24px;
+  padding-left:15px;
+  box-sizing: border-box;
+  span{
+    font-size:12px;
+    color:#F4F6FA;
+    line-height:24px;
+    padding-left:10px;
+  }
+}
 .scene{height:100%;}
 ul {
   li {
@@ -838,6 +987,86 @@ ul {
   padding-top: 34px;
   max-height: 316px;
   overflow: auto;
+  .totalinfo{
+    width: 295px;
+    overflow: hidden;
+    background: #F9FBFF;
+    box-shadow: 2px 2px 2px 0px #BFC2D8;
+    border-radius: 5px;
+    margin-bottom:10px;
+    padding-bottom:10px;
+    .myLevel{
+      width:275px;
+      height: 120px;
+      background: #F4F6FA;
+      border-radius: 6px;
+      text-align:center;
+      margin:10px auto;
+      padding-top:12px;
+      .timeAndMan{
+        clear: both;
+        overflow:hidden;
+        padding-top:8px;
+        p{
+          font-size:10px;
+          color:#8997B3;
+          line-height:100%;
+          width:50%;
+          text-align:left;
+          span{
+            font-size:10px;
+            color:#303030;
+            line-height:100%;
+            width:auto;
+            vertical-align: middle;
+          }
+          &.time{
+            float:left;
+          }
+          &.man{
+            float:right;
+          }
+        }
+      }
+      .level{
+        width:36px;
+        height:40px;
+        padding-bottom:5px;
+        margin:0 auto 0;
+        text-align:center;
+        line-height:45px;
+        font-size:10px;
+        color:#FFFFFF;
+        background: url(../../assets/level.png) no-repeat center;
+        background-size:100% 100%;
+      }
+      p{
+        font-size:10px;
+        color:#8997B3;
+        line-height: 100%;
+        width: 100%;
+      }
+    }
+    a{
+      color:#8997B3;
+      vertical-align: middle;
+    }
+    p{
+      float:left;
+      width:50%;
+      text-indent: 10px;
+      font-size:14px;
+      color: #303030;
+      line-height: 20px;
+      padding-top:10px;
+      span{
+        display:inline-block;
+        vertical-align: middle;
+        width:75%;
+        text-align:right;
+      }
+    }
+  }
   .an11{
     height:130px;
     overflow:auto;
@@ -871,27 +1100,61 @@ ul {
   }
 }
 .announcement2 {
-  max-height: 530px;
+  max-height: 430px;
+  .incomeTotal{
+    padding:15px 10px 0;
+    overflow:hidden;
+    .fl{float:left;width:50%;}
+    .fr{
+      position:relative;
+      float:right;
+      width:50%;
+      &:after{
+        content:'';
+        position:absolute;
+        left:0;
+        top:6px;
+        width:1px;
+        height:20px;
+        background:#DADEEC;
+      }
+    }
+    .title{
+      font-size:12px;
+      color:#8D91AB;
+      line-height:100%;
+      text-align:center;
+      padding-bottom:6px;
+    }
+    .val{
+      font-size:12px;
+      color:#303030;
+      line-height:100%;
+      text-align: center;
+    }
+  }
   .accets {
     background: linear-gradient(180deg, #ebedf6 0%, #ffffff 100%);
     border-radius: 5px;
-    padding: 25px 0;
-    p {
-      text-align: center;
-    }
-    p:nth-child(1) {
-      font-size: 30px;
-      font-weight: 600;
-      color: #303030;
-      span {
-        font-size: 14px;
-        color: #494c61;
+    padding: 15px 0 12px;
+    .accetstop{
+      p {
+        text-align: center;
       }
-    }
-    p:nth-child(2) {
-      font-size: 12px;
-      font-weight: 600;
-      color: #8d91ab;
+      p:nth-child(1) {
+        font-size: 30px;
+        font-weight: 600;
+        color: #303030;
+        span {
+          font-size: 14px;
+          color: #494c61;
+        }
+      }
+      p:nth-child(2) {
+        font-size: 12px;
+        font-weight: 600;
+        color: #8d91ab;
+      }
     }
   }
   .an2 {
@@ -933,7 +1196,7 @@ ul {
 }
 .friend {
   .friendul {
-    height: 280px;
+    height: 200px;
     overflow: auto;
     &::-webkit-scrollbar {
       width: 0;
@@ -945,30 +1208,34 @@ ul {
       display: flex;
       padding: 10px;
       margin-bottom: 10px;
-      div:nth-child(1) {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        margin-right: 10px;
-        background: cornflowerblue;
-        img {
+      .van-cell__value{
+        div:nth-child(1) {
+          float:left;
           width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          margin-right: 10px;
+          background: cornflowerblue;
+          img {
+            width: 40px;
+          }
+        }
+        div:nth-child(2) {
+          p {
+            font-weight: 400;
+          }
+          p:nth-child(1) {
+            font-size: 14px;
+            color: #303030;
+          }
+          p:nth-child(2) {
+            font-size: 12px;
+            color: #8d91ab;
+            margin-top: 3px;
+          }
         }
       }
-      div:nth-child(2) {
-        p {
-          font-weight: 400;
-        }
-        p:nth-child(1) {
-          font-size: 14px;
-          color: #303030;
-        }
-        p:nth-child(2) {
-          font-size: 12px;
-          color: #8d91ab;
-          margin-top: 3px;
-        }
-      }
+      
     }
   }
 }
@@ -1476,5 +1743,13 @@ ul {
   left:45%;
   width:50px;
   height:50px;
+}
+.van-overlay{
+  z-index:999;
+}
+.van-loading{
+  position: absolute;
+  top: 40%;
+  left: 45%;
 }
 </style>

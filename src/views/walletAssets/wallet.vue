@@ -1,38 +1,38 @@
 <template>
   <div class="container">
     <div class="title_bg">
-      <Title title="钱包" :isback="false" hide></Title>
+      <Title :title="$t('mall1')" :isback="false" hide></Title>
       <div class="assetsDtal">
         <p>{{totalBalance}} IDC</p>
         <p>≈{{convertedBalance}}</p>
       </div>
       <div class="wallet_btn">
-        <router-link tag="div" to="/walletAssets/transfer" class="btn">转账</router-link>
-        <router-link tag="div" to="/walletAssets/collection" class="btn">收款</router-link>
+        <router-link tag="div" to="/walletAssets/transfer" class="btn">{{$t('mall2')}}</router-link>
+        <router-link tag="div" to="/walletAssets/collection" class="btn">{{$t('mall3')}}</router-link>
       </div>
     </div>
     <div class="wallet_scoll">
       <div class="wallet_energy">
         <div class="energy_lt">
-          <div class="dv1">能量</div>
+          <div class="dv1">{{$t('mall4')}}</div>
           <div class="dv2">
             <p :style="'width:'+energyBi+'%'"></p>
           </div>
-          <div class="dv3"><span>{{walletInfo.energy}}</span>/{{walletInfo.energyLimit}}</div>
+          <div class="dv3"><span>{{walletInfo.energy || 0}}</span>/{{walletInfo.energyLimit || 0}}</div>
         </div>
         <div class="energy_lt">
-          <div class="dv1">宽带</div>
+          <div class="dv1">{{$t('mall5')}}</div>
           <div class="dv2">
             <p  :style="'width:'+freeNetBi+'%'"></p>
           </div>
-          <div class="dv3"><span>{{walletInfo.freeNet}}</span>/{{walletInfo.freeNetLimit}}</div>
+          <div class="dv3"><span>{{walletInfo.freeNet || 0}}</span>/{{walletInfo.freeNetLimit || 0}}</div>
         </div>
       </div>
       <div class="currency__list">
         <van-pull-refresh v-model="isLoading" @refresh="getMyToken">
           <div class="item" v-for="(item,index) in coinList" :key="index" @click="toDetail(item)">
             <div class="item_top">
-              <img :src="item.icon" alt="">
+              <img :src="item.img" alt="">
               <div class="item_assets">
                 <p>
                   <span>{{item.coinCode}}</span>
@@ -56,7 +56,7 @@
             <img :src="active == 0?require('../../assets/zican.svg'):require('../../assets/assetsh.png')" />
           </div>
         </template>
-        <div class="tabbar_zise">资产</div>
+        <div class="tabbar_zise">{{$t('mall8')}}</div>
       </van-tabbar-item>
       <van-tabbar-item  @click="toMall">
         <template>
@@ -64,15 +64,15 @@
             <img :src="active == 1?require('../../assets/liulanqs.png'):require('../../assets/liulanq.svg')" />
           </div>
         </template>
-        <div class="tabbar_zise">发现</div>
+        <div class="tabbar_zise">{{$t('mall9')}}</div>
       </van-tabbar-item>
-      <van-tabbar-item>
+      <van-tabbar-item @click="toHome">
         <template>
           <div class="tabbar_img">
             <img :src="active == 2?require('../../assets/meIcoActive.png'):require('../../assets/meIco.png')" />
           </div>
         </template>
-        <div class="tabbar_zise">我的</div>
+        <div class="tabbar_zise">{{$t('mall99')}}</div>
       </van-tabbar-item>
     </van-tabbar>
   </div>
@@ -102,17 +102,20 @@ export default {
         name:'TRX',
         decimals:6,
         balance:0,
-        price:0
+        price:0,
+        img:'../../assets/trx.png'
       },{
         name:'IDC',
         decimals:6,
         balance:0,
-        price:0
+        price:0,
+        img:require('@/assets/idct.png')
       },{
         name:'USDT',
         decimals:6,
         balance:0,
-        price:0
+        price:0,
+        img:require('@/assets/usdt.png')
       }]
     }
   },
@@ -124,18 +127,29 @@ export default {
     if(!window.tronWeb){
       this.createTronWeb()
     }else{
-      this.userLogin()
+      
+      let token = getStore('token')
+      if(!token){
+        this.userLogin()
+      }else{
+        this.getMyToken()
+      }
     }
-    
+    let idctUserId = this.getUrlKey('idctUserId',window.location.href)
+    if(idctUserId){
+      setStore('idctUserId',idctUserId)
+    }
   },
   methods: {
     toDetail(item){
+      setStore('coin',item) 
       this.$router.push({
                   path: "/walletAssets/details",
                   query: {
                       coin:item
                   }
               });
+             
     },
     withdraw(item){
       this.$router.push({
@@ -153,6 +167,11 @@ export default {
     toMall(){
       this.$router.push({
                   path: "/mall"
+              });
+    },
+    toHome(){
+      this.$router.push({
+                  path: "/home"
               });
     },
     onChange(index) {
@@ -173,8 +192,12 @@ export default {
       window.tronWeb = new TronWeb(fullNode,solidityNode,eventServer,privateKey)
       if(window.tronWeb){
         window.tronWeb.setAddress(window.tronWeb.defaultAddress.base58)
-        this.userLogin()
-        
+        let token = getStore('token')
+        if(!token){
+          this.userLogin()
+        }else{
+          this.getMyToken()
+        }
       }
       // this.tronWeb.trx.getBalance(this.tronWeb.defaultAddress.base58).then(res => {
       //   that.coinList[0].balance = that.tronWeb.fromSun(res)   
@@ -209,7 +232,18 @@ export default {
           that.totalBalance = res.data.resultData.balance
           that.convertedBalance = res.data.resultData.convertedBalance
           that.coinList = res.data.resultData.lstWallet
+          setStore('trxAddress',res.data.resultData.address)
+          that.coinList.forEach((item,index)=>{
+            if(item.coinCode=='TRX'){
+              item.img = require('../../assets/trx.png')
+            }else if(item.coinCode=='IDCT'){
+              item.img = require('../../assets/idct.png')
+            }else if(item.coinCode=='USDT'){
+              item.img = require('../../assets/usdt.png')
+            }
+          })
           that.walletInfo = res.data.resultData
+          setStore('myInviteCode', res.data.resultData.inviteCode)
           if(res.data.resultData.energyLimit!==0&&res.data.resultData.energy!==0){
             that.energyBi = res.data.resultData.energy/res.data.resultData.energyLimit*100
           }
@@ -219,12 +253,18 @@ export default {
         }
       })
     },
+    getUrlKey(name,url){
+      　return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(url) || [, ""])[1].replace(/\+/g, '%20')) || null
+    },
     userLogin(){
       let that = this
+      let namePsd = getStore('namepsd')
+      namePsd = JSON.parse(namePsd)
+      let walletName = namePsd.walletName
         let data = {
-          name:'xxx',
-          idctUserId:'760732255497768192',
-          // inviteCode:'',
+          name:walletName,
+          idctUserId:getStore('idctUserId')?getStore('idctUserId'):'',
+          inviteCode:getStore('inviteCode'),
           trxAddress:window.tronWeb.defaultAddress.base58
         }
         login(data).then((res)=>{

@@ -1,7 +1,8 @@
 import bip39 from 'bip39';
 var lightwallet = require('eth-lightwallet')
 var ethers = require('ethers')
-import abi from './abi';
+// var Mnemonic = require('bitcore-mnemonic');
+// var Bitcore = require('bitcore-lib');
 /**
  * 存储localStorage
  */
@@ -57,6 +58,7 @@ export const objIsNull = data => {
 export const createWallet = (userpassword) => {
   return new Promise((resolve, reject) => {
     var secretSeed = lightwallet.keystore.generateRandomSeed();//注记词
+    debugger
     var password = userpassword;//密码
     var global_keystore = null
     let privateKey = null
@@ -65,12 +67,14 @@ export const createWallet = (userpassword) => {
         password: password,
         seedPhrase: secretSeed,
         //random salt
-        hdPathString: "m/44'/195'/0'/0/0"
+        hdPathString: "m/44'/195'/0'/0"
       }, function (err, ks) {
         global_keystore = ks
         global_keystore.keyFromPassword(password, function(err, pwDerivedKey) {
           global_keystore.generateNewAddress(pwDerivedKey);
           addresses = global_keystore.getAddresses()[0];
+          // addresses = addresses.substring(2,addresses.length)
+          // addresses = '41'+addresses
           privateKey = global_keystore.exportPrivateKey(addresses,pwDerivedKey)
           let wallet = {
             privateKey:privateKey,
@@ -84,6 +88,15 @@ export const createWallet = (userpassword) => {
           resolve(wallet);
         })
       })
+    // 生成助记词
+    // var mnemonic = new Mnemonic();          
+    // // HD钱包扩展私钥、扩展公钥
+    // var xPrivKey = mnemonic.toHDPrivateKey();   
+    // var xPubKey, pubKey, address;
+    // xPubKey = Bitcore.HDPublicKey(xPrivKey.derive("m/44'/195'/0'/0/0"));
+    // pubKey = xPubKey.derive('m/0/0').publicKey;
+    // address = pubKey.toAddress();
+    // console.log('Bitcoin普通地址：' + address.toString());
   })
   // let words = bip39.generateMnemonic(
   //   128,
