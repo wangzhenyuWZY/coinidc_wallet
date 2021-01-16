@@ -70,7 +70,11 @@
         <div class="totalinfo">
           <div class="myLevel">
             <div class="level">LV{{homeInfo.level}}</div>
-            <p>我的等级</p>
+            <p>{{$t('mall116')}}</p>
+            <div class="timeAndMan">
+              <p class="time">{{$t('mall117')}}<span>{{homeInfo.runHours}} {{$t('mall115')}}</span></p>
+              <p class="man">{{$t('mall118')}}<span>{{homeInfo.idctHoldersCount}}</span></p>
+            </div>
           </div>
           <p v-for="(item,index) in totalInfo" :key="index"><span>{{item.name}}：</span><a>{{item.owlCount}}</a></p>
         </div>
@@ -234,11 +238,11 @@
           </div>
           <div class="incomeTotal clearfix">
             <div class="fl">
-              <p class="title">累计收益</p>
+              <p class="title">{{$t('mall112')}}</p>
               <p class="val">{{homeInfo.usdtMaxIncome}} USDT</p>
             </div>
             <div class="fr">
-              <p class="title">待发放收益</p>
+              <p class="title">{{$t('mall113')}}</p>
               <p class="val">{{homeInfo.unReceivedUsdtIncome}} USDT</p>
             </div>
           </div>
@@ -283,7 +287,7 @@
         </div>
       </div>
       <div class="ps_nav">
-        <div class="totalprice">累计收益<span>{{homeInfo.usdtIncome}} USDT</span></div>
+        <div class="totalprice">{{$t('mall112')}}<span>{{homeInfo.usdtIncome}} USDT</span></div>
         <div class="play " @click="getMyFriends"> <img src="../../assets/haoyou.png" alt=""> <span class="play_size">{{$t('mall91')}}</span> </div>
         <div class="play1 " @click="feeGold">
           <div class="ceter_img"><countTo v-if="homeInfo.goldBalance" ref="goldEl" :startVal='goldBalanceStart' :endVal='goldBalanceEnd' :duration='3000' :autoplay=false></countTo><span v-else>{{homeInfo.goldBalance}}</span></div> <span class="play_size">{{$t('mall87')}}</span>
@@ -930,12 +934,37 @@ ul {
     padding-bottom:10px;
     .myLevel{
       width:275px;
-      height: 80px;
+      height: 120px;
       background: #F4F6FA;
       border-radius: 6px;
       text-align:center;
       margin:10px auto;
       padding-top:12px;
+      .timeAndMan{
+        clear: both;
+        overflow:hidden;
+        padding-top:8px;
+        p{
+          font-size:10px;
+          color:#8997B3;
+          line-height:100%;
+          width:50%;
+          text-align:left;
+          span{
+            font-size:10px;
+            color:#303030;
+            line-height:100%;
+            width:auto;
+            vertical-align: middle;
+          }
+          &.time{
+            float:left;
+          }
+          &.man{
+            float:right;
+          }
+        }
+      }
       .level{
         width:36px;
         height:40px;

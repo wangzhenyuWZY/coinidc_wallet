@@ -111,4 +111,11 @@ module.exports = {
   mall110:'Mnemonic words',
   mall110:'The password is inconsistent',
   mall111:'Incorrect mnemonics',
+  mall112:'Cumulative revenue',
+  mall113:'Income to be released',
+  mall114:'Import Wallet',
+  mall115:'hour',
+  mall116:'My level',
+  mall117:'Running time',
+  mall118:'Active citizens',
 }

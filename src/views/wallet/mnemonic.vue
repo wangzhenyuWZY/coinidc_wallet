@@ -8,6 +8,9 @@
         <textarea class="input_text" v-model="mnemonic" :placeholder="$t('mall54')" />
       </div>
       <div class="set_input">
+        <Input :label="$t('mall72')" :icon='false' :placeholder="$t('mall102')" v-model="name" />
+      </div>
+      <div class="set_input">
         <Input :label="$t('mall22')" :showEye='false' :placeholder="$t('mall23')" v-model="password" />
       </div>
       <div class="set_input">
@@ -37,7 +40,8 @@ export default {
       password:'',
       passwordAgen:'',
       mnemonic:'',
-      isConfirm:false
+      isConfirm:false,
+      name:''
     }
   },
   components: {
@@ -81,8 +85,6 @@ export default {
           global_keystore.keyFromPassword(password, function(err, pwDerivedKey) {
             global_keystore.generateNewAddress(pwDerivedKey);
             addresses = global_keystore.getAddresses()[0];
-            // addresses = addresses.substring(2,addresses.length)
-            // addresses = '41'+addresses
             privateKey = global_keystore.exportPrivateKey(addresses,pwDerivedKey)
             let wallet = {
               privateKey:privateKey,
@@ -94,6 +96,11 @@ export default {
             setStore('mnemonic', secretSeed);
             setStore('walletItem', walletItem)
             that.isConfirm = false
+            let data = {
+                walletName:that.name,
+                walletPassword: that.password
+            }
+            setStore('namepsd', data)
             that.$router.push('/walletAssets/wallet')
           })
         })

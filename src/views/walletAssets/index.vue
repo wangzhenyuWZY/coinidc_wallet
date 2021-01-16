@@ -1,10 +1,10 @@
 <template>
     <div class="walletHome">
-        <Title :title="title"></Title>
+        <Title :isback='false' :title="title"></Title>
         <img src="../../assets/Group.png" />
         <div class="btnbox">
             <router-link to="/wallet/step1" class="btn active">{{$t('mall41')}}</router-link>
-            <router-link to="/wallet/mnemonic" class="btn">导入钱包</router-link>    
+            <router-link to="/wallet/mnemonic" class="btn">{{$t('mall114')}}</router-link>    
         </div>
     </div>
 </template>
