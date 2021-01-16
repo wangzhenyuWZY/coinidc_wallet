@@ -9,6 +9,9 @@
       <van-cell :title="$t('mall39')" value="" is-link arrow-direction @click="showMemo(1)" />
       <van-cell :title="$t('mall38')" value="" is-link arrow-direction @click="showMemo(2)"/>
     </van-cell-group>
+    <van-cell-group class="mycode">
+      <van-cell :title="$t('mall47')" :value="inviteCode"/>
+    </van-cell-group>
     <button class="outbtn" @click="confirmout">{{$t('mall100')}}</button>
     <van-tabbar v-model="activeNav" active-color="#6362F1">
       <van-tabbar-item @click="toWallet">
@@ -81,7 +84,9 @@ export default {
       activeNav:2,
       username:'',
       namepop:false,
-      namePsd:{}
+      namePsd:{},
+      inviteCode:getStore('myInviteCode'),
+      hasUserid:false
     }
   },
   components: {
@@ -93,6 +98,7 @@ export default {
   created(){
     let namePsd = getStore('namepsd')
     this.namePsd = JSON.parse(namePsd)
+    
   },
   mounted() { 
      
@@ -175,7 +181,7 @@ export default {
     width:90%;
     height:50px;
     text-align:center;
-    margin:44px 5%;
+    margin:66px 5%;
     line-height:50px;
     border-radius:5px;
     font-size:16px;
@@ -291,6 +297,10 @@ export default {
 .group{
   position:relative;
   top:22px;
+}
+.mycode{
+  position:relative;
+  top:44px;
 }
 .tabbar_img {
   text-align: center;

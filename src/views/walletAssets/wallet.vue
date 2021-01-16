@@ -18,21 +18,21 @@
           <div class="dv2">
             <p :style="'width:'+energyBi+'%'"></p>
           </div>
-          <div class="dv3"><span>{{walletInfo.energy}}</span>/{{walletInfo.energyLimit}}</div>
+          <div class="dv3"><span>{{walletInfo.energy || 0}}</span>/{{walletInfo.energyLimit || 0}}</div>
         </div>
         <div class="energy_lt">
           <div class="dv1">{{$t('mall5')}}</div>
           <div class="dv2">
             <p  :style="'width:'+freeNetBi+'%'"></p>
           </div>
-          <div class="dv3"><span>{{walletInfo.freeNet}}</span>/{{walletInfo.freeNetLimit}}</div>
+          <div class="dv3"><span>{{walletInfo.freeNet || 0}}</span>/{{walletInfo.freeNetLimit || 0}}</div>
         </div>
       </div>
       <div class="currency__list">
         <van-pull-refresh v-model="isLoading" @refresh="getMyToken">
           <div class="item" v-for="(item,index) in coinList" :key="index" @click="toDetail(item)">
             <div class="item_top">
-              <img :src="item.icon" alt="">
+              <img :src="item.img" alt="">
               <div class="item_assets">
                 <p>
                   <span>{{item.coinCode}}</span>
@@ -102,17 +102,20 @@ export default {
         name:'TRX',
         decimals:6,
         balance:0,
-        price:0
+        price:0,
+        img:'../../assets/trx.png'
       },{
         name:'IDC',
         decimals:6,
         balance:0,
-        price:0
+        price:0,
+        img:require('@/assets/idct.png')
       },{
         name:'USDT',
         decimals:6,
         balance:0,
-        price:0
+        price:0,
+        img:require('@/assets/usdt.png')
       }]
     }
   },
@@ -124,6 +127,8 @@ export default {
     if(!window.tronWeb){
       this.createTronWeb()
     }else{
+      
+      let token = getStore('token')
       if(!token){
         this.userLogin()
       }else{
@@ -137,12 +142,14 @@ export default {
   },
   methods: {
     toDetail(item){
+      setStore('coin',item) 
       this.$router.push({
                   path: "/walletAssets/details",
                   query: {
                       coin:item
                   }
               });
+             
     },
     withdraw(item){
       this.$router.push({
@@ -225,7 +232,18 @@ export default {
           that.totalBalance = res.data.resultData.balance
           that.convertedBalance = res.data.resultData.convertedBalance
           that.coinList = res.data.resultData.lstWallet
+          setStore('trxAddress',res.data.resultData.address)
+          that.coinList.forEach((item,index)=>{
+            if(item.coinCode=='TRX'){
+              item.img = require('../../assets/trx.png')
+            }else if(item.coinCode=='IDCT'){
+              item.img = require('../../assets/idct.png')
+            }else if(item.coinCode=='USDT'){
+              item.img = require('../../assets/usdt.png')
+            }
+          })
           that.walletInfo = res.data.resultData
+          setStore('myInviteCode', res.data.resultData.inviteCode)
           if(res.data.resultData.energyLimit!==0&&res.data.resultData.energy!==0){
             that.energyBi = res.data.resultData.energy/res.data.resultData.energyLimit*100
           }
@@ -245,14 +263,13 @@ export default {
       let walletName = namePsd.walletName
         let data = {
           name:walletName,
-          idctUserId:getStore('idctUserId'),
+          idctUserId:getStore('idctUserId')?getStore('idctUserId'):'',
           inviteCode:getStore('inviteCode'),
           trxAddress:window.tronWeb.defaultAddress.base58
         }
         login(data).then((res)=>{
           if(res.data.resultCode==999999){
             setStore('token', res.data.resultData)
-            console.log('登录后==='+res.data.resultData)
             that.getMyToken()
           }
         })

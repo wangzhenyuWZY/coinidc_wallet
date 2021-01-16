@@ -65,7 +65,7 @@
         </van-list>
       </div>
     </alert1>
-    <alert1 :show='show4' :label="$t('mall67')" @close="show4 = false">
+    <alert1 :show='show4' :label="$t('mall91')" @close="show4 = false">
       <div class="announcement friend">
         <div class="totalinfo">
           <div class="myLevel">
@@ -95,7 +95,7 @@
         </van-list>
       </div>
     </alert1>
-    <mallmodel :show='show5' :label="$t('mall59')" @close="show5 = false" :mall="true" :hide="true">
+    <mallmodel :show='show5' :label="$t('mall59')" @close="closeMall" :mall="true" :hide="true">
       <div class="malltop">
         <div class="people-container" v-show="mallDetail.level==0">
           <people  :defaultBranch="false" :showShining='true' :showHealth="false">
@@ -283,7 +283,7 @@
         <div class="play play1" @click="getNoticeList"> <img src="../../assets/announcement.svg" alt=""> <span
                 class="play_size p_announcement">{{$t('mall62')}}</span><a class="num" v-show="homeInfo.unReadNoticeCount">{{homeInfo.unReadNoticeCount}}</a> </div>
         <div class="play play1 " @click="getPalaceOwls"> <img src="../../assets/mall.svg" alt=""> <span class="play_size p_mall">{{$t('mall59')}}</span> </div>
-        <div class="play play1 " @click="getIncomeList"> <img src="../../assets/earnings.svg" alt=""> <span class="play_size p_earnings">{{$t('mall85')}}</span>
+        <div class="play play1 " @click="showIncomme"> <img src="../../assets/earnings.svg" alt=""> <span class="play_size p_earnings">{{$t('mall85')}}</span>
         </div>
       </div>
       <div class="ps_nav">
@@ -296,7 +296,7 @@
       </div>
     </scene>
     <coinsRolling :show="isAddGold" @close="isAddGold=false" class="coinsroll"></coinsRolling>
-    <chouJing :show='show77' @closepop='show77=false;show5=true' @notGold='show7=true;show77=false' @drawcode='getDrawCode' :drawNum='mallDetail.level'></chouJing>
+    <chouJing :show='show77' @closepop='show77=false;show5=true' @notDraw='notDraw' @notGold='show7=true;show77=false' @drawcode='getDrawCode' :drawNum='mallDetail.level'></chouJing>
     <van-overlay :show="overlayLoading" @click="overlayLoading = false">
       <van-loading />
     </van-overlay>
@@ -397,16 +397,21 @@ export default {
       goldBalanceEnd:0,
       approveding:false,
       paying:false,
-      totalInfo:{}
+      totalInfo:{},
+      trxBalance:0,
+      transfer:null
     }
   },
   created(){
-    
+    let that  = this
     if(!window.tronWeb){
       this.getTronWeb()
     }else{
       this.allowance()
       this.getUsdtBalance()
+      window.tronWeb.trx.getBalance(window.tronWeb.defaultAddress.base58).then(res=>{
+          that.trxBalance = res/Math.pow(10,6)
+        })
     }
     this.getHomeInfo()
     this.getMyOwlList()
@@ -431,7 +436,19 @@ export default {
         window.tronWeb.setAddress(window.tronWeb.defaultAddress.base58)
         that.allowance()
         that.getUsdtBalance()
+        window.tronWeb.trx.getBalance(window.tronWeb.defaultAddress.base58).then(res=>{
+          that.trxBalance = res/Math.pow(10,6)
+        })
       }
+    },
+    notDraw(){
+      this.show77 = false
+      Toast('未中奖')
+      this.show5 = true
+    },
+    showIncomme(){
+      this.incomeList = []
+      this.getIncomeList()
     },
     getDrawCode(code){
       this.show77 = false
@@ -447,6 +464,11 @@ export default {
       }else{
         this.isApproved = false
       }
+    },
+    closeMall(){
+      this.show5 = false
+      this.toindex = 0
+      this.mallDetail = []
     },
     feeGold(){
       this.overlayLoading = true
@@ -488,7 +510,9 @@ export default {
             if(res.data.resultCode==999999){
               that.goldBalanceEnd = res.data.resultData.goldBalance
               that.$refs.goldEl.start()
-              that.getHomeInfo()
+              // setTimeout(function(){
+              //   that.getHomeInfo()
+              // },3000)
             }
           })
         }else if(res.data.resultCode==100006){
@@ -518,7 +542,7 @@ export default {
       that.loading3 = true
       queryMyFriends({pageNum:this.pageNum3}).then(res=>{
         that.loading3 = true
-        if(that.pageNum3<res.data.pages){
+        if(that.pageNum3+1<res.data.pages){
           that.pageNum3++
         }else{
           that.finished3 = true;
@@ -588,7 +612,7 @@ export default {
           res.data.resultData.forEach((item,index)=>{
             that.incomeList.push(item)  
           })
-          if(that.pageNum<res.data.pages){
+          if(that.pageNum+1<res.data.pages){
             that.pageNum++
           }else{
             that.finished = true;
@@ -603,7 +627,7 @@ export default {
       that.loading1 = true
       queryNoticeList({pageNum:this.pageNum1}).then(res=>{
         that.loading1 = false;
-        if(that.pageNum1<res.data.pages){
+        if(that.pageNum1+1<res.data.pages){
           that.pageNum1++
         }else{
           that.finished1 = true;
@@ -640,7 +664,7 @@ export default {
       that.loading2 = true
       queryWithdrawList({pageNum:this.pageNum2}).then(res=>{
         that.loading2 = false
-        if(that.pageNum2<res.data.pages){
+        if(that.pageNum2+1<res.data.pages){
           that.pageNum2++
         }else{
           that.finished2 = true;
@@ -670,12 +694,27 @@ export default {
         this.show56 = true
         // this.createOrder()
       }else{
-        this.approveding = true
-        this.approved()
+        if(this.trxBalance){
+          if(this.trxBalance>2){
+            Toast('授权需要1~2分钟，请耐心等待')
+            this.approveding = true
+            this.approved()
+          }else{
+            Toast('TRX余额不足')
+          }
+        }else{
+          Toast('未获取到TRX余额')
+        }
+        
+        
       }
     },
     createOrder(){
       let that = this
+      if(that.mallDetail.usdtPrice>that.usdtBalance){
+        Toast('IDCT余额不足')
+        return
+      }
       let namePsd = getStore('namepsd')
       namePsd = JSON.parse(namePsd)
       let passwordTrue = namePsd.walletPassword
@@ -689,11 +728,22 @@ export default {
         owlLevel:this.mallDetail.level,
         drawCode:this.mallDetail.level>2?this.drawCode:''
       }
+      
       createBuyOwlOrder(data).then(res=>{
         if(res.data.resultCode==999999){
           that.orderDetail = res.data.resultData
           if(that.approvedBalance && that.approvedBalance>that.mallDetail.usdtPrice){
-            that.sendToken()
+            if(that.trxBalance){
+              if(that.trxBalance>2){    
+                that.sendToken()
+              }else{
+                Toast('TRX余额不足')
+              }
+            }else{
+              Toast('未获取到TRX余额')
+            }
+            
+            
           }else{
             that.isApproved = false
           }
@@ -752,7 +802,7 @@ export default {
     async sendToken(){
       let that = this
       let func = 'buy(uint256,string)'
-      let idcnum = new bigNumber(this.mallDetail.usdtPrice)
+      let idcnum = new bigNumber(that.orderDetail.idctPrice)
       // idcnum = idcnum.div(that.orderDetail.idctPrice)
       idcnum = idcnum.times(Math.pow(10,6))
       let params = [
@@ -760,7 +810,13 @@ export default {
         {'type':'string','value':'aaa'}
       ]
       let transfer = await window.tronWeb.transactionBuilder.triggerSmartContract(contracts.OWL,func, {},params)
-      window.tronWeb.trx.sign(transfer.transaction).then(function(signedTransaction) {
+      console.log(transfer.transaction.txID)
+      that.transfer = transfer
+      that.payOrder(transfer.transaction.txID)
+    },
+    sendTransfer(){
+      let that = this
+      window.tronWeb.trx.sign(this.transfer.transaction).then(function(signedTransaction) {
           window.tronWeb.trx
             .sendRawTransaction(signedTransaction)
             .then(function(res) {
@@ -771,7 +827,7 @@ export default {
                   that.mallName = ''
                   Toast(window.tronWeb.toAscii(e.contractResult[0]))
                 }else{
-                  that.payOrder(res.txid)
+                  
                 }
               })
             })
@@ -802,10 +858,16 @@ export default {
         txHash:txid
       }
       payOwlOrder(data).then((res)=>{
-        that.show55 = false
-        that.show56 = false
-        that.paying = false
-        Toast(that.$t('mall90'))
+        if(res.data.resultCode==999999){
+          that.show55 = false
+          that.show56 = false
+          that.paying = false
+          that.closeMall()
+          Toast(that.$t('mall119'))
+          that.sendTransfer()
+        }else{
+          Toast('支付失败')
+        }
         // if(res.data.resultCode==999999){
         //   Notify({ type: 'success', message: res.data.resultDesc });
         // }else{
@@ -878,7 +940,8 @@ export default {
       verifyZjadReward({"device":device,"transId": transId}).then(res=>{
         if(res.data.resultCode==999999){
           that.isAddGold = true
-          that.getHomeInfo()
+          // that.getHomeInfo()
+          window.location.reload()
           Toast(res.data.resultDesc)
         }else{
           Toast(res.data.resultDesc)

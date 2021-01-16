@@ -13,7 +13,7 @@
       <div class="set_input">
         <Input :showEye="false" :label="$t('mall45')" :placeholder="$t('mall46')" v-model="passwordAgain" />
       </div>
-      <div class="set_input">
+      <div class="set_input" v-show="hasUserid">
         <Input :label="$t('mall47')" :icon='false' :placeholder="$t('mall48')" v-model="inviteCode" />
       </div>
       <div class="btn">
@@ -38,7 +38,8 @@ export default {
       password:'',
       passwordAgain:'',
       name:'',
-      inviteCode:''
+      inviteCode:'',
+      hasUserid:false
     }
   },
   components: {
@@ -57,6 +58,12 @@ export default {
   mounted() {
     removeStore("mnemonic");
     removeStore("walletItem");
+    let userId = getStore('idctUserId')
+    if(userId){
+      this.hasUserid = false
+    }else{
+      this.hasUserid = true
+    }
   },
   methods: {
     handelClick() {

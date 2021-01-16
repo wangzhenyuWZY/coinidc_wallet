@@ -50,6 +50,7 @@ function getUrlKey(name,url){
 function beforeCheck(){
     var lang = getStore('lang')
     var hreflang = getUrlKey('lang',window.location.href)
+    debugger
     if(!lang){
       if(hreflang){
         setStore('lang',hreflang)
@@ -62,7 +63,10 @@ function beforeCheck(){
       }
     }
     let idctUserId = getUrlKey('user_id',window.location.href)
-    setStore('idctUserId',idctUserId)
+    if(idctUserId){
+      setStore('idctUserId',idctUserId)
+    }
+    
     // alert(idctUserId)
     // alert(lang)
     // alert('链接上的参数lang'+hreflang)

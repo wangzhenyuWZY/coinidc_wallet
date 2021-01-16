@@ -38,6 +38,7 @@
 <script>
 import alert2 from './globelModel2'
 import {getdraw} from '@/api/user'
+import { Toast } from 'vant'
 	export default {
         name: 'numberRolling',
         components:{
@@ -84,6 +85,8 @@ import {getdraw} from '@/api/user'
                             if(res.data.resultData.result=='Y'){
                                 that.drawCode = res.data.resultData
                                 that.$emit('drawcode',drawCode)
+                            }else{
+                              that.$emit('notDraw')
                             }
                         }else if(res.data.resultCode=100006){
                             that.$emit('notGold')

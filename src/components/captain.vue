@@ -100,7 +100,7 @@
       </div>
       <div class="health" v-if="showHealth">
         <div class="name">{{name}}</div>
-        <div class="progress" :style="{width: health + '%'}"></div>
+        <div class="progress" :style="{width: health + '%'}" :class="health<=10?'red':''"></div>
       </div>
     </div>
   </div>

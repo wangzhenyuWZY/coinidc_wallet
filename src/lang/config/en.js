@@ -118,4 +118,5 @@ module.exports = {
   mall116:'My level',
   mall117:'Running time',
   mall118:'Active citizens',
+  mall119:'Successful purchase, your owl will hatch in a few minutes!'
 }

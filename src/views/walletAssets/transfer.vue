@@ -191,6 +191,7 @@ export default {
                 that.transNum = ''
                 that.toAccount = ''
                 Notify({ type: 'success', message: that.$t('mall29') });
+                that.$router.push('/walletAssets/wallet')
               })
           })
 
@@ -208,6 +209,7 @@ export default {
               .sendRawTransaction(signedTransaction)
               .then(function(res) {
                 Notify({ type: 'success', message: that.$t('mall29') });
+                that.$router.push('/walletAssets/wallet')
               })
           })
       }

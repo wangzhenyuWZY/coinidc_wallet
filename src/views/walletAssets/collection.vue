@@ -40,12 +40,13 @@ export default {
     VueQr
   },
   created(){
-    if(window.tronWeb){
-      this.address = window.tronWeb.defaultAddress.base58
+    this.address = getStore('trxAddress')
+    // if(window.tronWeb){
+    //   this.address = window.tronWeb.defaultAddress.base58
 
-    }else{
-      this.createTronWeb()
-    }
+    // }else{
+    //   this.createTronWeb()
+    // }
     
     let namePsd = getStore('namepsd')
     namePsd = JSON.parse(namePsd)

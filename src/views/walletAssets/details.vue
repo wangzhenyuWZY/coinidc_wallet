@@ -48,7 +48,7 @@
         <router-link class="tabbar_ls tabbar_ls1" tag="div" to="/walletAssets/transfer">
           <template>
             <span class="tabbar_img">
-              <img src="../../assets/assets.svg" />
+              <img width="18px" src="../../assets/assets.png" />
             </span>
           </template>
           <span class="tabbar_zise">{{$t('mall2')}}</span>
@@ -73,12 +73,13 @@
 import {queryTransaction} from '@/api/user'
 import Title from '@/components/Title'
 import { List } from 'vant'
+import { getStore} from "@/config/utils";
 export default {
   data() {
     return {
       active: 0,
       navIndex: 'all',
-      coin:this.$route.query.coin,
+      coin:JSON.parse(getStore('coin')),
       transactionList:[],
       pageNum:1,
       show:false,
