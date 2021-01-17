@@ -3,7 +3,7 @@
     <div class="title_bg">
       <Title :title="$t('mall1')" :isback="false" hide></Title>
       <div class="assetsDtal">
-        <p>{{totalBalance}} IDC</p>
+        <p>{{totalBalance}} IDCT</p>
         <p>≈{{convertedBalance}}</p>
       </div>
       <div class="wallet_btn">
@@ -32,7 +32,7 @@
         <van-pull-refresh v-model="isLoading" @refresh="getMyToken">
           <div class="item" v-for="(item,index) in coinList" :key="index" @click="toDetail(item)">
             <div class="item_top">
-              <img :src="item.img" alt="">
+              <img :src="item.icon" alt="">
               <div class="item_assets">
                 <p>
                   <span>{{item.coinCode}}</span>
@@ -140,7 +140,13 @@ export default {
       setStore('idctUserId',idctUserId)
     }
   },
+  mounted(){
+    window.loadImages = () => this.loadImages()
+  },
   methods: {
+    loadImages(){
+      alert('loadimages的回调')
+    },
     toDetail(item){
       setStore('coin',item) 
       this.$router.push({

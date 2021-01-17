@@ -50,7 +50,7 @@ function getUrlKey(name,url){
 function beforeCheck(){
     var lang = getStore('lang')
     var hreflang = getUrlKey('lang',window.location.href)
-    debugger
+    // debugger
     if(!lang){
       if(hreflang){
         setStore('lang',hreflang)

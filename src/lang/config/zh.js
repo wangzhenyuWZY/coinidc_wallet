@@ -81,7 +81,7 @@ module.exports = {
   mall80:'注',
   mall81:'首次提币限额为价值2 USDT的 IDCT起',
   mall82:'第二次提币限额为价值10 USDT的 IDCT起',
-  mall83:'第三次提币限额为价值20 USDT的 IDCT起',
+  mall83:'第三次提币限额为价值100 USDT的 IDCT起',
   mall84:'玩法',
   mall85:'收益',
   mall86:'好友',
@@ -118,5 +118,7 @@ module.exports = {
   mall116:'我的等级',
   mall117:'运行时间',
   mall118:'活跃公民',
-  mall119:'购买成功，您的猫头鹰将于几分钟后孵化！'
+  mall119:'购买成功，您的猫头鹰将于几分钟后孵化！',
+  mall120:'请填写提币数量',
+  mall121:'提币成功，请等待区块确认'
 }

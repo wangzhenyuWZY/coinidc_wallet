@@ -81,7 +81,7 @@ module.exports = {
   mall80:'Note',
   mall81:'The first withdrawal limit is from IDCT worth 2 USDT',
   mall82:'The second withdrawal limit is from IDCT worth 10 USDT',
-  mall83:'The third withdrawal limit starts from IDCT worth 20 USDT',
+  mall83:'The third withdrawal limit starts from IDCT worth 100 USDT',
   mall84:'How to play',
   mall85:'income',
   mall86:'Buddy',
@@ -118,5 +118,7 @@ module.exports = {
   mall116:'My level',
   mall117:'Running time',
   mall118:'Active citizens',
-  mall119:'Successful purchase, your owl will hatch in a few minutes!'
+  mall119:'Successful purchase, your owl will hatch in a few minutes!',
+  mall120:'Please fill in the withdrawal quantity',
+  mall121:'Withdraw currency successfully, please wait for block confirmation'
 }

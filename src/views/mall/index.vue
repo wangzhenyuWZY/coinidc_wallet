@@ -58,7 +58,7 @@
            class="an2 m_top20"
         >
           <van-cell v-for="(item,index) in incomeList" :key="index" class="an2li">
-            <p>{{item.createTime}}</p>
+            <p>{{item.settleDate}}</p>
             <p>1.{{$t('mall65')}}{{item.owlIncome}} IDCT</p>
             <p>2.{{$t('mall66')}}{{item.taxIncome}} IDCT</p>
           </van-cell>
@@ -250,7 +250,7 @@
         <div class="ditals_bg">
           <div class="dital2">
             <div class="willt_pwd" style="padding-top:10px;">{{$t('mall78')}}</div>
-            <div class="inputs" style="padding-bottom:10px;"><input type="number" v-model="withdrawNum" :placeholder="$t('mall79')"></div>
+            <div class="inputs" style="padding-bottom:10px;"><input type="number" v-model="withdrawNum" :placeholder="$t('mall120')"></div>
           </div>
         </div>
         <div class="btns btnst" @click="doWithdraw">{{$t('mall6')}}</div>
@@ -300,7 +300,7 @@
     <van-overlay :show="overlayLoading" @click="overlayLoading = false">
       <van-loading />
     </van-overlay>
-    
+    <div class="loading" v-show="!isLoading"></div>
   </div>
 </template>
 
@@ -399,11 +399,20 @@ export default {
       paying:false,
       totalInfo:{},
       trxBalance:0,
-      transfer:null
+      transfer:null,
+      isLoading:false
     }
   },
   created(){
     let that  = this
+var timer = setInterval(function () {
+    // 判断文档和所有子资源(图片、音视频等)已完成加载
+    if (document.readyState === 'complete') {
+        //执行方法
+        that.isLoading = true
+        window.clearInterval(timer)
+    }
+}, 500)
     if(!window.tronWeb){
       this.getTronWeb()
     }else{
@@ -471,6 +480,14 @@ export default {
       this.mallDetail = []
     },
     feeGold(){
+      // let that = this
+      // that.goldBalanceEnd = that.homeInfo.goldBalance+10000
+      //         that.goldBalanceStart = that.homeInfo.goldBalance
+      //         that.isAddGold = true
+      //         that.$refs.goldEl.start()
+      //         return
+
+
       this.overlayLoading = true
       var u = navigator.userAgent;
       var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
@@ -528,7 +545,9 @@ export default {
       let that = this
       getIndexInfo().then(res=>{
         if(res.data.resultCode==999999){
+          
           that.homeInfo = res.data.resultData
+          that.homeInfo = Object.assign({}, that.homeInfo)
           that.goldBalanceStart = that.homeInfo.goldBalance
           if(that.$refs.goldEl){
             that.$refs.goldEl.reset()
@@ -843,7 +862,8 @@ export default {
       }
       withdrawIncome(data).then((res)=>{
         that.show8 = false
-        Toast(res.data.resultDesc)
+        that.getHomeInfo()
+        Toast(that.$t('mall121'))
         // if(res.data.resultCode==999999){
         //   Notify({ type: 'success', message: res.data.resultDesc });
         // }else{
@@ -902,7 +922,16 @@ export default {
                 // alert(4);
                 break;
             case 'onZjAdClose':
-                // alert(5);
+                let that = this
+                getIndexInfo().then(res=>{
+                  if(res.data.resultCode==999999){
+                    that.goldBalanceEnd = res.data.resultData.goldBalance
+                    that.goldBalanceStart = that.homeInfo.goldBalance
+                    that.isAddGold = true
+                    that.$refs.goldEl.start()
+                    that.homeInfo = res.data.resultData
+                  }
+                })
                 break;
             case 'onZjAdError':
                 // alert(6);
@@ -939,10 +968,10 @@ export default {
       }
       verifyZjadReward({"device":device,"transId": transId}).then(res=>{
         if(res.data.resultCode==999999){
-          that.isAddGold = true
-          // that.getHomeInfo()
-          window.location.reload()
-          Toast(res.data.resultDesc)
+          // that.isAddGold = true
+          
+          // window.location.reload()
+          // Toast(res.data.resultDesc)
         }else{
           Toast(res.data.resultDesc)
         }
@@ -953,6 +982,18 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.loading{
+  position: absolute;
+  top:0;
+  right:0;
+  bottom:0;
+  left:0;
+  z-index:9999;
+  background-color:rgba(0,0,0,0.8);
+  background-image:url(../../assets/loading.gif);
+  background-repeat: no-repeat;
+  background-position: 50% 40%;
+}
 .totalprice{
   position:absolute;
   bottom:80px;
